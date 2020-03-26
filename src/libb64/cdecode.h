@@ -1,0 +1,50 @@
+/****************************************************************************************************************************
+   cdecoder.h - c source to a base64 decoding algorithm implementation
+   For ESP32-based WiFi shields, such as WiFiNINA W101, W102, W13x, etc
+
+   WiFiWebServer is a library for the ESP32-based WiFi shields to run WebServer
+   Forked and modified from ESP8266 https://github.com/esp8266/Arduino/releases
+   Forked and modified from Arduino WiFiNINA library https://www.arduino.cc/en/Reference/WiFiNINA
+   Built by Khoi Hoang https://github.com/khoih-prog/WiFiWebServer
+   Licensed under MIT license
+   Version: 1.0.0
+
+   Original author:
+   @file       Esp8266WebServer.h
+   @author     Ivan Grokhotkov
+
+   Version Modified By   Date      Comments
+   ------- -----------  ---------- -----------
+    1.0.0   K Hoang      12/02/2020 Initial coding for SAMD21, Nano 33 IoT, etc running WiFiNINA
+ *****************************************************************************************************************************/
+#ifndef BASE64_CDECODE_H
+#define BASE64_CDECODE_H
+
+#define base64_decode_expected_len(n) ((n * 3) / 4)
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+typedef enum {
+  step_a, step_b, step_c, step_d
+} base64_decodestep;
+
+typedef struct {
+  base64_decodestep step;
+  char plainchar;
+} base64_decodestate;
+
+void base64_init_decodestate(base64_decodestate* state_in);
+
+int base64_decode_value(char value_in);
+
+int base64_decode_block(const char* code_in, const int length_in, char* plaintext_out, base64_decodestate* state_in);
+
+int base64_decode_chars(const char* code_in, const int length_in, char* plaintext_out);
+
+#ifdef __cplusplus
+} // extern "C"
+#endif
+
+#endif /* BASE64_CDECODE_H */

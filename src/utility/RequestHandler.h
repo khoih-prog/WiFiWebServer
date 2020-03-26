@@ -1,0 +1,50 @@
+/****************************************************************************************************************************
+   WiFiRequestHandler.h - Dead simple web-server.
+   For ESP32-based WiFi shields, such as WiFiNINA W101, W102, W13x, etc
+
+   WiFiWebServer is a library for the ESP32-based WiFi shields to run WebServer
+   Forked and modified from ESP8266 https://github.com/esp8266/Arduino/releases
+   Forked and modified from Arduino WiFiNINA library https://www.arduino.cc/en/Reference/WiFiNINA
+   Built by Khoi Hoang https://github.com/khoih-prog/WiFiWebServer
+   Licensed under MIT license
+   Version: 1.0.0
+
+   Original author:
+   @file       Esp8266WebServer.h
+   @author     Ivan Grokhotkov
+
+   Version Modified By   Date      Comments
+   ------- -----------  ---------- -----------
+    1.0.0   K Hoang      12/02/2020 Initial coding for SAMD21, Nano 33 IoT, etc running WiFiNINA
+ *****************************************************************************************************************************/
+
+#ifndef WiFiRequestHandler_h
+#define WiFiRequestHandler_h
+
+class RequestHandler
+{
+  public:
+    virtual ~RequestHandler() { }
+    virtual bool canHandle(HTTPMethod method, String uri) {
+      return false;
+    }
+    virtual bool canUpload(String uri) {
+      return false;
+    }
+    virtual bool handle(WiFiWebServer& server, HTTPMethod requestMethod, String requestUri) {
+      return false;
+    }
+    virtual void upload(WiFiWebServer& server, String requestUri, HTTPUpload& upload) {}
+
+    RequestHandler* next() {
+      return _next;
+    }
+    void next(RequestHandler* r) {
+      _next = r;
+    }
+
+  private:
+    RequestHandler* _next = nullptr;
+};
+
+#endif //WiFiRequestHandler_h
