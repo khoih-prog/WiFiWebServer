@@ -22,7 +22,6 @@ The library supports
 
 Library is based on and modified from:
 1. [Ivan Grokhotkov's ESP8266WebServer](https://github.com/esp8266/Arduino/tree/master/libraries/ESP8266WebServer)
-2. [bportaluri's WiFiEsp library](https://github.com/bportaluri/WiFiEsp)
 
 The WiFiWebServer class found in `WiFiWebServerr.h` header, is a simple web server that knows how to handle HTTP requests such as GET and POST and can only support one simultaneous client.
 
