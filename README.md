@@ -25,6 +25,10 @@ Library is based on and modified from:
 
 The WiFiWebServer class found in `WiFiWebServerr.h` header, is a simple web server that knows how to handle HTTP requests such as GET and POST and can only support one simultaneous client.
 
+### Important note:
+To use AP reliably, update WiFiNINA firmware to v1.3.0+ by using FirmwareUpdate program
+See [WiFiNINAFirmwareUpdater](https://www.arduino.cc/en/Tutorial/WiFiNINAFirmwareUpdater) for more information how to proceed.
+
 ## Prerequisite
 1. [`Arduino IDE 1.8.12 or later` for Arduino](https://www.arduino.cc/en/Main/Software)
 2. `Arduino AVR core 1.8.2 or later` for Arduino (Use Arduino Board Manager) for AVR boards
@@ -216,6 +220,7 @@ Also see examples:
 12. [WebClient](examples/WebClient)
 13. [WebClientRepeating](examples/WebClientRepeating)
 14. [WebServer](examples/WebServer)
+15. [AP_SimpleWebServer](examples/AP_SimpleWebServer)
 
 
 ## Example
