@@ -7,7 +7,7 @@
    Forked and modified from Arduino WiFiNINA library https://www.arduino.cc/en/Reference/WiFiNINA
    Built by Khoi Hoang https://github.com/khoih-prog/WiFiWebServer
    Licensed under MIT license
-   Version: 1.0.0
+   Version: 1.0.1
 
    Original author:
    @file       Esp8266WebServer.h
@@ -16,6 +16,7 @@
    Version Modified By   Date      Comments
    ------- -----------  ---------- -----------
     1.0.0   K Hoang      12/02/2020 Initial coding for SAMD21, Nano 33 IoT, etc running WiFiNINA
+    1.0.1   K Hoang      28/03/2020 Change to use new WiFiNINA_Generic library to support many more boards running WiFiNINA
  *****************************************************************************************************************************/
 
 #ifndef WiFiRequestHandler_h

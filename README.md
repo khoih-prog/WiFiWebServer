@@ -2,6 +2,11 @@
 
 [![arduino-library-badge](https://www.ardu-badge.com/badge/WiFiWebServer.svg?)](https://www.ardu-badge.com/WiFiWebServer)
 
+### New Version v1.0.1
+
+1. Use new [`WiFiNINA_Generic library`](https://github.com/khoih-prog/WiFiNINA_Generic) to provide support to many more boards running WiFiNINA. 
+The original WiFiNINA library only supports Nano-33 IoT, Arduino MKR WiFi 1010, Arduino MKR VIDOR 4000 and Arduino UNO WiFi Rev.2.
+
 ### Initial Version v1.0.0
 
 This is simple yet complete WebServer library for `AVR, Teensy, SAM DUE, SAMD, STM32, etc.` boards running WiFi modules/shields (WiFiNINA U-Blox W101, W102, etc.). ***The functions are similar and compatible to ESP8266/ESP32 WebServer libraries*** to make life much easier to port sketches from ESP8266/ESP32.
@@ -23,11 +28,7 @@ The library supports
 Library is based on and modified from:
 1. [Ivan Grokhotkov's ESP8266WebServer](https://github.com/esp8266/Arduino/tree/master/libraries/ESP8266WebServer)
 
-The WiFiWebServer class found in `WiFiWebServerr.h` header, is a simple web server that knows how to handle HTTP requests such as GET and POST and can only support one simultaneous client.
-
-### Important note:
-To use AP reliably, update WiFiNINA firmware to v1.3.0+ by using FirmwareUpdate program
-See [WiFiNINAFirmwareUpdater](https://www.arduino.cc/en/Tutorial/WiFiNINAFirmwareUpdater) for more information how to proceed.
+The WiFiWebServer class found in `WiFiWebServer.h` header, is a simple web server that knows how to handle HTTP requests such as GET and POST and can only support one simultaneous client.
 
 ## Prerequisite
 1. [`Arduino IDE 1.8.12 or later` for Arduino](https://www.arduino.cc/en/Main/Software)
@@ -38,7 +39,7 @@ See [WiFiNINAFirmwareUpdater](https://www.arduino.cc/en/Tutorial/WiFiNINAFirmwar
 6. [`Adafruit SAMD core 1.5.11 or later`](https://www.adafruit.com/) for SAMD ARM Cortex-M0+ and M4 boards (Nano 33 IoT, etc.)
 7. [`Arduino Core for STM32 v1.8.0 or later`](https://github.com/khoih-prog/Arduino_Core_STM32) for STM32 boards
 8. [`Functional-VLPP library`](https://github.com/khoih-prog/functional-vlpp) to use server's lambda function. To install. check [![arduino-library-badge](https://www.ardu-badge.com/badge/Functional-Vlpp.svg?)](https://www.ardu-badge.com/Functional-Vlpp)
-9. [`WiFiNINA library 1.5.0 or later`](https://www.arduino.cc/en/Reference/WiFiNINA)
+9. [`WiFiNINA_Generic library 1.5.0 or later`](https://github.com/khoih-prog/WiFiNINA_Generic)
 
 ## Installation
 
@@ -220,7 +221,6 @@ Also see examples:
 12. [WebClient](examples/WebClient)
 13. [WebClientRepeating](examples/WebClientRepeating)
 14. [WebServer](examples/WebServer)
-15. [AP_SimpleWebServer](examples/AP_SimpleWebServer)
 
 
 ## Example
@@ -444,6 +444,12 @@ HTTP server started @ 192.168.2.139
 </svg>
 
 ```
+
+### New Version v1.0.1
+
+1. Use new [`WiFiNINA_Generic library`](https://github.com/khoih-prog/WiFiNINA_Generic) to provide support to many more boards running WiFiNINA. 
+The original WiFiNINA library only supports Nano-33 IoT, Arduino MKR WiFi 1010, Arduino MKR VIDOR 4000 and Arduino UNO WiFi Rev.2.
+
 ### Initial Version v1.0.0
 
 This is simple yet complete WebServer library for `AVR, Teensy, SAM DUE, SAMD, STM32, etc.` boards running WiFi modules/shields (WiFiNINA U-Blox W101, W102, etc.). ***The functions are similar and compatible to ESP8266/ESP32 WebServer libraries*** to make life much easier to port sketches from ESP8266/ESP32.

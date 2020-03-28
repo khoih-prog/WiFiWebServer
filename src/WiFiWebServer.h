@@ -7,7 +7,7 @@
    Forked and modified from Arduino WiFiNINA library https://www.arduino.cc/en/Reference/WiFiNINA
    Built by Khoi Hoang https://github.com/khoih-prog/WiFiWebServer
    Licensed under MIT license
-   Version: 1.0.0
+   Version: 1.0.1
 
    Original author:
    @file       Esp8266WebServer.h
@@ -16,6 +16,7 @@
    Version Modified By   Date      Comments
    ------- -----------  ---------- -----------
     1.0.0   K Hoang      12/02/2020 Initial coding for SAMD21, Nano 33 IoT, etc running WiFiNINA
+    1.0.1   K Hoang      28/03/2020 Change to use new WiFiNINA_Generic library to support many more boards running WiFiNINA
  *****************************************************************************************************************************/
 
 #ifndef WiFiWebServer_h
@@ -31,7 +32,7 @@
 #undef WIFI_USE_SAMD
 #endif
 #define WIFI_USE_SAMD      true
-#warning Use SAMD architecture from WiFiWebServer
+#warning Use SAMD / SAM DUE architecture from WiFiWebServer
 #endif
 
 #if ( defined(STM32F0) || defined(STM32F1) || defined(STM32F2) || defined(STM32F3)  ||defined(STM32F4) || defined(STM32F7) )
@@ -50,10 +51,11 @@
 #define USE_WIFI_NINA     true
 #endif
 
+// Modify to use new WiFiNINA_Generic library to support boards besides Nano-33 IoT, MKRWiFi1010, Adafruit MetroM4, etc.
 #if USE_WIFI_NINA
-#include <WiFiNINA.h>
+#include <WiFiNINA_Generic.h>
 #else
-#include <WiFi.h>
+#include <WiFi_Generic.h>
 #endif
 
 #include "utility/mimetable.h"
