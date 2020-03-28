@@ -55,7 +55,7 @@
 #if USE_WIFI_NINA
 #include <WiFiNINA_Generic.h>
 #else
-#include <WiFi_Generic.h>
+#include <WiFi.h>
 #endif
 
 #include "utility/mimetable.h"
