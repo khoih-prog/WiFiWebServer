@@ -6,21 +6,26 @@
 [![contributions welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat)](#Contributing)
 [![GitHub issues](https://img.shields.io/github/issues/khoih-prog/WiFiWebServer.svg)](http://github.com/khoih-prog/WiFiWebServer/issues)
 
+### New Version v1.0.2
+
+1. Add support to ***SAM51 (Itsy-Bitsy M4, Metro M4, Grand Central M4, Feather M4 Express, etc.) and SAM DUE***.
+
 ### New Version v1.0.1
 
 1. Use new [`WiFiNINA_Generic library`](https://github.com/khoih-prog/WiFiNINA_Generic) to provide support to many more boards running WiFiNINA. 
-The original WiFiNINA library only supports Nano-33 IoT, Arduino MKR WiFi 1010, Arduino MKR VIDOR 4000 and Arduino UNO WiFi Rev.2.
+The original WiFiNINA library only supports ***Nano-33 IoT***, Arduino MKR WiFi 1010, Arduino MKR VIDOR 4000 and Arduino UNO WiFi Rev.2.
 
 ### Initial Version v1.0.0
 
-This is simple yet complete WebServer library for `AVR, Teensy, SAM DUE, SAMD, STM32, etc.` boards running WiFi modules/shields (WiFiNINA U-Blox W101, W102, etc.). ***The functions are similar and compatible to ESP8266/ESP32 WebServer libraries*** to make life much easier to port sketches from ESP8266/ESP32.
+This is simple yet complete WebServer library for `AVR Mega, Teensy, SAMD21, STM32, etc.` boards running WiFi modules/shields (WiFiNINA U-Blox W101, W102, etc.). ***The functions are similar and compatible to ESP8266/ESP32 WebServer libraries*** to make life much easier to port sketches from ESP8266/ESP32.
 
 The library currently supports these boards
 1. SAM DUE
 2. SAMD21 (ZERO, MKR, NANO_33_IOT, M0, M0 Pro, AdaFruit CIRCUITPLAYGROUND_EXPRESS, etc.)
 3. SAMD51 (Adafruit M4 : Metro, Grand Central, ItsyBitsy, Feather Express, Trellis, Metro AirLift lite, MONSTER M4SK Express, Hallowing Express, etc. )
 4. Teensy (4.0, 3.6, 3.5, 3,2, 3.1, 3.0, LC)
-5. STM32F1, STM32F2, STM32F4, STM32F7
+5. STM32F1, STM32F2, STM32F4, STM32F7 with more than 32KB flash memory.
+6. AVR Mega1280, 2560, ADK.
 
 The library supports 
 1. WiFi Client, STA and AP mode
@@ -227,23 +232,31 @@ Also see examples:
 14. [WebServer](examples/WebServer)
 
 
-## Example
-Please take a look at examples, as well.
+## Example [HelloServer](examples/HelloServer)
+Please take a look at other examples, as well.
 
 ```cpp
 #define DEBUG_WIFI_WEBSERVER_PORT Serial
 
 #define USE_WIFI_NINA         true
 
-
-#if    ( defined(ARDUINO_SAM_DUE) || defined(ARDUINO_SAMD_ZERO) || defined(ARDUINO_SAMD_MKR1000) || defined(ARDUINO_SAMD_MKRWIFI1010) \
+#if    ( defined(ARDUINO_SAMD_ZERO) || defined(ARDUINO_SAMD_MKR1000) || defined(ARDUINO_SAMD_MKRWIFI1010) \
       || defined(ARDUINO_SAMD_NANO_33_IOT) || defined(ARDUINO_SAMD_MKRFox1200) || defined(ARDUINO_SAMD_MKRWAN1300) || defined(ARDUINO_SAMD_MKRWAN1310) \
       || defined(ARDUINO_SAMD_MKRGSM1400) || defined(ARDUINO_SAMD_MKRNB1500) || defined(ARDUINO_SAMD_MKRVIDOR4000) || defined(__SAMD21G18A__) \
-      || defined(ARDUINO_SAMD_CIRCUITPLAYGROUND_EXPRESS) || defined(__SAM3X8E__) || defined(__CPU_ARC__) )
+      || defined(ARDUINO_SAMD_CIRCUITPLAYGROUND_EXPRESS) || defined(__SAMD21E18A__) || defined(__SAMD51__) || defined(__SAMD51J20A__) || defined(__SAMD51J19A__) \
+      || defined(__SAMD51G19A__) || defined(__SAMD21G18A__) )
 #if defined(WIFI_USE_SAMD)
 #undef WIFI_USE_SAMD
 #endif
 #define WIFI_USE_SAMD      true
+#endif
+
+#if ( defined(ARDUINO_SAM_DUE) || defined(__SAM3X8E__) )
+#if defined(WIFI_USE_SAM_DUE)
+#undef WIFI_USE_SAM_DUE
+#endif
+#define WIFI_USE_SAM_DUE      true
+#warning Use SAM_DUE architecture
 #endif
 
 #if ( defined(STM32F0) || defined(STM32F1) || defined(STM32F2) || defined(STM32F3)  ||defined(STM32F4) || defined(STM32F7) )
@@ -255,11 +268,25 @@ Please take a look at examples, as well.
 
 #ifdef CORE_TEENSY
 #if defined(__IMXRT1062__)
+// For Teensy 4.0
 #define BOARD_TYPE      "TEENSY 4.0"
-#elif ( defined(__MKL26Z64__) || defined(ARDUINO_ARCH_AVR) )
-#define BOARD_TYPE      "TEENSY LC or 2.0"
+#elif defined(__MK66FX1M0__)
+#define BOARD_TYPE "Teensy 3.6"
+#elif defined(__MK64FX512__)
+#define BOARD_TYPE "Teensy 3.5"
+#elif defined(__MKL26Z64__)
+#define BOARD_TYPE "Teensy LC"
+#elif defined(__MK20DX256__)
+#define BOARD_TYPE "Teensy 3.2" // and Teensy 3.1 (obsolete)
+#elif defined(__MK20DX128__)
+#define BOARD_TYPE "Teensy 3.0"
+#elif defined(__AVR_AT90USB1286__)
+#error Teensy 2.0++ not supported yet
+#elif defined(__AVR_ATmega32U4__)
+#error Teensy 2.0 not supported yet
 #else
-#define BOARD_TYPE      "TEENSY 3.X"
+// For Other Boards
+#define BOARD_TYPE      "Unknown Teensy Board"
 #endif
 
 #elif defined(WIFI_USE_SAMD)
@@ -283,10 +310,36 @@ Please take a look at examples, as well.
 #define BOARD_TYPE      "SAMD MKRVIDOR4000"
 #elif defined(ARDUINO_SAMD_CIRCUITPLAYGROUND_EXPRESS)
 #define BOARD_TYPE      "SAMD ARDUINO_SAMD_CIRCUITPLAYGROUND_EXPRESS"
-#elif ( defined(__SAM3X8E__) || (__SAM3X8E__) || (__CPU_ARC__) )
-#define BOARD_TYPE      "SAMD Board"
+#elif defined(ADAFRUIT_ITSYBITSY_M4_EXPRESS)
+#define BOARD_TYPE      "SAMD ADAFRUIT_ITSYBITSY_M4_EXPRESS"
+#elif defined(__SAMD21E18A__)
+#define BOARD_TYPE      "SAMD21E18A"
+#elif defined(__SAMD21G18A__)
+#define BOARD_TYPE      "SAMD21G18A"
+#elif defined(__SAMD51G19A__)
+#define BOARD_TYPE      "SAMD51G19A"
+#elif defined(__SAMD51J19A__)
+#define BOARD_TYPE      "SAMD51J19A"
+#elif defined(__SAMD51J20A__)
+#define BOARD_TYPE      "SAMD51J20A"
+#elif defined(__SAM3X8E__)
+#define BOARD_TYPE      "SAM3X8E"
+#elif defined(__CPU_ARC__)
+#define BOARD_TYPE      "CPU_ARC"
+#elif defined(__SAMD51__)
+#define BOARD_TYPE      "SAMD51"
 #else
 #define BOARD_TYPE      "SAMD Unknown"
+#endif
+
+#elif defined(WIFI_USE_SAM_DUE)
+
+#if defined(ARDUINO_SAM_DUE)
+#define BOARD_TYPE      "SAM DUE"
+#elif defined(__SAM3X8E__)
+#define BOARD_TYPE      "SAM SAM3X8E"
+#else
+#define BOARD_TYPE      "SAM Unknown"
 #endif
 
 #elif defined(WIFI_USE_STM32)
@@ -448,22 +501,26 @@ HTTP server started @ 192.168.2.139
 </svg>
 
 ```
+### New Version v1.0.2
+
+1. Add support to ***SAM51 (Itsy-Bitsy M4, Metro M4, Grand Central M4, Feather M4 Express, etc.) and SAM DUE***.
 
 ### New Version v1.0.1
 
 1. Use new [`WiFiNINA_Generic library`](https://github.com/khoih-prog/WiFiNINA_Generic) to provide support to many more boards running WiFiNINA. 
-The original WiFiNINA library only supports Nano-33 IoT, Arduino MKR WiFi 1010, Arduino MKR VIDOR 4000 and Arduino UNO WiFi Rev.2.
+The original WiFiNINA library only supports ***Nano-33 IoT***, Arduino MKR WiFi 1010, Arduino MKR VIDOR 4000 and Arduino UNO WiFi Rev.2.
 
 ### Initial Version v1.0.0
 
-This is simple yet complete WebServer library for `AVR, Teensy, SAM DUE, SAMD, STM32, etc.` boards running WiFi modules/shields (WiFiNINA U-Blox W101, W102, etc.). ***The functions are similar and compatible to ESP8266/ESP32 WebServer libraries*** to make life much easier to port sketches from ESP8266/ESP32.
+This is simple yet complete WebServer library for `AVR, Teensy, SAMD21, STM32, etc.` boards running WiFi modules/shields (WiFiNINA U-Blox W101, W102, etc.). ***The functions are similar and compatible to ESP8266/ESP32 WebServer libraries*** to make life much easier to port sketches from ESP8266/ESP32.
 
 The library currently supports these boards
 1. SAM DUE
 2. SAMD21 (ZERO, MKR, NANO_33_IOT, M0, M0 Pro, AdaFruit CIRCUITPLAYGROUND_EXPRESS, etc.)
 3. SAMD51 (Adafruit M4 : Metro, Grand Central, ItsyBitsy, Feather Express, Trellis, Metro AirLift lite, MONSTER M4SK Express, Hallowing Express, etc. )
 4. Teensy (4.0, 3.6, 3.5, 3,2, 3.1, 3.0, LC)
-5. STM32F1, STM32F2, STM32F4, STM32F7
+5. STM32F1, STM32F2, STM32F4, STM32F7 with more than 32KB flash memory.
+6. AVR Mega1280, 2560, ADK.
 
 The library supports 
 1. WiFi Client, STA and AP mode
@@ -475,11 +532,11 @@ The library supports
 ## TO DO
 1. Bug Searching and Killing
 2. Add SSL/TLS Client and Server support
-3. Support more types of boards using ESP8266 AT-command shields.
+3. Support more types of boards using WiFiNINA and other WiFi shields.
 
 
 ### Contributions and thanks
-1. Forked from [Ivan Grokhotkov's ESP8266WebServer](https://github.com/esp8266/Arduino/tree/master/libraries/ESP8266WebServer)
+1. Based on and modified from [Ivan Grokhotkov's ESP8266WebServer](https://github.com/esp8266/Arduino/tree/master/libraries/ESP8266WebServer)
 
 ## Contributing
 

@@ -7,7 +7,7 @@
    Forked and modified from Arduino WiFiNINA library https://www.arduino.cc/en/Reference/WiFiNINA
    Built by Khoi Hoang https://github.com/khoih-prog/WiFiWebServer
    Licensed under MIT license
-   Version: 1.0.1
+   Version: 1.0.2
 
    Original author:
    @file       Esp8266WebServer.h
@@ -17,6 +17,7 @@
    ------- -----------  ---------- -----------
     1.0.0   K Hoang      12/02/2020 Initial coding for SAMD21, Nano 33 IoT, etc running WiFiNINA
     1.0.1   K Hoang      28/03/2020 Change to use new WiFiNINA_Generic library to support many more boards running WiFiNINA
+    1.0.2   K Hoang      28/03/2020 Add support to SAMD51 and SAM DUE boards
  *****************************************************************************************************************************/
 
 #ifndef WiFiWebServer_h
@@ -24,15 +25,24 @@
 
 #define USE_NEW_WEBSERVER_VERSION     true
 
-#if    ( defined(ARDUINO_SAM_DUE) || defined(ARDUINO_SAMD_ZERO) || defined(ARDUINO_SAMD_MKR1000) || defined(ARDUINO_SAMD_MKRWIFI1010) \
+#if    ( defined(ARDUINO_SAMD_ZERO) || defined(ARDUINO_SAMD_MKR1000) || defined(ARDUINO_SAMD_MKRWIFI1010) \
       || defined(ARDUINO_SAMD_NANO_33_IOT) || defined(ARDUINO_SAMD_MKRFox1200) || defined(ARDUINO_SAMD_MKRWAN1300) || defined(ARDUINO_SAMD_MKRWAN1310) \
-      || defined(ARDUINO_SAMD_MKRGSM1400) || defined(ARDUINO_SAMD_MKRNB1500) || defined(ARDUINO_SAMD_MKRVIDOR4000) || defined(ARDUINO_SAMD_MKRGSM1400) \
-      || defined(ARDUINO_SAMD_CIRCUITPLAYGROUND_EXPRESS) || defined(__SAMD21G18A__) || defined(__SAM3X8E__) || defined(__CPU_ARC__) )
+      || defined(ARDUINO_SAMD_MKRGSM1400) || defined(ARDUINO_SAMD_MKRNB1500) || defined(ARDUINO_SAMD_MKRVIDOR4000) || defined(__SAMD21G18A__) \
+      || defined(ARDUINO_SAMD_CIRCUITPLAYGROUND_EXPRESS) || defined(__SAMD21E18A__) || defined(__SAMD51__) || defined(__SAMD51J20A__) || defined(__SAMD51J19A__) \
+      || defined(__SAMD51G19A__) || defined(__SAMD21G18A__) )
 #if defined(WIFI_USE_SAMD)
 #undef WIFI_USE_SAMD
 #endif
 #define WIFI_USE_SAMD      true
-#warning Use SAMD / SAM DUE architecture from WiFiWebServer
+#warning Use SAMD architecture from WiFiWebServer
+#endif
+
+#if ( defined(ARDUINO_SAM_DUE) || defined(__SAM3X8E__) )
+#if defined(WIFI_USE_SAM_DUE)
+#undef WIFI_USE_SAM_DUE
+#endif
+#define WIFI_USE_SAM_DUE      true
+#warning Use SAM_DUE architecture from WiFiWebServer
 #endif
 
 #if ( defined(STM32F0) || defined(STM32F1) || defined(STM32F2) || defined(STM32F3)  ||defined(STM32F4) || defined(STM32F7) )
@@ -42,6 +52,7 @@
 #undef WIFI_USE_STM32
 #endif
 #define WIFI_USE_STM32      true
+#warning Use STM32 architecture from WiFiWebServer
 #endif
 
 // To support lambda function in class
@@ -167,7 +178,7 @@ class WiFiWebServer
     //KH
     void send(int code, char*  content_type, const String& content, size_t contentLength);
 
-#if !( defined(CORE_TEENSY) || (WIFI_USE_SAMD) || (WIFI_USE_STM32) )
+#if !( defined(CORE_TEENSY) || (WIFI_USE_SAMD) || WIFI_USE_SAM_DUE || (WIFI_USE_STM32) )
     void send_P(int code, PGM_P content_type, PGM_P content);
     void send_P(int code, PGM_P content_type, PGM_P content, size_t contentLength);
 #endif
