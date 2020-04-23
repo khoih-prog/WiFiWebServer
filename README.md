@@ -6,6 +6,10 @@
 [![contributions welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat)](#Contributing)
 [![GitHub issues](https://img.shields.io/github/issues/khoih-prog/WiFiWebServer.svg)](http://github.com/khoih-prog/WiFiWebServer/issues)
 
+#### New in v1.0.3
+
+1. Add support to ***nRF52*** boards, such as ***AdaFruit Feather nRF52832, nRF52840 Express, BlueFruit Sense, Itsy-Bitsy nRF52840 Express, Metro nRF52840 Express, etc***
+
 ### New Version v1.0.2
 
 1. Add support to ***SAM51 (Itsy-Bitsy M4, Metro M4, Grand Central M4, Feather M4 Express, etc.) and SAM DUE***.
@@ -40,15 +44,16 @@ Library is based on and modified from:
 The WiFiWebServer class found in `WiFiWebServer.h` header, is a simple web server that knows how to handle HTTP requests such as GET and POST and can only support one simultaneous client.
 
 ## Prerequisite
-1. [`Arduino IDE 1.8.12 or later` for Arduino](https://www.arduino.cc/en/Main/Software)
-2. `Arduino AVR core 1.8.2 or later` for Arduino (Use Arduino Board Manager) for AVR boards
-3. [`Teensy core 1.51 or later`](https://www.pjrc.com/teensy/td_download.html) for Teensy (4.0, 3.6, 3.5, 3,2, 3.1, 3.0, LC) boards
-4. [`Arduino SAM DUE core 1.6.12 or later`](https://www.arduino.cc/en/Guide/ArduinoDue) for SAM DUE ARM Cortex-M3 boards
-5. [`Arduino SAMD core 1.8.5 or later`](https://www.arduino.cc/en/Guide/ArduinoM0) for SAMD ARM Cortex-M0+ boards
-6. [`Adafruit SAMD core 1.5.11 or later`](https://www.adafruit.com/) for SAMD ARM Cortex-M0+ and M4 boards (Nano 33 IoT, etc.)
-7. [`Arduino Core for STM32 v1.8.0 or later`](https://github.com/khoih-prog/Arduino_Core_STM32) for STM32 boards
-8. [`Functional-VLPP library`](https://github.com/khoih-prog/functional-vlpp) to use server's lambda function. To install. check [![arduino-library-badge](https://www.ardu-badge.com/badge/Functional-Vlpp.svg?)](https://www.ardu-badge.com/Functional-Vlpp)
-9. [`WiFiNINA_Generic library 1.5.0 or later`](https://github.com/khoih-prog/WiFiNINA_Generic)
+ 1. [`Arduino IDE 1.8.12 or later` for Arduino](https://www.arduino.cc/en/Main/Software)
+ 2. `Arduino AVR core 1.8.2 or later` for Arduino (Use Arduino Board Manager) for AVR boards
+ 3. [`Teensy core 1.51 or later`](https://www.pjrc.com/teensy/td_download.html) for Teensy (4.0, 3.6, 3.5, 3,2, 3.1, 3.0, LC) boards
+ 4. [`Arduino SAM DUE core 1.6.12 or later`](https://www.arduino.cc/en/Guide/ArduinoDue) for SAM DUE ARM Cortex-M3 boards
+ 5. [`Arduino SAMD core 1.8.5 or later`](https://www.arduino.cc/en/Guide/ArduinoM0) for SAMD ARM Cortex-M0+ boards
+ 6. [`Adafruit SAMD core 1.5.11 or later`](https://www.adafruit.com/) for SAMD ARM Cortex-M0+ and M4 boards (Nano 33 IoT, etc.)
+ 7. [`Arduino Core for STM32 v1.8.0 or later`](https://github.com/khoih-prog/Arduino_Core_STM32) for STM32 boards
+ 8. [`Adafruit nRF52 v0.19.0 or later`](www.adafruit.com) for nRF52 boards such as AdaFruit Feather nRF52840 Express, etc.
+ 9. [`Functional-VLPP library`](https://github.com/khoih-prog/functional-vlpp) to use server's lambda function. To install. check [![arduino-library-badge](https://www.ardu-badge.com/badge/Functional-Vlpp.svg?)](https://www.ardu-badge.com/Functional-Vlpp)
+10. [`WiFiNINA_Generic library 1.5.1 or later`](https://github.com/khoih-prog/WiFiNINA_Generic)
 
 ## Installation
 
@@ -64,6 +69,28 @@ You can also use this link [![arduino-library-badge](https://www.ardu-badge.com/
 4. Copy whole 
   - `WiFiWebServer-master` folder to Arduino libraries' directory such as `~/Arduino/libraries/`.
 
+#### Important notes
+
+Please change the pin-to-pin connection in `~/Arduino/libraries/src/WiFiNINA_Pinout_Generic.h` to match actual connection.
+
+For example
+
+```
+#elif    ( defined(NRF52840_FEATHER) || defined(NRF52832_FEATHER) || defined(NRF52_SERIES) || defined(ARDUINO_NRF52_ADAFRUIT) )
+
+  #warning You have to modify pin usage accoring to actual connection for NRF528XX
+  // To define pin out for WiFiNINA here
+
+  //#define PINS_COUNT           (60u)
+  //NINA
+  #define NINA_GPIO0  (26u)                             //26
+  #define NINA_RESETN (27u)
+  #define NINA_ACK    (28u)
+
+  #define SPIWIFI_SS       24   //PIN_SPI1_SS            //24
+  #define SPIWIFI_ACK      28   //NINA_ACK               //28 
+  #define SPIWIFI_RESET    27   //NINA_RESETN            //27
+```
 
 #### Usage
 
@@ -240,6 +267,13 @@ Please take a look at other examples, as well.
 
 #define USE_WIFI_NINA         true
 
+#if    ( defined(NRF52840_FEATHER) || defined(NRF52832_FEATHER) || defined(NRF52_SERIES) || defined(ARDUINO_NRF52_ADAFRUIT) )
+  #if defined(WIFI_USE_NRF528XX)
+    #undef WIFI_USE_NRF528XX
+  #endif
+  #define WIFI_USE_NRF528XX          true
+#endif
+
 #if    ( defined(ARDUINO_SAMD_ZERO) || defined(ARDUINO_SAMD_MKR1000) || defined(ARDUINO_SAMD_MKRWIFI1010) \
       || defined(ARDUINO_SAMD_NANO_33_IOT) || defined(ARDUINO_SAMD_MKRFox1200) || defined(ARDUINO_SAMD_MKRWAN1300) || defined(ARDUINO_SAMD_MKRWAN1310) \
       || defined(ARDUINO_SAMD_MKRGSM1400) || defined(ARDUINO_SAMD_MKRNB1500) || defined(ARDUINO_SAMD_MKRVIDOR4000) || defined(__SAMD21G18A__) \
@@ -287,6 +321,15 @@ Please take a look at other examples, as well.
 #else
 // For Other Boards
 #define BOARD_TYPE      "Unknown Teensy Board"
+#endif
+
+#elif defined(WIFI_USE_NRF528XX)
+#if defined(NRF52840_FEATHER)
+#define BOARD_TYPE      "NRF52840_FEATHER"
+#elif defined(NRF52832_FEATHER)
+#define BOARD_TYPE      "NRF52832_FEATHER"
+#else
+#define BOARD_TYPE      "NRF52 Unknown"
 #endif
 
 #elif defined(WIFI_USE_SAMD)
@@ -501,6 +544,11 @@ HTTP server started @ 192.168.2.139
 </svg>
 
 ```
+
+#### New in v1.0.3
+
+1. Add support to nRF52 boards, such as AdaFruit Feather nRF52832, nRF52840 Express, BlueFruit Sense, Itsy-Bitsy nRF52840 Express, Metro nRF52840 Express, etc.
+
 ### New Version v1.0.2
 
 1. Add support to ***SAM51 (Itsy-Bitsy M4, Metro M4, Grand Central M4, Feather M4 Express, etc.) and SAM DUE***.

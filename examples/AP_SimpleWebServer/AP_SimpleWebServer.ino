@@ -7,7 +7,7 @@
    Forked and modified from Arduino WiFiNINA library https://www.arduino.cc/en/Reference/WiFiNINA
    Built by Khoi Hoang https://github.com/khoih-prog/WiFiWebServer
    Licensed under MIT license
-   Version: 1.0.2
+   Version: 1.0.3
 
    A simple web server that lets you blink an LED via the web.
    This sketch will create a new access point (with no password).
@@ -28,10 +28,19 @@
     1.0.0   K Hoang      12/02/2020 Initial coding for SAMD21, Nano 33 IoT, etc running WiFiNINA
     1.0.1   K Hoang      28/03/2020 Change to use new WiFiNINA_Generic library to support many more boards running WiFiNINA
     1.0.2   K Hoang      28/03/2020 Add support to SAMD51 and SAM DUE boards
+    1.0.3   K Hoang      28/03/2020 Add support to nRF52 boards, such as AdaFruit Feather nRF52832, nRF52840 Express, BlueFruit Sense, 
+                                    Itsy-Bitsy nRF52840 Express, Metro nRF52840 Express, etc. 
  *****************************************************************************************************************************/
 #define DEBUG_WIFI_WEBSERVER_PORT Serial
 
 #define USE_WIFI_NINA         true
+
+#if    ( defined(NRF52840_FEATHER) || defined(NRF52832_FEATHER) || defined(NRF52_SERIES) || defined(ARDUINO_NRF52_ADAFRUIT) )
+  #if defined(WIFI_USE_NRF528XX)
+    #undef WIFI_USE_NRF528XX
+  #endif
+  #define WIFI_USE_NRF528XX          true
+#endif
 
 #if    ( defined(ARDUINO_SAMD_ZERO) || defined(ARDUINO_SAMD_MKR1000) || defined(ARDUINO_SAMD_MKRWIFI1010) \
       || defined(ARDUINO_SAMD_NANO_33_IOT) || defined(ARDUINO_SAMD_MKRFox1200) || defined(ARDUINO_SAMD_MKRWAN1300) || defined(ARDUINO_SAMD_MKRWAN1310) \
@@ -80,6 +89,15 @@
 #else
 // For Other Boards
 #define BOARD_TYPE      "Unknown Teensy Board"
+#endif
+
+#elif defined(WIFI_USE_NRF528XX)
+#if defined(NRF52840_FEATHER)
+#define BOARD_TYPE      "NRF52840_FEATHER"
+#elif defined(NRF52832_FEATHER)
+#define BOARD_TYPE      "NRF52832_FEATHER"
+#else
+#define BOARD_TYPE      "NRF52 Unknown"
 #endif
 
 #elif defined(WIFI_USE_SAMD)

@@ -7,7 +7,7 @@
    Forked and modified from Arduino WiFiNINA library https://www.arduino.cc/en/Reference/WiFiNINA
    Built by Khoi Hoang https://github.com/khoih-prog/WiFiWebServer
    Licensed under MIT license
-   Version: 1.0.2
+   Version: 1.0.3
 
    Original author:
    @file       Esp8266WebServer.h
@@ -18,6 +18,8 @@
     1.0.0   K Hoang      12/02/2020 Initial coding for SAMD21, Nano 33 IoT, etc running WiFiNINA
     1.0.1   K Hoang      28/03/2020 Change to use new WiFiNINA_Generic library to support many more boards running WiFiNINA
     1.0.2   K Hoang      28/03/2020 Add support to SAMD51 and SAM DUE boards
+    1.0.3   K Hoang      28/03/2020 Add support to nRF52 boards, such as AdaFruit Feather nRF52832, nRF52840 Express, BlueFruit Sense, 
+                                    Itsy-Bitsy nRF52840 Express, Metro nRF52840 Express, etc. 
  *****************************************************************************************************************************/
 
 #ifndef WiFiWebServer_h
@@ -35,6 +37,14 @@
 #endif
 #define WIFI_USE_SAMD      true
 #warning Use SAMD architecture from WiFiWebServer
+#endif
+
+#if    ( defined(NRF52840_FEATHER) || defined(NRF52832_FEATHER) || defined(NRF52_SERIES) || defined(ARDUINO_NRF52_ADAFRUIT) )
+#if defined(WIFI_USE_NRF528XX)
+#undef WIFI_USE_NRF528XX
+#endif
+#define WIFI_USE_NRF528XX      true
+#warning Use nFR52 architecture from WiFiWebServer
 #endif
 
 #if ( defined(ARDUINO_SAM_DUE) || defined(__SAM3X8E__) )
@@ -178,7 +188,7 @@ class WiFiWebServer
     //KH
     void send(int code, char*  content_type, const String& content, size_t contentLength);
 
-#if !( defined(CORE_TEENSY) || (WIFI_USE_SAMD) || WIFI_USE_SAM_DUE || (WIFI_USE_STM32) )
+#if !( defined(CORE_TEENSY) || (WIFI_USE_SAMD) || WIFI_USE_SAM_DUE || (WIFI_USE_STM32) || WIFI_USE_NRF528XX )
     void send_P(int code, PGM_P content_type, PGM_P content);
     void send_P(int code, PGM_P content_type, PGM_P content, size_t contentLength);
 #endif
