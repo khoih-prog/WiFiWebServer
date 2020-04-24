@@ -7,7 +7,7 @@
    Forked and modified from Arduino WiFiNINA library https://www.arduino.cc/en/Reference/WiFiNINA
    Built by Khoi Hoang https://github.com/khoih-prog/WiFiWebServer
    Licensed under MIT license
-   Version: 1.0.3
+   Version: 1.0.4
 
    Original author:
    @file       Esp8266WebServer.h
@@ -18,8 +18,9 @@
     1.0.0   K Hoang      12/02/2020 Initial coding for SAMD21, Nano 33 IoT, etc running WiFiNINA
     1.0.1   K Hoang      28/03/2020 Change to use new WiFiNINA_Generic library to support many more boards running WiFiNINA
     1.0.2   K Hoang      28/03/2020 Add support to SAMD51 and SAM DUE boards
-    1.0.3   K Hoang      28/03/2020 Add support to nRF52 boards, such as AdaFruit Feather nRF52832, nRF52840 Express, BlueFruit Sense, 
-                                    Itsy-Bitsy nRF52840 Express, Metro nRF52840 Express, etc. 
+    1.0.3   K Hoang      22/04/2020 Add support to nRF52 boards, such as AdaFruit Feather nRF52832, nRF52840 Express, BlueFruit Sense, 
+                                    Itsy-Bitsy nRF52840 Express, Metro nRF52840 Express, NINA_B30_ublox, etc. 
+    1.0.4   K Hoang      23/04/2020 Add support to MKR1000 boards using WiFi101 and custom WiFi libraries.                             
  *****************************************************************************************************************************/
 
 #ifndef WiFiWebServer_h
@@ -39,7 +40,9 @@
 #warning Use SAMD architecture from WiFiWebServer
 #endif
 
-#if    ( defined(NRF52840_FEATHER) || defined(NRF52832_FEATHER) || defined(NRF52_SERIES) || defined(ARDUINO_NRF52_ADAFRUIT) )
+#if ( defined(NRF52840_FEATHER) || defined(NRF52832_FEATHER) || defined(NRF52_SERIES) || defined(ARDUINO_NRF52_ADAFRUIT) || \
+        defined(NRF52840_FEATHER_SENSE) || defined(NRF52840_ITSYBITSY) || defined(NRF52840_CIRCUITPLAY) || defined(NRF52840_CLUE) || \
+        defined(NRF52840_METRO) || defined(NRF52840_PCA10056) || defined(PARTICLE_XENON) || defined(NINA_B302_ublox) )
 #if defined(WIFI_USE_NRF528XX)
 #undef WIFI_USE_NRF528XX
 #endif
@@ -74,9 +77,20 @@
 
 // Modify to use new WiFiNINA_Generic library to support boards besides Nano-33 IoT, MKRWiFi1010, Adafruit MetroM4, etc.
 #if USE_WIFI_NINA
+
 #include <WiFiNINA_Generic.h>
+#warning Use WiFiNINA from WiFiWebServer
+#elif USE_WIFI101
+#include <WiFi101.h>
+#warning Use WiFi101 from WiFiWebServer
+#else
+#if USE_WIFI_CUSTOM
+#warning Use Custom WiFi for WiFiWebServer
 #else
 #include <WiFi.h>
+#warning Use WiFi.h from WiFiWebServer
+#endif
+
 #endif
 
 #include "utility/mimetable.h"

@@ -6,9 +6,14 @@
 [![contributions welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat)](#Contributing)
 [![GitHub issues](https://img.shields.io/github/issues/khoih-prog/WiFiWebServer.svg)](http://github.com/khoih-prog/WiFiWebServer/issues)
 
+#### New in v1.0.4
+
+1. Add support to boards using ***WiFi101 built-in or shield***. For example MKR1000, Teensy, Mega, etc..
+2. Support any future custom WiFi library that meets the no-compiling-error requirements.
+
 #### New in v1.0.3
 
-1. Add support to ***nRF52*** boards, such as ***AdaFruit Feather nRF52832, nRF52840 Express, BlueFruit Sense, Itsy-Bitsy nRF52840 Express, Metro nRF52840 Express, etc***
+1. Add support to ***nRF52*** boards, such as ***AdaFruit Feather nRF52832, nRF52840 Express, BlueFruit Sense, Itsy-Bitsy nRF52840 Express, Metro nRF52840 Express, NINA_B30_ublox, etc.***
 
 ### New Version v1.0.2
 
@@ -71,12 +76,14 @@ You can also use this link [![arduino-library-badge](https://www.ardu-badge.com/
 
 #### Important notes
 
-Please change the pin-to-pin connection in `~/Arduino/libraries/src/WiFiNINA_Pinout_Generic.h` to match actual connection.
+1. Please change the pin-to-pin connection in `~/Arduino/libraries/src/WiFiNINA_Pinout_Generic.h` to match actual connection.
 
 For example
 
 ```
-#elif    ( defined(NRF52840_FEATHER) || defined(NRF52832_FEATHER) || defined(NRF52_SERIES) || defined(ARDUINO_NRF52_ADAFRUIT) )
+#elif ( defined(NRF52840_FEATHER) || defined(NRF52832_FEATHER) || defined(NRF52_SERIES) || defined(ARDUINO_NRF52_ADAFRUIT) || \
+        defined(NRF52840_FEATHER_SENSE) || defined(NRF52840_ITSYBITSY) || defined(NRF52840_CIRCUITPLAY) || defined(NRF52840_CLUE) || \
+        defined(NRF52840_METRO) || defined(NRF52840_PCA10056) || defined(PARTICLE_XENON) || defined(NINA_B302_ublox) )
 
   #warning You have to modify pin usage accoring to actual connection for NRF528XX
   // To define pin out for WiFiNINA here
@@ -91,6 +98,51 @@ For example
   #define SPIWIFI_ACK      28   //NINA_ACK               //28 
   #define SPIWIFI_RESET    27   //NINA_RESETN            //27
 ```
+
+2. ***How to select which built-in WiFi or shield to use***
+
+- To use W102-based WiFiNINA, define in the sketch:
+
+```
+#define USE_WIFI_NINA         true
+```
+
+- To use built-in WiFi101 or shield:
+
+```
+#define USE_WIFI_NINA         false
+#define USE_WIFI101           true
+```
+
+- To use MKR1000 with built-in WiFi101:
+
+```
+// Don't care false ot true
+#define USE_WIFI_NINA         false
+```
+
+- For boards other than MKR1000, to use another WiFi library with the standard ***WiFi.h***, such as WiFiEspAT library
+
+```
+#define USE_WIFI_NINA         false
+```
+- To use another WiFi library without the standard ***WiFi.h***
+For example, WiFi_XYZ library uses ***WiFi_XYZ.h***
+
+```
+#define USE_WIFI_NINA         false
+#define USE_WIFI_CUSTOM       true
+
+...
+//Must be placed before #include <WiFiWebServer.h>
+#include <WiFi_XYZ.h>
+#include <WiFiWebServer.h>
+```
+
+#### Important:
+
+- The ***WiFiEsp, WiFi_Link libraries are not supported***. Don't use unless you know how to modify those libraries.
+- Requests to support for any custom WiFi library will be ignored. ***Use at your own risk***.
 
 #### Usage
 
@@ -266,6 +318,14 @@ Please take a look at other examples, as well.
 #define DEBUG_WIFI_WEBSERVER_PORT Serial
 
 #define USE_WIFI_NINA         true
+
+#if defined(ARDUINO_SAMD_MKR1000)
+  #if defined(USE_WIFI_NINA)
+    #undef USE_WIFI_NINA
+  #endif
+  #define USE_WIFI_NINA         false
+  #define USE_WIFI101           true
+#endif
 
 #if    ( defined(NRF52840_FEATHER) || defined(NRF52832_FEATHER) || defined(NRF52_SERIES) || defined(ARDUINO_NRF52_ADAFRUIT) )
   #if defined(WIFI_USE_NRF528XX)
@@ -450,18 +510,24 @@ void setup(void)
   Serial.println("\nStarting HelloServer on " + String(BOARD_TYPE));
 
   // check for the presence of the shield
+#if USE_WIFI_NINA
   if (WiFi.status() == WL_NO_MODULE)
+#else
+  if (WiFi.status() == WL_NO_SHIELD)
+#endif  
   {
     Serial.println(F("WiFi shield not present"));
     // don't continue
     while (true);
   }
 
+#if USE_WIFI_NINA
   String fv = WiFi.firmwareVersion();
   if (fv < WIFI_FIRMWARE_LATEST_VERSION) 
   {
     Serial.println("Please upgrade the firmware");
   }
+#endif
 
   // attempt to connect to WiFi network
   while ( status != WL_CONNECTED)
@@ -544,6 +610,11 @@ HTTP server started @ 192.168.2.139
 </svg>
 
 ```
+
+#### New in v1.0.4
+
+1. Add support to boards using ***WiFi101 built-in or shield***. For example MKR1000, Teensy, Mega, etc..
+2. Support any future custom WiFi library that meets the no-compiling-error requirements.
 
 #### New in v1.0.3
 
