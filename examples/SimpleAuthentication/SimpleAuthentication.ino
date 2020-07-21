@@ -14,10 +14,15 @@
     1.0.1   K Hoang      28/03/2020 Change to use new WiFiNINA_Generic library to support many more boards running WiFiNINA
     1.0.2   K Hoang      28/03/2020 Add support to SAMD51 and SAM DUE boards
     1.0.3   K Hoang      22/04/2020 Add support to nRF52 boards, such as AdaFruit Feather nRF52832, nRF52840 Express, BlueFruit Sense, 
-                                    Itsy-Bitsy nRF52840 Express, Metro nRF52840 Express, etc. 
+                                    Itsy-Bitsy nRF52840 Express, Metro nRF52840 Express, NINA_B30_ublox, etc. 
     1.0.4   K Hoang      23/04/2020 Add support to MKR1000 boards using WiFi101 and custom WiFi libraries.
+    1.0.5   K Hoang      21/07/2020 Fix bug not closing client and releasing socket.
  *****************************************************************************************************************************/
-#define DEBUG_WIFI_WEBSERVER_PORT Serial
+#define DEBUG_WIFI_WEBSERVER_PORT   Serial
+
+// Debug Level from 0 to 4
+#define _WIFI_LOGLEVEL_             1
+#define _WIFININA_LOGLEVEL_         1
 
 #define USE_WIFI_NINA         true
 
@@ -168,6 +173,10 @@
 #define BOARD_TYPE      "AVR Mega"
 #endif
 
+#ifndef BOARD_NAME
+  #define BOARD_NAME    BOARD_TYPE
+#endif
+
 #include <WiFiWebServer.h>
 
 char ssid[] = "****";        // your network SSID (name)
@@ -257,7 +266,7 @@ void handleRoot()
     return;
   }
 
-  String content = "<html><body><H2>hello, you successfully connected to WiFiNINA!</H2><br>";
+  String content = String("<html><body><H2>Hello, you successfully connected to WiFiNINA on ") + BOARD_NAME + "!</H2><br>";
 
   if (server.hasHeader("User-Agent"))
   {
@@ -294,7 +303,7 @@ void setup(void)
   Serial.begin(115200);
   while (!Serial);
 
-  Serial.println("\nStarting SimpleAuthentication on " + String(BOARD_TYPE));
+  Serial.println("\nStarting SimpleAuthentication on " + String(BOARD_NAME));
 
   // check for the presence of the shield
 #if USE_WIFI_NINA

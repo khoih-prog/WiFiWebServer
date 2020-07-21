@@ -7,7 +7,7 @@
    Forked and modified from Arduino WiFiNINA library https://www.arduino.cc/en/Reference/WiFiNINA
    Built by Khoi Hoang https://github.com/khoih-prog/WiFiWebServer
    Licensed under MIT license
-   Version: 1.0.4
+   Version: 1.0.5
 
    Original author:
    @file       Esp8266WebServer.h
@@ -19,8 +19,9 @@
     1.0.1   K Hoang      28/03/2020 Change to use new WiFiNINA_Generic library to support many more boards running WiFiNINA
     1.0.2   K Hoang      28/03/2020 Add support to SAMD51 and SAM DUE boards
     1.0.3   K Hoang      22/04/2020 Add support to nRF52 boards, such as AdaFruit Feather nRF52832, nRF52840 Express, BlueFruit Sense, 
-                                    Itsy-Bitsy nRF52840 Express, Metro nRF52840 Express, NINA_B30_ublox, etc.  
-    1.0.4   K Hoang      23/04/2020 Add support to MKR1000 boards using WiFi101 and custom WiFi libraries.  
+                                    Itsy-Bitsy nRF52840 Express, Metro nRF52840 Express, NINA_B30_ublox, etc. 
+    1.0.4   K Hoang      23/04/2020 Add support to MKR1000 boards using WiFi101 and custom WiFi libraries.
+    1.0.5   K Hoang      21/07/2020 Fix bug not closing client and releasing socket.
  *****************************************************************************************************************************/
 
 #ifndef WiFiWebServer_Parsing_impl_h
@@ -104,7 +105,7 @@ bool WiFiWebServer::_parseRequest(WiFiClient& client) {
   int addr_start = req.indexOf(' ');
   int addr_end = req.indexOf(' ', addr_start + 1);
   if (addr_start == -1 || addr_end == -1) {
-    LOGDEBUG1(F("Invalid request: "), req);
+    WS_LOGDEBUG1(F("Invalid request: "), req);
     return false;
   }
 
@@ -156,9 +157,9 @@ bool WiFiWebServer::_parseRequest(WiFiClient& client) {
 
   _currentMethod = method;
 
-  LOGDEBUG1(F("method: "), methodStr);
-  LOGDEBUG1(F("url: "), url);
-  LOGDEBUG1(F("search: "), searchStr);
+  WS_LOGDEBUG1(F("method: "), methodStr);
+  WS_LOGDEBUG1(F("url: "), url);
+  WS_LOGDEBUG1(F("search: "), searchStr);
 
   //attach handler
   RequestHandler* handler;
@@ -191,8 +192,8 @@ bool WiFiWebServer::_parseRequest(WiFiClient& client) {
       headerValue.trim();
       _collectHeader(headerName.c_str(), headerValue.c_str());
 
-      LOGDEBUG1(F("headerName: "), headerName);
-      LOGDEBUG1(F("headerValue: "), headerValue);
+      WS_LOGDEBUG1(F("headerName: "), headerName);
+      WS_LOGDEBUG1(F("headerValue: "), headerValue);
 
       //KH
       if (headerName.equalsIgnoreCase("Content-Type"))
@@ -279,8 +280,8 @@ bool WiFiWebServer::_parseRequest(WiFiClient& client) {
       headerValue = req.substring(headerDiv + 2);
       _collectHeader(headerName.c_str(),headerValue.c_str());
 
-      LOGDEBUG1(F("headerName:"), headerName);
-      LOGDEBUG1(F("headerValue:"), headerValue);
+      WS_LOGDEBUG1(F("headerName:"), headerName);
+      WS_LOGDEBUG1(F("headerValue:"), headerValue);
 
       if (headerName.equalsIgnoreCase(F("Host"))){
         _hostHeader = headerValue;
@@ -290,13 +291,13 @@ bool WiFiWebServer::_parseRequest(WiFiClient& client) {
   }
   client.flush();
 
-  LOGDEBUG1(F("Request:"), url);
-  LOGDEBUG1(F("Arguments:"), searchStr);
-  LOGDEBUG(F("Final list of key/value pairs:"));
+  WS_LOGDEBUG1(F("Request:"), url);
+  WS_LOGDEBUG1(F("Arguments:"), searchStr);
+  WS_LOGDEBUG(F("Final list of key/value pairs:"));
   for (int i = 0; i < _currentArgCount; i++)
   {
-    LOGDEBUG1("key:",   _currentArgs[i].key.c_str());
-    LOGDEBUG1("value:", _currentArgs[i].value.c_str());
+    WS_LOGDEBUG1("key:",   _currentArgs[i].key.c_str());
+    WS_LOGDEBUG1("value:", _currentArgs[i].value.c_str());
   }
   
   return true;
@@ -326,7 +327,7 @@ bool WiFiWebServer::_parseRequest(WiFiClient& client) {
           arg.value = String(plainBuf);
         }
 
-        LOGDEBUG1(F("Plain: "), plainBuf);
+        WS_LOGDEBUG1(F("Plain: "), plainBuf);
 
         free(plainBuf);
       }
@@ -354,8 +355,8 @@ bool WiFiWebServer::_parseRequest(WiFiClient& client) {
       headerValue = req.substring(headerDiv + 2);
       _collectHeader(headerName.c_str(), headerValue.c_str());
 
-      LOGDEBUG1(F("headerName: "), headerName);
-      LOGDEBUG1(F("headerValue: "), headerValue);
+      WS_LOGDEBUG1(F("headerName: "), headerName);
+      WS_LOGDEBUG1(F("headerValue: "), headerValue);
 
       if (headerName == "Host") {
         _hostHeader = headerValue;
@@ -365,8 +366,8 @@ bool WiFiWebServer::_parseRequest(WiFiClient& client) {
   }
   client.flush();
 
-  LOGDEBUG1(F("Request: "), url);
-  LOGDEBUG1(F("Arguments: "), searchStr);
+  WS_LOGDEBUG1(F("Request: "), url);
+  WS_LOGDEBUG1(F("Arguments: "), searchStr);
 
   return true;
 #endif  
@@ -422,7 +423,7 @@ void WiFiWebServer::_parseArguments(const String& data) {
 int WiFiWebServer::_parseArgumentsPrivate(const String& data, vl::Func<void(String&,String&,const String&,int,int,int,int)> handler) 
 {
 
-  LOGDEBUG1(F("args: "), data);
+  WS_LOGDEBUG1(F("args: "), data);
 
   size_t pos = 0;
   int arg_total = 0;
@@ -463,7 +464,7 @@ int WiFiWebServer::_parseArgumentsPrivate(const String& data, vl::Func<void(Stri
       break;
   }
 
-  LOGDEBUG1(F("args count: "), arg_total);
+  WS_LOGDEBUG1(F("args count: "), arg_total);
 
   return arg_total;
 }
@@ -499,7 +500,7 @@ uint8_t WiFiWebServer::_uploadReadByte(WiFiClient& client)
 
 void WiFiWebServer::_parseArguments(String data) {
 
-  LOGDEBUG1(F("args: "), data);
+  WS_LOGDEBUG1(F("args: "), data);
 
   if (_currentArgs)
     delete[] _currentArgs;
@@ -519,7 +520,7 @@ void WiFiWebServer::_parseArguments(String data) {
     ++_currentArgCount;
   }
 
-  LOGDEBUG1(F("args count: "), _currentArgCount);
+  WS_LOGDEBUG1(F("args count: "), _currentArgCount);
 
   _currentArgs = new RequestArgument[_currentArgCount + 1];
   int pos = 0;
@@ -528,13 +529,13 @@ void WiFiWebServer::_parseArguments(String data) {
     int equal_sign_index = data.indexOf('=', pos);
     int next_arg_index = data.indexOf('&', pos);
 
-    LOGDEBUG1(F("pos: "), pos);
-    LOGDEBUG1(F("=@ "), equal_sign_index);
-    LOGDEBUG1(F(" &@ "), next_arg_index);
+    WS_LOGDEBUG1(F("pos: "), pos);
+    WS_LOGDEBUG1(F("=@ "), equal_sign_index);
+    WS_LOGDEBUG1(F(" &@ "), next_arg_index);
 
     if ((equal_sign_index == -1) || ((equal_sign_index > next_arg_index) && (next_arg_index != -1))) {
 
-      LOGDEBUG1(F("arg missing value: "), iarg);
+      WS_LOGDEBUG1(F("arg missing value: "), iarg);
 
       if (next_arg_index == -1)
         break;
@@ -545,9 +546,9 @@ void WiFiWebServer::_parseArguments(String data) {
     arg.key = data.substring(pos, equal_sign_index);
     arg.value = data.substring(equal_sign_index + 1, next_arg_index);
 
-    LOGDEBUG1(F("arg: "), iarg);
-    LOGDEBUG1(F("key: "), arg.key);
-    LOGDEBUG1(F("value: "), arg.value);
+    WS_LOGDEBUG1(F("arg: "), iarg);
+    WS_LOGDEBUG1(F("key: "), arg.key);
+    WS_LOGDEBUG1(F("value: "), arg.value);
 
     ++iarg;
     if (next_arg_index == -1)
@@ -556,7 +557,7 @@ void WiFiWebServer::_parseArguments(String data) {
   }
   _currentArgCount = iarg;
 
-  LOGDEBUG1(F("args count: "), _currentArgCount);
+  WS_LOGDEBUG1(F("args count: "), _currentArgCount);
 }
 
 
@@ -589,8 +590,8 @@ bool WiFiWebServer::_parseForm(WiFiClient& client, const String& boundary, uint3
 {
   (void) len;
 
-  LOGDEBUG1(F("Parse Form: Boundary: "), boundary);
-  LOGDEBUG1(F("Length: "), len);
+  WS_LOGDEBUG1(F("Parse Form: Boundary: "), boundary);
+  WS_LOGDEBUG1(F("Length: "), len);
 
   String line;
   int retry = 0;
@@ -637,14 +638,14 @@ bool WiFiWebServer::_parseForm(WiFiClient& client, const String& boundary, uint3
             argName = argName.substring(0, argName.indexOf('"'));
             argIsFile = true;
             
-            LOGDEBUG1(F("PostArg FileName: "), argFilename);
+            WS_LOGDEBUG1(F("PostArg FileName: "), argFilename);
 
             //use GET to set the filename if uploading using blob
             if (argFilename == F("blob") && hasArg("filename")) 
               argFilename = arg("filename");
           }
           
-          LOGDEBUG1(F("PostArg Name: "), argName);
+          WS_LOGDEBUG1(F("PostArg Name: "), argName);
           
           using namespace mime;
           argType = mimeTable[txt].mimeType;
@@ -660,7 +661,7 @@ bool WiFiWebServer::_parseForm(WiFiClient& client, const String& boundary, uint3
           }
           
           
-          LOGDEBUG1(F("PostArg Type: "), argType);
+          WS_LOGDEBUG1(F("PostArg Type: "), argType);
 
           if (!argIsFile)
           {
@@ -673,7 +674,7 @@ bool WiFiWebServer::_parseForm(WiFiClient& client, const String& boundary, uint3
               argValue += line;
             }
             
-            LOGDEBUG1(F("PostArg Value: "), argValue);
+            WS_LOGDEBUG1(F("PostArg Value: "), argValue);
 
             RequestArgument& arg = _postArgs[_postArgsLen++];
             arg.key = argName;
@@ -681,7 +682,7 @@ bool WiFiWebServer::_parseForm(WiFiClient& client, const String& boundary, uint3
 
             if (line == ("--" + boundary + "--"))
             {
-              LOGDEBUG(F("Done Parsing POST"));
+              WS_LOGDEBUG(F("Done Parsing POST"));
 
               break;
             }
@@ -700,8 +701,8 @@ bool WiFiWebServer::_parseForm(WiFiClient& client, const String& boundary, uint3
             _currentUpload->currentSize = 0;
             _currentUpload->contentLength = len;
             
-            LOGDEBUG1(F("Start File: "), _currentUpload->filename);
-            LOGDEBUG1(F("Type: "), _currentUpload->type);
+            WS_LOGDEBUG1(F("Start File: "), _currentUpload->filename);
+            WS_LOGDEBUG1(F("Type: "), _currentUpload->type);
 
             if(_currentHandler && _currentHandler->canUpload(_currentUri))
               _currentHandler->upload(*this, _currentUri, *_currentUpload);
@@ -747,16 +748,16 @@ readfile:
                 if(_currentHandler && _currentHandler->canUpload(_currentUri))
                   _currentHandler->upload(*this, _currentUri, *_currentUpload);
                   
-                LOGDEBUG1(F("End File: "), _currentUpload->filename);
-                LOGDEBUG1(F("Type: "), _currentUpload->type);
-                LOGDEBUG1(F("Size: "), _currentUpload->totalSize);
+                WS_LOGDEBUG1(F("End File: "), _currentUpload->filename);
+                WS_LOGDEBUG1(F("Type: "), _currentUpload->type);
+                WS_LOGDEBUG1(F("Size: "), _currentUpload->totalSize);
 
                 line = client.readStringUntil(0x0D);
                 client.readStringUntil(0x0A);
                 
                 if (line == "--")
                 {
-                  LOGDEBUG(F("Done Parsing POST"));
+                  WS_LOGDEBUG(F("Done Parsing POST"));
                   break;
                 }
                 continue;
@@ -819,7 +820,7 @@ readfile:
     return true;
   }
   
-  LOGDEBUG1(F("Error: line: "), line);
+  WS_LOGDEBUG1(F("Error: line: "), line);
 
   return false;
 }
@@ -835,8 +836,8 @@ bool WiFiWebServer::_parseFormUploadAborted(){
 
 bool WiFiWebServer::_parseForm(WiFiClient& client, String boundary, uint32_t len) {
 
-  LOGDEBUG1(F("Parse Form: Boundary: "), boundary);
-  LOGDEBUG1(F("Length: "), len);
+  WS_LOGDEBUG1(F("Parse Form: Boundary: "), boundary);
+  WS_LOGDEBUG1(F("Length: "), len);
 
   String line;
   int retry = 0;
@@ -871,13 +872,13 @@ bool WiFiWebServer::_parseForm(WiFiClient& client, String boundary, uint32_t len
             argName = argName.substring(0, argName.indexOf('"'));
             argIsFile = true;
 
-            LOGDEBUG1(F("PostArg FileName: "), argFilename);
+            WS_LOGDEBUG1(F("PostArg FileName: "), argFilename);
 
             //use GET to set the filename if uploading using blob
             if (argFilename == "blob" && hasArg("filename")) argFilename = arg("filename");
           }
 
-          LOGDEBUG1(F("PostArg Name: "), argName);
+          WS_LOGDEBUG1(F("PostArg Name: "), argName);
 
           argType = "text/plain";
           line = client.readStringUntil('\r');
@@ -889,7 +890,7 @@ bool WiFiWebServer::_parseForm(WiFiClient& client, String boundary, uint32_t len
             client.readStringUntil('\n');
           }
 
-          LOGDEBUG1(F("PostArg Type: "), argType);
+          WS_LOGDEBUG1(F("PostArg Type: "), argType);
 
           if (!argIsFile) {
             while (1) {
@@ -900,7 +901,7 @@ bool WiFiWebServer::_parseForm(WiFiClient& client, String boundary, uint32_t len
               argValue += line;
             }
 
-            LOGDEBUG1(F("PostArg Value: "), argValue);
+            WS_LOGDEBUG1(F("PostArg Value: "), argValue);
 
             RequestArgument& arg = postArgs[postArgsLen++];
             arg.key = argName;
@@ -908,7 +909,7 @@ bool WiFiWebServer::_parseForm(WiFiClient& client, String boundary, uint32_t len
 
             if (line == ("--" + boundary + "--")) {
 
-              LOGDEBUG(F("Done Parsing POST"));
+              WS_LOGDEBUG(F("Done Parsing POST"));
 
               break;
             }
@@ -920,8 +921,8 @@ bool WiFiWebServer::_parseForm(WiFiClient& client, String boundary, uint32_t len
             _currentUpload.totalSize = 0;
             _currentUpload.currentSize = 0;
 
-            LOGDEBUG1(F("Start File: "), _currentUpload.filename);
-            LOGDEBUG1(F("Type: "), _currentUpload.type);
+            WS_LOGDEBUG1(F("Start File: "), _currentUpload.filename);
+            WS_LOGDEBUG1(F("Type: "), _currentUpload.type);
 
             if (_currentHandler && _currentHandler->canUpload(_currentUri))
               _currentHandler->upload(*this, _currentUri, _currentUpload);
@@ -967,14 +968,14 @@ readfile:
                 if (_currentHandler && _currentHandler->canUpload(_currentUri))
                   _currentHandler->upload(*this, _currentUri, _currentUpload);
 
-                LOGDEBUG1(F("End File: "), _currentUpload.filename);
-                LOGDEBUG1(F("Type: "), _currentUpload.type);
-                LOGDEBUG1(F("Size: "), _currentUpload.totalSize);
+                WS_LOGDEBUG1(F("End File: "), _currentUpload.filename);
+                WS_LOGDEBUG1(F("Type: "), _currentUpload.type);
+                WS_LOGDEBUG1(F("Size: "), _currentUpload.totalSize);
 
                 line = client.readStringUntil(0x0D);
                 client.readStringUntil(0x0A);
                 if (line == "--") {
-                  LOGDEBUG(F("Done Parsing POST"));
+                  WS_LOGDEBUG(F("Done Parsing POST"));
 
                   break;
                 }
@@ -1020,7 +1021,7 @@ readfile:
     return true;
   }
 
-  LOGDEBUG1(F("Error: line: "), line);
+  WS_LOGDEBUG1(F("Error: line: "), line);
 
   return false;
 }

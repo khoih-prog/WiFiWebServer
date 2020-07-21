@@ -7,7 +7,7 @@
     Forked and modified from Arduino WiFiNINA library https://www.arduino.cc/en/Reference/WiFiNINA
     Built by Khoi Hoang https://github.com/khoih-prog/WiFiWebServer
     Licensed under MIT license
-    Version: 1.0.4
+    Version: 1.0.5
 
     Copyright (c) 2015, Majenko Technologies
     All rights reserved.
@@ -45,24 +45,29 @@
     1.0.3   K Hoang      22/04/2020 Add support to nRF52 boards, such as AdaFruit Feather nRF52832, nRF52840 Express, BlueFruit Sense, 
                                     Itsy-Bitsy nRF52840 Express, Metro nRF52840 Express, NINA_B30_ublox, etc. 
     1.0.4   K Hoang      23/04/2020 Add support to MKR1000 boards using WiFi101 and custom WiFi libraries.
+    1.0.5   K Hoang      21/07/2020 Fix bug not closing client and releasing socket.
  *****************************************************************************************************************************/
-#define DEBUG_WIFI_WEBSERVER_PORT Serial
+#define DEBUG_WIFI_WEBSERVER_PORT   Serial
+
+// Debug Level from 0 to 4
+#define _WIFI_LOGLEVEL_             1
+#define _WIFININA_LOGLEVEL_         1
 
 #define USE_WIFI_NINA         true
 
 #if defined(ARDUINO_SAMD_MKR1000)
-  #if defined(USE_WIFI_NINA)
-    #undef USE_WIFI_NINA
-  #endif
-  #define USE_WIFI_NINA         false
-  #define USE_WIFI101           true
+#if defined(USE_WIFI_NINA)
+#undef USE_WIFI_NINA
+#endif
+#define USE_WIFI_NINA         false
+#define USE_WIFI101           true
 #endif
 
 #if    ( defined(NRF52840_FEATHER) || defined(NRF52832_FEATHER) || defined(NRF52_SERIES) || defined(ARDUINO_NRF52_ADAFRUIT) )
-  #if defined(WIFI_USE_NRF528XX)
-    #undef WIFI_USE_NRF528XX
-  #endif
-  #define WIFI_USE_NRF528XX          true
+#if defined(WIFI_USE_NRF528XX)
+#undef WIFI_USE_NRF528XX
+#endif
+#define WIFI_USE_NRF528XX          true
 #endif
 
 #if    ( defined(ARDUINO_SAMD_ZERO) || defined(ARDUINO_SAMD_MKR1000) || defined(ARDUINO_SAMD_MKRWIFI1010) \
@@ -187,10 +192,16 @@
 #define BOARD_TYPE      "AVR Mega"
 #endif
 
+#ifndef BOARD_NAME
+  #define BOARD_NAME    BOARD_TYPE
+#endif
+
 #include <WiFiWebServer.h>
 
-char ssid[] = "****";        // your network SSID (name)
-char pass[] = "****";        // your network password
+char ssid[] = "HueNet1";        // your network SSID (name)
+char pass[] = "jenniqqs";        // your network password
+//char ssid[] = "****";        // your network SSID (name)
+//char pass[] = "****";        // your network password
 
 int status = WL_IDLE_STATUS;     // the Wifi radio's status
 int reqCount = 0;                // number of requests received
@@ -201,27 +212,30 @@ const int led = 13;
 
 void handleRoot()
 {
+#define BUFFER_SIZE     400
+  
   digitalWrite(led, 1);
-  char temp[400];
+  char temp[BUFFER_SIZE];
   int sec = millis() / 1000;
   int min = sec / 60;
   int hr = min / 60;
 
-  snprintf(temp, 400,
+  snprintf(temp, BUFFER_SIZE - 1,
            "<html>\
 <head>\
 <meta http-equiv='refresh' content='5'/>\
-<title>WiFiNINA Demo</title>\
+<title>WiFiNINA %s</title>\
 <style>\
 body { background-color: #cccccc; font-family: Arial, Helvetica, Sans-Serif; Color: #000088; }\
 </style>\
 </head>\
 <body>\
-<h1>Hello from WiFiNINA!</h1>\
+<h1>Hello from WiFiNINA</h1>\
+<h2>on %s</h2>\
 <p>Uptime: %02d:%02d:%02d</p>\
 <img src=\"/test.svg\" />\
 </body>\
-</html>", hr, min % 60, sec % 60);
+</html>", BOARD_NAME, BOARD_NAME, hr, min % 60, sec % 60);
 
   server.send(200, "text/html", temp);
   digitalWrite(led, 0);
@@ -248,12 +262,14 @@ void handleNotFound()
   digitalWrite(led, 0);
 }
 
+String out;
+
 void drawGraph()
 {
-  String out;
+  //String out;
   out.reserve(3000);
   char temp[70];
-  out += "<svg xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\" width=\"310\" height=\"150\">\n";
+  out = "<svg xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\" width=\"310\" height=\"150\">\n";
   out += "<rect width=\"310\" height=\"150\" fill=\"rgb(250, 230, 210)\" stroke-width=\"1\" stroke=\"rgb(0, 0, 0)\" />\n";
   out += "<g stroke=\"black\">\n";
   int y = rand() % 130;
@@ -277,15 +293,15 @@ void setup(void)
 
   Serial.begin(115200);
   while (!Serial);
-  
-  Serial.println("\nStarting AdvancedServer on " + String(BOARD_TYPE));
+
+  Serial.println("\nStarting AdvancedServer on " + String(BOARD_NAME));
 
   // check for the presence of the shield
 #if USE_WIFI_NINA
   if (WiFi.status() == WL_NO_MODULE)
 #else
   if (WiFi.status() == WL_NO_SHIELD)
-#endif  
+#endif
   {
     Serial.println(F("WiFi shield not present"));
     // don't continue
@@ -294,7 +310,7 @@ void setup(void)
 
 #if USE_WIFI_NINA
   String fv = WiFi.firmwareVersion();
-  if (fv < WIFI_FIRMWARE_LATEST_VERSION) 
+  if (fv < WIFI_FIRMWARE_LATEST_VERSION)
   {
     Serial.println("Please upgrade the firmware");
   }

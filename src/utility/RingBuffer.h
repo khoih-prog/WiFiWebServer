@@ -7,7 +7,7 @@
    Forked and modified from Arduino WiFiNINA library https://www.arduino.cc/en/Reference/WiFiNINA
    Built by Khoi Hoang https://github.com/khoih-prog/WiFiWebServer
    Licensed under MIT license
-   Version: 1.0.4
+   Version: 1.0.5
 
    Original author:
    @file       Esp8266WebServer.h
@@ -19,8 +19,9 @@
     1.0.1   K Hoang      28/03/2020 Change to use new WiFiNINA_Generic library to support many more boards running WiFiNINA
     1.0.2   K Hoang      28/03/2020 Add support to SAMD51 and SAM DUE boards
     1.0.3   K Hoang      22/04/2020 Add support to nRF52 boards, such as AdaFruit Feather nRF52832, nRF52840 Express, BlueFruit Sense, 
-                                    Itsy-Bitsy nRF52840 Express, Metro nRF52840 Express, etc. 
+                                    Itsy-Bitsy nRF52840 Express, Metro nRF52840 Express, NINA_B30_ublox, etc. 
     1.0.4   K Hoang      23/04/2020 Add support to MKR1000 boards using WiFi101 and custom WiFi libraries.
+    1.0.5   K Hoang      21/07/2020 Fix bug not closing client and releasing socket.
  *****************************************************************************************************************************/
 
 #ifndef WiFi_RingBuffer_h

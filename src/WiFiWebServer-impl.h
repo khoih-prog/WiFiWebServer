@@ -7,7 +7,7 @@
    Forked and modified from Arduino WiFiNINA library https://www.arduino.cc/en/Reference/WiFiNINA
    Built by Khoi Hoang https://github.com/khoih-prog/WiFiWebServer
    Licensed under MIT license
-   Version: 1.0.4
+   Version: 1.0.5
 
    Original author:
    @file       Esp8266WebServer.h
@@ -21,6 +21,7 @@
     1.0.3   K Hoang      22/04/2020 Add support to nRF52 boards, such as AdaFruit Feather nRF52832, nRF52840 Express, BlueFruit Sense, 
                                     Itsy-Bitsy nRF52840 Express, Metro nRF52840 Express, NINA_B30_ublox, etc. 
     1.0.4   K Hoang      23/04/2020 Add support to MKR1000 boards using WiFi101 and custom WiFi libraries.
+    1.0.5   K Hoang      21/07/2020 Fix bug not closing client and releasing socket.
  *****************************************************************************************************************************/
 
 #ifndef WiFiWebServer_impl_h
@@ -161,10 +162,11 @@ void WiFiWebServer::handleClient()
     WiFiClient client = _server.available();
     if (!client) 
     {
+      //WS_LOGDEBUG(F("WiFiWebServer::handleClient: No Client"));
       return;
     }
 
-    LOGINFO(F("New Client"));
+    WS_LOGDEBUG(F("WiFiWebServer::handleClient: New Client"));
 
     _currentClient = client;
     _currentStatus = HC_WAIT_READ;
@@ -220,9 +222,10 @@ void WiFiWebServer::handleClient()
 
   if (!keepCurrentClient) 
   {
+    WS_LOGDEBUG(F("WiFiWebServer::handleClient: Don't keepCurrentClient"));
     _currentClient = WiFiClient();
     _currentStatus = HC_NONE;
-    //KH
+    // KH
     //_currentUpload.reset();
   }
 
@@ -231,6 +234,11 @@ void WiFiWebServer::handleClient()
     yield();
   }
   
+  // KH, fix bug relating to New NINA FW 1.4.0. Have to close the connection
+  _currentClient.stop();
+  WS_LOGDEBUG(F("WiFiWebServer::handleClient: Client disconnected"));
+}
+ 
 #else
 
 void WiFiWebServer::handleClient() 
@@ -243,12 +251,13 @@ void WiFiWebServer::handleClient()
       return;
     }
 
-    LOGINFO(F("New Client"));
+    WS_LOGDEBUG(F("WiFiWebServer::handleClient: New Client"));
 
     _currentClient = client;
     _currentStatus = HC_WAIT_READ;
     _statusChange = millis();
   }
+  
   if (!_currentClient.connected()) 
   {
     _currentClient = WiFiClient();
@@ -263,7 +272,7 @@ void WiFiWebServer::handleClient()
     {
       if (millis() - _statusChange > HTTP_MAX_DATA_WAIT) 
       {
-        LOGINFO(F("HTTP_MAX_DATA_WAIT Timeout"));
+        WS_LOGDEBUG(F("WiFiWebServer::handleClient: HTTP_MAX_DATA_WAIT Timeout"));
 
         _currentClient = WiFiClient();
         _currentStatus = HC_NONE;
@@ -272,11 +281,11 @@ void WiFiWebServer::handleClient()
       return;
     }
 
-    LOGINFO(F("Parsing Request"));
+    WS_LOGDEBUG(F("WiFiWebServer::handleClient: Parsing Request"));
 
     if (!_parseRequest(_currentClient)) 
     {
-      LOGINFO(F("Can't parse request"));
+      WS_LOGDEBUG(F("WiFiWebServer::handleClient: Can't parse request"));
 
       _currentClient = WiFiClient();
       _currentStatus = HC_NONE;
@@ -286,12 +295,12 @@ void WiFiWebServer::handleClient()
     _currentClient.setTimeout(HTTP_MAX_SEND_WAIT);
     _contentLength = CONTENT_LENGTH_NOT_SET;
 
-    //LOGINFO(F("WiFiWebServer::handleClient _handleRequest"));
+    //WS_LOGDEBUG(F("WiFiWebServer::handleClient _handleRequest"));
     _handleRequest();
 
     if (!_currentClient.connected()) 
     {
-      LOGINFO(F("Connection closed"));
+      WS_LOGINFO(F("WiFiWebServer::handleClient: Connection closed"));
 
       _currentClient = WiFiClient();
       _currentStatus = HC_NONE;
@@ -312,7 +321,7 @@ void WiFiWebServer::handleClient()
       _currentClient = WiFiClient();
       _currentStatus = HC_NONE;
 
-      LOGINFO(F("HTTP_MAX_CLOSE_WAIT Timeout"));
+      WS_LOGDEBUG(F("WiFiWebServer::handleClient: HTTP_MAX_CLOSE_WAIT Timeout"));
 
       yield();
     } 
@@ -322,8 +331,13 @@ void WiFiWebServer::handleClient()
       return;
     }
   }
-#endif
+  
+  // KH, fix bug relating to New NINA FW 1.4.0. Have to close the connection
+  _currentClient.stop();
+  WS_LOGDEBUG(F("WiFiWebServer::handleClient: Client disconnected"));
 }
+
+#endif
 
 void WiFiWebServer::close() 
 {
@@ -389,7 +403,7 @@ void WiFiWebServer::_prepareHeader(String& response, int code, const char* conte
     sendHeader("Transfer-Encoding", "chunked");
   }
 
-  LOGDEBUG(F("WiFiWebServer::_prepareHeader sendHeader Conn close"));
+  WS_LOGDEBUG(F("WiFiWebServer::_prepareHeader sendHeader Conn close"));
 
   sendHeader("Connection", "close");
 
@@ -405,8 +419,8 @@ void WiFiWebServer::send(int code, const char* content_type, const String& conte
   //if(code == 200 && content.length() == 0 && _contentLength == CONTENT_LENGTH_NOT_SET)
   //  _contentLength = CONTENT_LENGTH_UNKNOWN;
 
-  LOGDEBUG1(F("WiFiWebServer::send1: len = "), content.length());
-  LOGDEBUG1(F("content = "), content);
+  WS_LOGDEBUG1(F("WiFiWebServer::send1: len = "), content.length());
+  WS_LOGDEBUG1(F("content = "), content);
 
   _prepareHeader(header, code, content_type, content.length());
 
@@ -414,7 +428,7 @@ void WiFiWebServer::send(int code, const char* content_type, const String& conte
 
   if (content.length())
   {
-    LOGDEBUG1(F("WiFiWebServer::send1: write header = "), header);
+    WS_LOGDEBUG1(F("WiFiWebServer::send1: write header = "), header);
     //sendContent(content);
     sendContent(content, content.length());
   }
@@ -424,15 +438,15 @@ void WiFiWebServer::send(int code, char* content_type, const String& content, si
 {
   String header;
 
-  LOGDEBUG1(F("send2: len = "), contentLength);
-  LOGDEBUG1(F("content = "), content);
+  WS_LOGDEBUG1(F("WiFiWebServer::send2: len = "), contentLength);
+  WS_LOGDEBUG1(F("content = "), content);
 
   char type[64];
   memccpy((void*)type, content_type, 0, sizeof(type));
   _prepareHeader(header, code, (const char* )type, contentLength);
 
-  LOGDEBUG1(F("send2: hdrlen = "), header.length());
-  LOGDEBUG1(F("header = "), header);
+  WS_LOGDEBUG1(F("WiFiWebServer::send2: hdrlen = "), header.length());
+  WS_LOGDEBUG1(F("header = "), header);
 
   _currentClient.write((const uint8_t *) header.c_str(), header.length());
   
@@ -467,10 +481,10 @@ void WiFiWebServer::send_P(int code, PGM_P content_type, PGM_P content)
   memccpy_P((void*)type, (PGM_VOID_P)content_type, 0, sizeof(type));
   _prepareHeader(header, code, (const char* )type, contentLength);
 
-  LOGDEBUG1(F("send_P: len = "), contentLength);
-  LOGDEBUG1(F("content = "), content);
-  LOGDEBUG1(F("send_P: hdrlen = "), header.length());
-  LOGDEBUG1(F("header = "), header);
+  WS_LOGDEBUG1(F("WiFiWebServer::send_P: len = "), contentLength);
+  WS_LOGDEBUG1(F("content = "), content);
+  WS_LOGDEBUG1(F("WiFiWebServer::send_P: hdrlen = "), header.length());
+  WS_LOGDEBUG1(F("header = "), header);
 
   _currentClient.write((const uint8_t *) header.c_str(), header.length());
   if (contentLength)
@@ -485,10 +499,10 @@ void WiFiWebServer::send_P(int code, PGM_P content_type, PGM_P content, size_t c
   memccpy_P((void*)type, (PGM_VOID_P)content_type, 0, sizeof(type));
   _prepareHeader(header, code, (const char* )type, contentLength);
 
-  LOGDEBUG1(F("send_P: len = "), contentLength);
-  LOGDEBUG1(F("content = "), content);
-  LOGDEBUG1(F("send_P: hdrlen = "), header.length());
-  LOGDEBUG1(F("header = "), header);
+  WS_LOGDEBUG1(F("WiFiWebServer::send_P: len = "), contentLength);
+  WS_LOGDEBUG1(F("content = "), content);
+  WS_LOGDEBUG1(F("WiFiWebServer::send_P: hdrlen = "), header.length());
+  WS_LOGDEBUG1(F("header = "), header);
 
   _currentClient.write((const uint8_t *) header.c_str(), header.length());
   if (contentLength)
@@ -521,7 +535,7 @@ void WiFiWebServer::sendContent(const String& content, size_t size)
   if (_chunked) {
     char * chunkSize = (char *)malloc(11);
     if (chunkSize) {
-      LOGDEBUG(F("WiFiWebServer::sendContent: _chunked"));
+      WS_LOGDEBUG(F("WiFiWebServer::sendContent: _chunked"));
 
       sprintf(chunkSize, "%x%s", size, footer);
       _currentClient.write(chunkSize, strlen(chunkSize));
@@ -529,7 +543,7 @@ void WiFiWebServer::sendContent(const String& content, size_t size)
     }
   }
 
-  LOGDEBUG1(F("WiFiWebServer::sendContent: Client.write content: "), content);
+  WS_LOGDEBUG1(F("WiFiWebServer::sendContent: Client.write content: "), content);
   _currentClient.write(content.c_str(), size);
   if (_chunked) {
     _currentClient.write(footer, 2);
@@ -649,19 +663,19 @@ void WiFiWebServer::_handleRequest()
   bool handled = false;
   if (!_currentHandler)
   {
-    LOGWARN(F("request handler not found"));
+    WS_LOGDEBUG(F("WiFiWebServer::_handleRequest: request handler not found"));
   }
   else
   {
-    //LOGWARN(F("WiFiWebServer::_handleRequest handle"));
+    WS_LOGDEBUG(F("WiFiWebServer::_handleRequest handle"));
     handled = _currentHandler->handle(*this, _currentMethod, _currentUri);
     if (!handled)
     {
-      LOGWARN(F("_handleRequest failed"));
+      WS_LOGDEBUG(F("WiFiWebServer::_handleRequest: _handleRequest failed"));
     }
     else
     {
-      LOGWARN(F("WiFiWebServer::_handleRequest OK"));
+      WS_LOGDEBUG(F("WiFiWebServer::_handleRequest OK"));
     }
   }
 
