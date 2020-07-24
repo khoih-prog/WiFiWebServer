@@ -28,16 +28,16 @@
 
 1. Add support to ***nRF52*** boards, such as ***AdaFruit Feather nRF52832, nRF52840 Express, BlueFruit Sense, Itsy-Bitsy nRF52840 Express, Metro nRF52840 Express, NINA_B302_ublox, etc.***
 
-### New Version v1.0.2
+#### New Version v1.0.2
 
 1. Add support to ***SAM51 (Itsy-Bitsy M4, Metro M4, Grand Central M4, Feather M4 Express, etc.) and SAM DUE***.
 
-### New Version v1.0.1
+#### New Version v1.0.1
 
 1. Use new [`WiFiNINA_Generic library`](https://github.com/khoih-prog/WiFiNINA_Generic) to provide support to many more boards running WiFiNINA. 
 The original WiFiNINA library only supports ***Nano-33 IoT***, Arduino MKR WiFi 1010, Arduino MKR VIDOR 4000 and Arduino UNO WiFi Rev.2.
 
-### Initial Version v1.0.0
+#### Initial Version v1.0.0
 
 This is simple yet complete WebServer library for `AVR Mega, Teensy, SAMD21, STM32, etc.` boards running WiFi modules/shields (WiFiNINA U-Blox W101, W102, etc.). ***The functions are similar and compatible to ESP8266/ESP32 WebServer libraries*** to make life much easier to port sketches from ESP8266/ESP32.
 
@@ -1094,16 +1094,16 @@ Debug is enabled by default on Serial. Debug Level from 0 to 4. To disable, chan
 
 1. Add support to nRF52 boards, such as AdaFruit Feather nRF52832, nRF52840 Express, BlueFruit Sense, Itsy-Bitsy nRF52840 Express, Metro nRF52840 Express, etc.
 
-### New Version v1.0.2
+#### New Version v1.0.2
 
 1. Add support to ***SAM51 (Itsy-Bitsy M4, Metro M4, Grand Central M4, Feather M4 Express, etc.) and SAM DUE***.
 
-### New Version v1.0.1
+#### New Version v1.0.1
 
 1. Use new [`WiFiNINA_Generic library`](https://github.com/khoih-prog/WiFiNINA_Generic) to provide support to many more boards running WiFiNINA. 
 The original WiFiNINA library only supports ***Nano-33 IoT***, Arduino MKR WiFi 1010, Arduino MKR VIDOR 4000 and Arduino UNO WiFi Rev.2.
 
-### Initial Version v1.0.0
+#### Initial Version v1.0.0
 
 This is simple yet complete WebServer library for `AVR, Teensy, SAMD21, STM32, etc.` boards running WiFi modules/shields (WiFiNINA U-Blox W101, W102, etc.). ***The functions are similar and compatible to ESP8266/ESP32 WebServer libraries*** to make life much easier to port sketches from ESP8266/ESP32.
 
@@ -1142,7 +1142,7 @@ The library provides supports to:
 
 ---
 
-## TO DO
+### TO DO
 1. Bug Searching and Killing
 2. Add SSL/TLS Client and Server support
 3. Support more types of boards using WiFiNINA and other WiFi shields.
@@ -1160,7 +1160,7 @@ The library provides supports to:
  
 ---
 
-### Contributions and Thanks
+## Contributions and Thanks
 
 1. Based on and modified from [Ivan Grokhotkov's ESP8266WebServer](https://github.com/esp8266/Arduino/tree/master/libraries/ESP8266WebServer)
 2. Thanks to good work of [Miguel Alexandre Wisintainer](https://github.com/tcpipchip) for initiating, inspriring, working with, developing, debugging and testing. Without that, support to nRF52, especially ***U-Blox B302 running as nRF52840 and U-Blox B112 running as nRF52832***, has never been started and finished. See [u-blox nina b](https://github.com/khoih-prog/WiFiNINA_Generic/issues/1)
