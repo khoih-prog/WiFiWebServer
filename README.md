@@ -8,6 +8,12 @@
 
 ---
 
+#### New in v1.0.6
+
+1. Add support to all STM32F/L/H/G/WB/MP1 boards.
+2. Add support to Seeeduino SAMD21/SAMD51 boards.
+3. Restructure examples. Clean-up code.
+
 #### New in v1.0.5
 
 1. Fix bug not closing client and releasing socket exposed in NINA Firmware v1.4.0.
@@ -20,7 +26,7 @@
 
 #### New in v1.0.3
 
-1. Add support to ***nRF52*** boards, such as ***AdaFruit Feather nRF52832, nRF52840 Express, BlueFruit Sense, Itsy-Bitsy nRF52840 Express, Metro nRF52840 Express, NINA_B30_ublox, etc.***
+1. Add support to ***nRF52*** boards, such as ***AdaFruit Feather nRF52832, nRF52840 Express, BlueFruit Sense, Itsy-Bitsy nRF52840 Express, Metro nRF52840 Express, NINA_B302_ublox, etc.***
 
 ### New Version v1.0.2
 
@@ -40,10 +46,17 @@ This is simple yet complete WebServer library for `AVR Mega, Teensy, SAMD21, STM
 This [WiFiWebServer library](https://github.com/khoih-prog/WiFiWebServer) currently supports these following boards:
 
 1. SAM DUE
-2. SAMD21 (ZERO, MKR, NANO_33_IOT, M0, M0 Pro, AdaFruit Adafruit M0: ItsyBitsy M0, etc.)
-3. SAMD51 (Adafruit M4 : Metro, Grand Central, ItsyBitsy, Feather Express, Trellis, Metro AirLift lite, MONSTER M4SK Express, Hallowing Express, etc. )
+2. SAMD21 
+  - Arduino: ZERO, MKR, NANO_33_IOT, etc.
+  - Adafruit M0: ItsyBitsy M0, Feather M0, Feather M0 Express, Metro M0 Express, Circuit Playground Express, Trinket M0, PIRkey, HalloWing M0, Crickit M0, etc.
+  - Seeeduino:  LoRaWAN, Zero, Femto M0, XIAO M0, Wio GPS Board, etc.
+  
+3. SAMD51 
+  - Adafruit M4 : Metro M4, Grand Central M4, ItsyBitsy M4, Feather M44 Express, Trellis M4, Metro M4 AirLift lite, MONSTER M4SK Express, Hallowing EM4 xpress, etc.
+  - Seeeduino: Wio Terminal, Grove UI Wireless
+  
 4. Teensy (4.1, 4.0, 3.6, 3.5, 3,2, 3.1, 3.0, LC)
-5. STM32F1, STM32F2, STM32F4, STM32F7 with more than 32KB flash memory.
+5. All STM32F/L/H/G/WB/MP1 with more than 32KB flash memory.
 6. AVR Mega1280, 2560, ADK.
 
 and these following WiFi shields/modules:
@@ -71,18 +84,21 @@ The WiFiWebServer class found in `WiFiWebServer.h` header, is a simple web serve
 
 ## Prerequisite
  1. [`Arduino IDE 1.8.12+` for Arduino](https://www.arduino.cc/en/Main/Software)
- 2. `Arduino AVR core 1.8.2+` for Arduino (Use Arduino Board Manager) for AVR boards
+ 2. `Arduino AVR core 1.8.3+` for Arduino (Use Arduino Board Manager) for AVR boards
  3. [`Teensy core v1.53+`](https://www.pjrc.com/teensy/td_download.html) for Teensy (4.1, 4.0, 3.6, 3.5, 3,2, 3.1, 3.0) boards.
  4. [`Arduino SAM DUE core v1.6.12+`](https://www.arduino.cc/en/Guide/ArduinoDue) for SAM DUE ARM Cortex-M3 boards.
  5. [`Arduino SAMD core 1.8.6+`](https://www.arduino.cc/en/Guide/ArduinoM0) for SAMD ARM Cortex-M0+ boards  (Nano 33 IoT, etc.).
- 6. [`Adafruit SAMD core 1.5.14+`](https://www.adafruit.com/) for SAMD ARM Cortex-M0+ and M4 boards (Itsy-Bitsy M4, etc.)
- 7. [`Adafruit nRF52 v0.20.5+`](https://www.adafruit.com/) for nRF52 boards such as AdaFruit Feather nRF52840 Express, NINA_B302_ublox, NINA_B112_ublox, etc.
- 8. [`Arduino Core for STM32 v1.9.0+`](https://github.com/khoih-prog/Arduino_Core_STM32) for STM32 boards 
- 9. [`Functional-VLPP library`](https://github.com/khoih-prog/functional-vlpp) to use server's lambda function. To install. check [![arduino-library-badge](https://www.ardu-badge.com/badge/Functional-Vlpp.svg?)](https://www.ardu-badge.com/Functional-Vlpp)
-10. [`WiFiNINA_Generic library v1.6.0+`](https://github.com/khoih-prog/WiFiNINA_Generic) if using WiFiNINA. To install. check [![arduino-library-badge](https://www.ardu-badge.com/badge/WiFiNINA_Generic.svg?)](https://www.ardu-badge.com/WiFiNINA_Generic).
-11. [`ESP_AT_Lib library v1.0.0+`](https://github.com/khoih-prog/ESP_AT_Lib) if using ESP8288/ESP32-AT shields. To install, check [![arduino-library-badge](https://www.ardu-badge.com/badge/ESP_AT_Lib.svg?)](https://www.ardu-badge.com/ESP_AT_Lib).
-12. [`WiFi101 library v0.16.0+`](https://www.arduino.cc/en/Reference/WiFi101) if using WiFi101 shields.
-13. [`WiFiEspAT library v1.2.0+`](https://github.com/jandrassy/WiFiEspAT) if using ESP8288/ESP32-AT shields.
+ 6. [`Adafruit SAMD core 1.6.0+`](https://www.adafruit.com/) for SAMD ARM Cortex-M0+ and M4 boards (Itsy-Bitsy M4, etc.)
+ 7. [`Seeeduino SAMD core 1.7.7+`](https://www.adafruit.com/) for SAMD21/SAMD51 boards (XIAO M0, Wio Terminal, etc.) 
+ 8. [`Adafruit nRF52 v0.20.5+`](https://www.adafruit.com/) for nRF52 boards such as AdaFruit Feather nRF52840 Express, NINA_B302_ublox, NINA_B112_ublox, etc.
+ 9. [`Arduino Core for STM32 v1.9.0+`](https://github.com/khoih-prog/Arduino_Core_STM32) for STM32F/L/H/G/WB/MP1 boards 
+10. [`Functional-VLPP library v1.0.1+`](https://github.com/khoih-prog/functional-vlpp) to use server's lambda function. To install. check [![arduino-library-badge](https://www.ardu-badge.com/badge/Functional-Vlpp.svg?)](https://www.ardu-badge.com/Functional-Vlpp)
+11. [`WiFiNINA_Generic library v1.6.0+`](https://github.com/khoih-prog/WiFiNINA_Generic) if using WiFiNINA. To install. check [![arduino-library-badge](https://www.ardu-badge.com/badge/WiFiNINA_Generic.svg?)](https://www.ardu-badge.com/WiFiNINA_Generic).
+12. [`ESP_AT_Lib library v1.0.0+`](https://github.com/khoih-prog/ESP_AT_Lib) if using ESP8288/ESP32-AT shields. To install, check [![arduino-library-badge](https://www.ardu-badge.com/badge/ESP_AT_Lib.svg?)](https://www.ardu-badge.com/ESP_AT_Lib).
+13. [`WiFi101 library v0.16.0+`](https://www.arduino.cc/en/Reference/WiFi101) if using WiFi101 shields.
+14. [`WiFiEspAT library v1.2.0+`](https://github.com/jandrassy/WiFiEspAT) if using ESP8288/ESP32-AT shields.
+
+---
 
 ## Installation
 
@@ -160,16 +176,27 @@ This file must be copied into the directory:
 
 - `~/.arduino15/packages/arduino/hardware/samd/x.yy.zz/platform.txt`
 
-5. ***To be able to automatically detect and display BOARD_NAME on Adafruit SAMD (Itsy-Bitsy M4, etc) boards***, you have to copy the file [Adafruit SAMD platform.txt](https://github.com/khoih-prog/WiFiWebServer/tree/master/Packages_Patches/adafruit/hardware/samd/1.5.14) into Adafruit samd directory (~/.arduino15/packages/adafruit/hardware/samd/1.5.14). 
+5. ***To be able to automatically detect and display BOARD_NAME on Adafruit SAMD (Itsy-Bitsy M4, etc) boards***, you have to copy the file [Adafruit SAMD platform.txt](https://github.com/khoih-prog/WiFiWebServer/tree/master/Packages_Patches/adafruit/hardware/samd/1.6.0) into Adafruit samd directory (~/.arduino15/packages/adafruit/hardware/samd/1.6.0). 
 
-Supposing the Adafruit SAMD core version is 1.5.14. This file must be copied into the directory:
+Supposing the Adafruit SAMD core version is 1.6.0. This file must be copied into the directory:
 
-- `~/.arduino15/packages/adafruit/hardware/samd/1.5.14/platform.txt`
+- `~/.arduino15/packages/adafruit/hardware/samd/1.6.0/platform.txt`
 
 Whenever a new version is installed, remember to copy this file into the new version directory. For example, new version is x.yy.zz
 This file must be copied into the directory:
 
 - `~/.arduino15/packages/adafruit/hardware/samd/x.yy.zz/platform.txt`
+
+6. ***To be able to automatically detect and display BOARD_NAME on Seeeduino SAMD (XIAO M0, Wio Terminal, etc) boards***, you have to copy the file [Seeeduino SAMD platform.txt](https://github.com/khoih-prog/WiFiWebServer/tree/master/Packages_Patches/Seeeduino/hardware/samd/1.7.7) into Adafruit samd directory (~/.arduino15/packages/Seeeduino/hardware/samd/1.7.7). 
+
+Supposing the Seeeduino SAMD core version is 1.7.7. This file must be copied into the directory:
+
+- `~/.arduino15/packages/Seeeduino/hardware/samd/1.7.7/platform.txt`
+
+Whenever a new version is installed, remember to copy this file into the new version directory. For example, new version is x.yy.zz
+This file must be copied into the directory:
+
+- `~/.arduino15/packages/Seeeduino/hardware/samd/x.yy.zz/platform.txt`
 
 ---
 
@@ -182,7 +209,7 @@ For example
 ```cpp
 #elif ( defined(NRF52840_FEATHER) || defined(NRF52832_FEATHER) || defined(NRF52_SERIES) || defined(ARDUINO_NRF52_ADAFRUIT) || \
         defined(NRF52840_FEATHER_SENSE) || defined(NRF52840_ITSYBITSY) || defined(NRF52840_CIRCUITPLAY) || defined(NRF52840_CLUE) || \
-        defined(NRF52840_METRO) || defined(NRF52840_PCA10056) || defined(PARTICLE_XENON) || defined(NINA_B302_ublox) )
+        defined(NRF52840_METRO) || defined(NRF52840_PCA10056) || defined(PARTICLE_XENON) || defined(NINA_B302_ublox) || defined(NINA_B112_ublox) )
 
   #warning You have to modify pin usage accoring to actual connection for NRF528XX
   // To define pin out for WiFiNINA here
@@ -220,12 +247,13 @@ For example
 #define USE_WIFI_NINA         false
 ```
 
-- For boards other than MKR1000, to use another WiFi library with the standard ***WiFi.h***, such as WiFiEspAT library
+- For boards other than MKR1000, to use another WiFi library with the standard ***WiFi.h***, such as [`WiFiEspAT library`](https://github.com/jandrassy/WiFiEspAT) library
 
 ```cpp
 #define USE_WIFI_NINA         false
 ```
 - To use another WiFi library without the standard ***WiFi.h***
+
 For example, WiFi_XYZ library uses ***WiFi_XYZ.h***
 
 ```cpp
@@ -397,9 +425,9 @@ Example:*
 ---
 
 Also see examples: 
- 1. [HelloServer](examples/HelloServer)
- 2. [HelloServer2](examples/HelloServer2)
- 3. [AdvancedWebServer](examples/AdvancedWebServer)
+ 1. [AdvancedWebServer](examples/AdvancedWebServer)
+ 2. [HelloServer](examples/HelloServer)
+ 3. [HelloServer2](examples/HelloServer2)
  4. [HttpBasicAuth](examples/HttpBasicAuth)
  5. [PostServer](examples/PostServer)
  6. [SimpleAuthentication](examples/SimpleAuthentication)
@@ -413,165 +441,15 @@ Also see examples:
 14. [WebServer](examples/WebServer)
 15. [AP_SimpleWebServer](examples/AP_SimpleWebServer)
 
+---
 
 ## Example [AdvancedWebServer](examples/AdvancedWebServer)
 
-Please take a look at other examples, as well.
+### File [AdvancedWebServer.ino](examples/AdvancedWebServer/AdvancedWebServer.ino)
+
 
 ```cpp
-#define DEBUG_WIFI_WEBSERVER_PORT   Serial
-
-// Debug Level from 0 to 4
-#define _WIFI_LOGLEVEL_             1
-#define _WIFININA_LOGLEVEL_         1
-
-#define USE_WIFI_NINA         true
-
-#if defined(ARDUINO_SAMD_MKR1000)
-#if defined(USE_WIFI_NINA)
-#undef USE_WIFI_NINA
-#endif
-#define USE_WIFI_NINA         false
-#define USE_WIFI101           true
-#endif
-
-#if    ( defined(NRF52840_FEATHER) || defined(NRF52832_FEATHER) || defined(NRF52_SERIES) || defined(ARDUINO_NRF52_ADAFRUIT) )
-#if defined(WIFI_USE_NRF528XX)
-#undef WIFI_USE_NRF528XX
-#endif
-#define WIFI_USE_NRF528XX          true
-#endif
-
-#if    ( defined(ARDUINO_SAMD_ZERO) || defined(ARDUINO_SAMD_MKR1000) || defined(ARDUINO_SAMD_MKRWIFI1010) \
-      || defined(ARDUINO_SAMD_NANO_33_IOT) || defined(ARDUINO_SAMD_MKRFox1200) || defined(ARDUINO_SAMD_MKRWAN1300) || defined(ARDUINO_SAMD_MKRWAN1310) \
-      || defined(ARDUINO_SAMD_MKRGSM1400) || defined(ARDUINO_SAMD_MKRNB1500) || defined(ARDUINO_SAMD_MKRVIDOR4000) || defined(__SAMD21G18A__) \
-      || defined(ARDUINO_SAMD_CIRCUITPLAYGROUND_EXPRESS) || defined(__SAMD21E18A__) || defined(__SAMD51__) || defined(__SAMD51J20A__) || defined(__SAMD51J19A__) \
-      || defined(__SAMD51G19A__) || defined(__SAMD21G18A__) )
-#if defined(WIFI_USE_SAMD)
-#undef WIFI_USE_SAMD
-#endif
-#define WIFI_USE_SAMD      true
-#endif
-
-#if ( defined(ARDUINO_SAM_DUE) || defined(__SAM3X8E__) )
-#if defined(WIFI_USE_SAM_DUE)
-#undef WIFI_USE_SAM_DUE
-#endif
-#define WIFI_USE_SAM_DUE      true
-#warning Use SAM_DUE architecture
-#endif
-
-#if ( defined(STM32F0) || defined(STM32F1) || defined(STM32F2) || defined(STM32F3)  ||defined(STM32F4) || defined(STM32F7) )
-#if defined(WIFI_USE_STM32)
-#undef WIFI_USE_STM32
-#endif
-#define WIFI_USE_STM32      true
-#endif
-
-#ifdef CORE_TEENSY
-#if defined(__IMXRT1062__)
-// For Teensy 4.0
-#define BOARD_TYPE      "TEENSY 4.0"
-#elif defined(__MK66FX1M0__)
-#define BOARD_TYPE "Teensy 3.6"
-#elif defined(__MK64FX512__)
-#define BOARD_TYPE "Teensy 3.5"
-#elif defined(__MKL26Z64__)
-#define BOARD_TYPE "Teensy LC"
-#elif defined(__MK20DX256__)
-#define BOARD_TYPE "Teensy 3.2" // and Teensy 3.1 (obsolete)
-#elif defined(__MK20DX128__)
-#define BOARD_TYPE "Teensy 3.0"
-#elif defined(__AVR_AT90USB1286__)
-#error Teensy 2.0++ not supported yet
-#elif defined(__AVR_ATmega32U4__)
-#error Teensy 2.0 not supported yet
-#else
-// For Other Boards
-#define BOARD_TYPE      "Unknown Teensy Board"
-#endif
-
-#elif defined(WIFI_USE_NRF528XX)
-#if defined(NRF52840_FEATHER)
-#define BOARD_TYPE      "NRF52840_FEATHER"
-#elif defined(NRF52832_FEATHER)
-#define BOARD_TYPE      "NRF52832_FEATHER"
-#else
-#define BOARD_TYPE      "NRF52 Unknown"
-#endif
-
-#elif defined(WIFI_USE_SAMD)
-#if defined(ARDUINO_SAMD_ZERO)
-#define BOARD_TYPE      "SAMD Zero"
-#elif defined(ARDUINO_SAMD_MKR1000)
-#define BOARD_TYPE      "SAMD MKR1000"
-#elif defined(ARDUINO_SAMD_MKRWIFI1010)
-#define BOARD_TYPE      "SAMD MKRWIFI1010"
-#elif defined(ARDUINO_SAMD_NANO_33_IOT)
-#define BOARD_TYPE      "SAMD NANO_33_IOT"
-#elif defined(ARDUINO_SAMD_MKRFox1200)
-#define BOARD_TYPE      "SAMD MKRFox1200"
-#elif ( defined(ARDUINO_SAMD_MKRWAN1300) || defined(ARDUINO_SAMD_MKRWAN1310) )
-#define BOARD_TYPE      "SAMD MKRWAN13X0"
-#elif defined(ARDUINO_SAMD_MKRGSM1400)
-#define BOARD_TYPE      "SAMD MKRGSM1400"
-#elif defined(ARDUINO_SAMD_MKRNB1500)
-#define BOARD_TYPE      "SAMD MKRNB1500"
-#elif defined(ARDUINO_SAMD_MKRVIDOR4000)
-#define BOARD_TYPE      "SAMD MKRVIDOR4000"
-#elif defined(ARDUINO_SAMD_CIRCUITPLAYGROUND_EXPRESS)
-#define BOARD_TYPE      "SAMD ARDUINO_SAMD_CIRCUITPLAYGROUND_EXPRESS"
-#elif defined(ADAFRUIT_ITSYBITSY_M4_EXPRESS)
-#define BOARD_TYPE      "SAMD ADAFRUIT_ITSYBITSY_M4_EXPRESS"
-#elif defined(__SAMD21E18A__)
-#define BOARD_TYPE      "SAMD21E18A"
-#elif defined(__SAMD21G18A__)
-#define BOARD_TYPE      "SAMD21G18A"
-#elif defined(__SAMD51G19A__)
-#define BOARD_TYPE      "SAMD51G19A"
-#elif defined(__SAMD51J19A__)
-#define BOARD_TYPE      "SAMD51J19A"
-#elif defined(__SAMD51J20A__)
-#define BOARD_TYPE      "SAMD51J20A"
-#elif defined(__SAM3X8E__)
-#define BOARD_TYPE      "SAM3X8E"
-#elif defined(__CPU_ARC__)
-#define BOARD_TYPE      "CPU_ARC"
-#elif defined(__SAMD51__)
-#define BOARD_TYPE      "SAMD51"
-#else
-#define BOARD_TYPE      "SAMD Unknown"
-#endif
-
-#elif defined(WIFI_USE_STM32)
-#if defined(STM32F0)
-#define BOARD_TYPE  "STM32F0"
-#elif defined(STM32F1)
-#define BOARD_TYPE  "STM32F1"
-#elif defined(STM32F2)
-#define BOARD_TYPE  "STM32F2"
-#elif defined(STM32F3)
-#define BOARD_TYPE  "STM32F3"
-#elif defined(STM32F4)
-#define BOARD_TYPE  "STM32F4"
-#elif defined(STM32F7)
-#define BOARD_TYPE  "STM32F7"
-#else
-#warning STM32 unknown board selected
-#define BOARD_TYPE  "STM32 Unknown"
-#endif
-#else
-#define BOARD_TYPE      "AVR Mega"
-#endif
-
-#ifndef BOARD_NAME
-  #define BOARD_NAME    BOARD_TYPE
-#endif
-
-#include <WiFiWebServer.h>
-
-char ssid[] = "****";        // your network SSID (name)
-char pass[] = "****";        // your network password
+#include "defines.h"
 
 int status = WL_IDLE_STATUS;     // the Wifi radio's status
 int reqCount = 0;                // number of requests received
@@ -589,6 +467,7 @@ void handleRoot()
   int sec = millis() / 1000;
   int min = sec / 60;
   int hr = min / 60;
+  int day = hr / 24;
 
   snprintf(temp, BUFFER_SIZE - 1,
            "<html>\
@@ -601,11 +480,11 @@ body { background-color: #cccccc; font-family: Arial, Helvetica, Sans-Serif; Col
 </head>\
 <body>\
 <h1>Hello from WiFiNINA</h1>\
-<h2>on %s</h2>\
-<p>Uptime: %02d:%02d:%02d</p>\
+<h3>on %s</h3>\
+<p>Uptime: %d d %02d:%02d:%02d</p>\
 <img src=\"/test.svg\" />\
 </body>\
-</html>", BOARD_NAME, BOARD_NAME, hr, min % 60, sec % 60);
+</html>", BOARD_NAME, BOARD_NAME, day, hr, min % 60, sec % 60);
 
   server.send(200, "text/html", temp);
   digitalWrite(led, 0);
@@ -713,6 +592,291 @@ void loop(void)
   server.handleClient();
 }
 ```
+
+### File [defines.h](examples/AdvancedWebServer/defines.h)
+
+```cpp
+#ifndef defines_h
+#define defines_h
+
+#define DEBUG_WIFI_WEBSERVER_PORT   Serial
+
+// Debug Level from 0 to 4
+#define _WIFI_LOGLEVEL_             1
+#define _WIFININA_LOGLEVEL_         1
+
+#define USE_WIFI_NINA         true
+//#define USE_WIFI_NINA         false
+
+// If not USE_WIFI_NINA, you can USE_WIFI_CUSTOM, then include the custom WiFi library here 
+//#define USE_WIFI_CUSTOM       true
+//#include "WiFi_XYZ.h"
+
+#if defined(ARDUINO_SAMD_MKR1000)
+#if defined(USE_WIFI_NINA)
+#undef USE_WIFI_NINA
+#endif
+#define USE_WIFI_NINA         false
+#define USE_WIFI101           true
+#endif
+
+#if ( defined(NRF52840_FEATHER) || defined(NRF52832_FEATHER) || defined(NRF52_SERIES) || defined(ARDUINO_NRF52_ADAFRUIT) || \
+        defined(NRF52840_FEATHER_SENSE) || defined(NRF52840_ITSYBITSY) || defined(NRF52840_CIRCUITPLAY) || defined(NRF52840_CLUE) || \
+        defined(NRF52840_METRO) || defined(NRF52840_PCA10056) || defined(PARTICLE_XENON) || defined(NINA_B302_ublox) || defined(NINA_B112_ublox) )
+#if defined(WIFI_USE_NRF528XX)
+#undef WIFI_USE_NRF528XX
+#endif
+#define WIFI_USE_NRF528XX          true
+#endif
+
+#if    ( defined(ARDUINO_SAMD_ZERO) || defined(ARDUINO_SAMD_MKR1000) || defined(ARDUINO_SAMD_MKRWIFI1010) \
+      || defined(ARDUINO_SAMD_NANO_33_IOT) || defined(ARDUINO_SAMD_MKRFox1200) || defined(ARDUINO_SAMD_MKRWAN1300) || defined(ARDUINO_SAMD_MKRWAN1310) \
+      || defined(ARDUINO_SAMD_MKRGSM1400) || defined(ARDUINO_SAMD_MKRNB1500) || defined(ARDUINO_SAMD_MKRVIDOR4000) || defined(__SAMD21G18A__) \
+      || defined(ARDUINO_SAMD_CIRCUITPLAYGROUND_EXPRESS) || defined(__SAMD21E18A__) || defined(__SAMD51__) || defined(__SAMD51J20A__) || defined(__SAMD51J19A__) \
+      || defined(__SAMD51G19A__) || defined(__SAMD51P19A__) || defined(__SAMD21G18A__) )
+#if defined(WIFI_USE_SAMD)
+#undef WIFI_USE_SAMD
+#endif
+#define WIFI_USE_SAMD      true
+#endif
+
+#if ( defined(ARDUINO_SAM_DUE) || defined(__SAM3X8E__) )
+#if defined(WIFI_USE_SAM_DUE)
+#undef WIFI_USE_SAM_DUE
+#endif
+#define WIFI_USE_SAM_DUE      true
+#warning Use SAM_DUE architecture
+#endif
+
+#if ( defined(STM32F0) || defined(STM32F1) || defined(STM32F2) || defined(STM32F3)  ||defined(STM32F4) || defined(STM32F7) || \
+       defined(STM32L0) || defined(STM32L1) || defined(STM32L4) || defined(STM32H7)  ||defined(STM32G0) || defined(STM32G4) || \
+       defined(STM32WB) || defined(STM32MP1) )
+#if defined(WIFI_USE_STM32)
+#undef WIFI_USE_STM32
+#endif
+#define WIFI_USE_STM32      true
+#endif
+
+#ifdef CORE_TEENSY
+#if defined(__IMXRT1062__)
+// For Teensy 4.1/4.0
+#define BOARD_TYPE      "TEENSY 4.1/4.0"
+#elif defined(__MK66FX1M0__)
+#define BOARD_TYPE "Teensy 3.6"
+#elif defined(__MK64FX512__)
+#define BOARD_TYPE "Teensy 3.5"
+#elif defined(__MKL26Z64__)
+#define BOARD_TYPE "Teensy LC"
+#elif defined(__MK20DX256__)
+#define BOARD_TYPE "Teensy 3.2" // and Teensy 3.1 (obsolete)
+#elif defined(__MK20DX128__)
+#define BOARD_TYPE "Teensy 3.0"
+#elif defined(__AVR_AT90USB1286__)
+#error Teensy 2.0++ not supported yet
+#elif defined(__AVR_ATmega32U4__)
+#error Teensy 2.0 not supported yet
+#else
+// For Other Boards
+#define BOARD_TYPE      "Unknown Teensy Board"
+#endif
+
+#elif defined(WIFI_USE_NRF528XX)
+#if defined(NRF52840_FEATHER)
+#define BOARD_TYPE      "NRF52840_FEATHER_EXPRESS"
+#elif defined(NRF52832_FEATHER)
+#define BOARD_TYPE      "NRF52832_FEATHER"
+#elif defined(NRF52840_FEATHER_SENSE)
+#define BOARD_TYPE      "NRF52840_FEATHER_SENSE"
+#elif defined(NRF52840_ITSYBITSY)
+#define BOARD_TYPE      "NRF52840_ITSYBITSY_EXPRESS"
+#elif defined(NRF52840_CIRCUITPLAY)
+#define BOARD_TYPE      "NRF52840_CIRCUIT_PLAYGROUND"
+#elif defined(NRF52840_CLUE)
+#define BOARD_TYPE      "NRF52840_CLUE"
+#elif defined(NRF52840_METRO)
+#define BOARD_TYPE      "NRF52840_METRO_EXPRESS"
+#elif defined(NRF52840_PCA10056)
+#define BOARD_TYPE      "NORDIC_NRF52840DK"
+#elif defined(NINA_B302_ublox)
+#define BOARD_TYPE      "NINA_B302_ublox"
+#elif defined(NINA_B112_ublox)
+#define BOARD_TYPE      "NINA_B112_ublox"
+#elif defined(PARTICLE_XENON)
+#define BOARD_TYPE      "PARTICLE_XENON"
+#elif defined(MDBT50Q_RX)
+#define BOARD_TYPE      "RAYTAC_MDBT50Q_RX"
+#elif defined(ARDUINO_NRF52_ADAFRUIT)
+#define BOARD_TYPE      "ARDUINO_NRF52_ADAFRUIT"
+#else
+#define BOARD_TYPE      "nRF52 Unknown"
+#endif
+
+#elif defined(WIFI_USE_SAMD)
+#if defined(ARDUINO_SAMD_ZERO)
+#define BOARD_TYPE      "SAMD Zero"
+#elif defined(ARDUINO_SAMD_MKR1000)
+#define BOARD_TYPE      "SAMD MKR1000"
+#elif defined(ARDUINO_SAMD_MKRWIFI1010)
+#define BOARD_TYPE      "SAMD MKRWIFI1010"
+#elif defined(ARDUINO_SAMD_NANO_33_IOT)
+#define BOARD_TYPE      "SAMD NANO_33_IOT"
+#elif defined(ARDUINO_SAMD_MKRFox1200)
+#define BOARD_TYPE      "SAMD MKRFox1200"
+#elif ( defined(ARDUINO_SAMD_MKRWAN1300) || defined(ARDUINO_SAMD_MKRWAN1310) )
+#define BOARD_TYPE      "SAMD MKRWAN13X0"
+#elif defined(ARDUINO_SAMD_MKRGSM1400)
+#define BOARD_TYPE      "SAMD MKRGSM1400"
+#elif defined(ARDUINO_SAMD_MKRNB1500)
+#define BOARD_TYPE      "SAMD MKRNB1500"
+#elif defined(ARDUINO_SAMD_MKRVIDOR4000)
+#define BOARD_TYPE      "SAMD MKRVIDOR4000"
+#elif defined(ARDUINO_SAMD_CIRCUITPLAYGROUND_EXPRESS)
+#define BOARD_TYPE      "SAMD ARDUINO_SAMD_CIRCUITPLAYGROUND_EXPRESS"
+#elif defined(ADAFRUIT_FEATHER_M0_EXPRESS)
+#define BOARD_TYPE      "SAMD21 ADAFRUIT_FEATHER_M0_EXPRESS"
+#elif defined(ADAFRUIT_METRO_M0_EXPRESS)
+#define BOARD_TYPE      "SAMD21 ADAFRUIT_METRO_M0_EXPRESS"
+#elif defined(ADAFRUIT_CIRCUITPLAYGROUND_M0)
+#define BOARD_TYPE      "SAMD21 ADAFRUIT_CIRCUITPLAYGROUND_M0"
+#elif defined(ADAFRUIT_GEMMA_M0)
+#define BOARD_TYPE      "SAMD21 ADAFRUIT_GEMMA_M0"
+#elif defined(ADAFRUIT_TRINKET_M0)
+#define BOARD_TYPE      "SAMD21 ADAFRUIT_TRINKET_M0"
+#elif defined(ADAFRUIT_ITSYBITSY_M0)
+#define BOARD_TYPE      "SAMD21 ADAFRUIT_ITSYBITSY_M0"
+#elif defined(ARDUINO_SAMD_HALLOWING_M0)
+#define BOARD_TYPE      "SAMD21 ARDUINO_SAMD_HALLOWING_M0"
+#elif defined(ADAFRUIT_METRO_M4_EXPRESS)
+#define BOARD_TYPE      "SAMD51 ADAFRUIT_METRO_M4_EXPRESS"
+#elif defined(ADAFRUIT_GRAND_CENTRAL_M4)
+#define BOARD_TYPE      "SAMD51 ADAFRUIT_GRAND_CENTRAL_M4"
+#elif defined(ADAFRUIT_FEATHER_M4_EXPRESS)
+#define BOARD_TYPE      "SAMD51 ADAFRUIT_FEATHER_M4_EXPRESS"
+#elif defined(ADAFRUIT_ITSYBITSY_M4_EXPRESS)
+#define BOARD_TYPE      "SAMD51 ADAFRUIT_ITSYBITSY_M4_EXPRESS"
+#elif defined(ADAFRUIT_TRELLIS_M4_EXPRESS)
+#define BOARD_TYPE      "SAMD51 ADAFRUIT_TRELLIS_M4_EXPRESS"
+#elif defined(ADAFRUIT_PYPORTAL)
+#define BOARD_TYPE      "SAMD51 ADAFRUIT_PYPORTAL"
+#elif defined(ADAFRUIT_PYPORTAL_M4_TITANO)
+#define BOARD_TYPE      "SAMD51 ADAFRUIT_PYPORTAL_M4_TITANO"
+#elif defined(ADAFRUIT_PYBADGE_M4_EXPRESS)
+#define BOARD_TYPE      "SAMD51 ADAFRUIT_PYBADGE_M4_EXPRESS"
+#elif defined(ADAFRUIT_METRO_M4_AIRLIFT_LITE)
+#define BOARD_TYPE      "SAMD51 ADAFRUIT_METRO_M4_AIRLIFT_LITE"
+#elif defined(ADAFRUIT_PYGAMER_M4_EXPRESS)
+#define BOARD_TYPE      "SAMD51 ADAFRUIT_PYGAMER_M4_EXPRESS"
+#elif defined(ADAFRUIT_PYGAMER_ADVANCE_M4_EXPRESS)
+#define BOARD_TYPE      "SAMD51 ADAFRUIT_PYGAMER_ADVANCE_M4_EXPRESS"
+#elif defined(ADAFRUIT_PYBADGE_AIRLIFT_M4)
+#define BOARD_TYPE      "SAMD51 ADAFRUIT_PYBADGE_AIRLIFT_M4"
+#elif defined(ADAFRUIT_MONSTER_M4SK_EXPRESS)
+#define BOARD_TYPE      "SAMD51 ADAFRUIT_MONSTER_M4SK_EXPRESS"
+#elif defined(ADAFRUIT_HALLOWING_M4_EXPRESS)
+#define BOARD_TYPE      "SAMD51 ADAFRUIT_HALLOWING_M4_EXPRESS"
+#elif defined(SEEED_WIO_TERMINAL)
+#define BOARD_TYPE      "SAMD SEEED_WIO_TERMINAL"
+#elif defined(SEEED_FEMTO_M0)
+#define BOARD_TYPE      "SAMD SEEED_FEMTO_M0"
+#elif defined(SEEED_XIAO_M0)
+#define BOARD_TYPE      "SAMD SEEED_XIAO_M0"
+#elif defined(Wio_Lite_MG126)
+#define BOARD_TYPE      "SAMD SEEED Wio_Lite_MG126"
+#elif defined(WIO_GPS_BOARD)
+#define BOARD_TYPE      "SAMD SEEED WIO_GPS_BOARD"
+#elif defined(SEEEDUINO_ZERO)
+#define BOARD_TYPE      "SAMD SEEEDUINO_ZERO"
+#elif defined(SEEEDUINO_LORAWAN)
+#define BOARD_TYPE      "SAMD SEEEDUINO_LORAWAN"
+#elif defined(SEEED_GROVE_UI_WIRELESS)
+#define BOARD_TYPE      "SAMD SEEED_GROVE_UI_WIRELESS"
+#elif defined(__SAMD21E18A__)
+#define BOARD_TYPE      "SAMD21E18A"
+#elif defined(__SAMD21G18A__)
+#define BOARD_TYPE      "SAMD21G18A"
+#elif defined(__SAMD51G19A__)
+#define BOARD_TYPE      "SAMD51G19A"
+#elif defined(__SAMD51J19A__)
+#define BOARD_TYPE      "SAMD51J19A"
+#elif defined(__SAMD51P19A__)
+#define BOARD_TYPE      "__SAMD51P19A__"
+#elif defined(__SAMD51J20A__)
+#define BOARD_TYPE      "SAMD51J20A"
+#elif defined(__SAM3X8E__)
+#define BOARD_TYPE      "SAM3X8E"
+#elif defined(__CPU_ARC__)
+#define BOARD_TYPE      "CPU_ARC"
+#elif defined(__SAMD51__)
+#define BOARD_TYPE      "SAMD51"
+#else
+#define BOARD_TYPE      "SAMD Unknown"
+#endif
+
+#elif defined(WIFI_USE_STM32)
+#if defined(STM32F0)
+#warning STM32F0 board selected
+#define BOARD_TYPE  "STM32F0"
+#elif defined(STM32F1)
+#warning STM32F1 board selected
+#define BOARD_TYPE  "STM32F1"
+#elif defined(STM32F2)
+#warning STM32F2 board selected
+#define BOARD_TYPE  "STM32F2"
+#elif defined(STM32F3)
+#warning STM32F3 board selected
+#define BOARD_TYPE  "STM32F3"
+#elif defined(STM32F4)
+#warning STM32F4 board selected
+#define BOARD_TYPE  "STM32F4"
+#elif defined(STM32F7)
+#warning STM32F7 board selected
+#define BOARD_TYPE  "STM32F7"
+#elif defined(STM32L0)
+#warning STM32L0 board selected
+#define BOARD_TYPE  "STM32L0"
+#elif defined(STM32L1)
+#warning STM32L1 board selected
+#define BOARD_TYPE  "STM32L1"
+#elif defined(STM32L4)
+#warning STM32L4 board selected
+#define BOARD_TYPE  "STM32L4"
+#elif defined(STM32H7)
+#warning STM32H7 board selected
+#define BOARD_TYPE  "STM32H7"
+#elif defined(STM32G0)
+#warning STM32G0 board selected
+#define BOARD_TYPE  "STM32G0"
+#elif defined(STM32G4)
+#warning STM32G4 board selected
+#define BOARD_TYPE  "STM32G4"
+#elif defined(STM32WB)
+#warning STM32WB board selected
+#define BOARD_TYPE  "STM32WB"
+#elif defined(STM32MP1)
+#warning STM32MP1 board selected
+#define BOARD_TYPE  "STM32MP1"
+#else
+#warning STM32 unknown board selected
+#define BOARD_TYPE  "STM32 Unknown"
+#endif
+
+#else
+#define BOARD_TYPE      "AVR Mega"
+#endif
+
+#ifndef BOARD_NAME
+  #define BOARD_NAME    BOARD_TYPE
+#endif
+
+#include <WiFiWebServer.h>
+
+char ssid[] = "****";        // your network SSID (name)
+char pass[] = "****";        // your network password
+
+#endif    //defines_h
+```
+
+---
 
 The following are debug terminal output and screen shot when running example [AdvancedWebServer](examples/AdvancedWebServer) on Arduino Nano 33 IoT board
 
@@ -910,6 +1074,12 @@ Debug is enabled by default on Serial. Debug Level from 0 to 4. To disable, chan
 
 ---
 
+#### New in v1.0.6
+
+1. Add support to all STM32F/L/H/G/WB/MP1 boards.
+2. Add support to Seeeduino SAMD21/SAMD51 boards.
+3. Restructure examples. Clean-up code.
+
 #### New in v1.0.5
 
 1. Fix bug not closing client and releasing socket exposed in NINA Firmware v1.4.0.
@@ -937,15 +1107,33 @@ The original WiFiNINA library only supports ***Nano-33 IoT***, Arduino MKR WiFi 
 
 This is simple yet complete WebServer library for `AVR, Teensy, SAMD21, STM32, etc.` boards running WiFi modules/shields (WiFiNINA U-Blox W101, W102, etc.). ***The functions are similar and compatible to ESP8266/ESP32 WebServer libraries*** to make life much easier to port sketches from ESP8266/ESP32.
 
-The library currently supports these boards
+---
+
+This [WiFiWebServer library](https://github.com/khoih-prog/WiFiWebServer) currently supports these following boards:
+
 1. SAM DUE
-2. SAMD21 (ZERO, MKR, NANO_33_IOT, M0, M0 Pro, AdaFruit CIRCUITPLAYGROUND_EXPRESS, etc.)
-3. SAMD51 (Adafruit M4 : Metro, Grand Central, ItsyBitsy, Feather Express, Trellis, Metro AirLift lite, MONSTER M4SK Express, Hallowing Express, etc. )
-4. Teensy (4.0, 3.6, 3.5, 3,2, 3.1, 3.0, LC)
-5. STM32F1, STM32F2, STM32F4, STM32F7 with more than 32KB flash memory.
+2. SAMD21 
+  - Arduino: ZERO, MKR, NANO_33_IOT, etc.
+  - Adafruit M0: ItsyBitsy M0, Feather M0, Feather M0 Express, Metro M0 Express, Circuit Playground Express, Trinket M0, PIRkey, HalloWing M0, Crickit M0, etc.
+  - Seeeduino:  LoRaWAN, Zero, Femto M0, XIAO M0, Wio GPS Board, etc.
+  
+3. SAMD51 
+  - Adafruit M4 : Metro M4, Grand Central M4, ItsyBitsy M4, Feather M44 Express, Trellis M4, Metro M4 AirLift lite, MONSTER M4SK Express, Hallowing EM4 xpress, etc.
+  - Seeeduino: Wio Terminal, Grove UI Wireless
+  
+4. Teensy (4.1, 4.0, 3.6, 3.5, 3,2, 3.1, 3.0, LC)
+5. All STM32F/L/H/G/WB/MP1 with more than 32KB flash memory.
 6. AVR Mega1280, 2560, ADK.
 
-The library supports 
+and these following WiFi shields/modules:
+
+1. WiFiNINA
+2. WiFi101
+3. U-Blox W101, W102
+4. ESP8266/ESP32-AT command
+
+The library provides supports to:
+
 1. WiFi Client, STA and AP mode
 2. TCP Server and Client
 3. UDP Server and Client
@@ -961,10 +1149,10 @@ The library supports
 
 ### DONE
 
- 1. Add support to Arduino SAMD21, Adafruit SAMD21/SAMD51.
+ 1. Add support to Arduino SAMD21, Adafruit SAMD21/SAMD51, Seeeduino SAMD21/SAMD51.
  2. Add support to nRF52.
  3. Add support to SAM DUE.
- 4. Add support to STM32F.
+ 4. Add support to all STM32F/L/H/G/WB/MP1.
  5. Add support to WiFiNINA using [`WiFiNINA_Generic library`](https://github.com/khoih-prog/WiFiNINA_Generic). 
  6. Add support to [`ESP_AT_Lib library`](https://github.com/khoih-prog/ESP_AT_Lib).
  7. Add support to [`WiFi101 library`](https://www.arduino.cc/en/Reference/WiFi101).
@@ -972,10 +1160,17 @@ The library supports
  
 ---
 
-### Contributions and thanks
+### Contributions and Thanks
 
 1. Based on and modified from [Ivan Grokhotkov's ESP8266WebServer](https://github.com/esp8266/Arduino/tree/master/libraries/ESP8266WebServer)
-2. Thanks to good work of [Miguel Alexandre Wisintainer](https://github.com/tcpipchip) for initiating, inspriring, working with, developing, debugging and testing. Without that, support to nRF52, especially ***U-Box B302 running as nRF52840 and U-Box B112 running as nRF52832***, has never been started and finished. See [u-blox nina b](https://github.com/khoih-prog/WiFiNINA_Generic/issues/1)
+2. Thanks to good work of [Miguel Alexandre Wisintainer](https://github.com/tcpipchip) for initiating, inspriring, working with, developing, debugging and testing. Without that, support to nRF52, especially ***U-Blox B302 running as nRF52840 and U-Blox B112 running as nRF52832***, has never been started and finished. See [u-blox nina b](https://github.com/khoih-prog/WiFiNINA_Generic/issues/1)
+
+<table>
+  <tr>
+    <td align="center"><a href="https://github.com/igrr"><img src="https://github.com/igrr.png" width="100px;" alt="igrr"/><br /><sub><b>⭐️ igrr</b></sub></a><br /></td>
+    <td align="center"><a href="https://github.com/tcpipchip"><img src="https://github.com/tcpipchip.png" width="100px;" alt="tcpipchip"/><br /><sub><b>⭐️ tcpipchip</b></sub></a><br /></td>
+  </tr> 
+</table>
 
 ## Contributing
 

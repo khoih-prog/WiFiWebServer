@@ -1,13 +1,13 @@
-/****************************************************************************************************************************
+/**************************************************************************************************************************************
    WiFiWebServer.h - Dead simple web-server.
-   For ESP32-based WiFi shields, such as WiFiNINA W101, W102, W13x, etc
+   For any WiFi shields, such as WiFiNINA W101, W102, W13x, or custom, such as ESP8266/ESP32-AT, Ethernet, etc
 
    WiFiWebServer is a library for the ESP32-based WiFi shields to run WebServer
    Forked and modified from ESP8266 https://github.com/esp8266/Arduino/releases
    Forked and modified from Arduino WiFiNINA library https://www.arduino.cc/en/Reference/WiFiNINA
    Built by Khoi Hoang https://github.com/khoih-prog/WiFiWebServer
    Licensed under MIT license
-   Version: 1.0.5
+   Version: 1.0.6
 
    Original author:
    @file       Esp8266WebServer.h
@@ -21,8 +21,9 @@
     1.0.3   K Hoang      22/04/2020 Add support to nRF52 boards, such as AdaFruit Feather nRF52832, nRF52840 Express, BlueFruit Sense, 
                                     Itsy-Bitsy nRF52840 Express, Metro nRF52840 Express, NINA_B30_ublox, etc. 
     1.0.4   K Hoang      23/04/2020 Add support to MKR1000 boards using WiFi101 and custom WiFi libraries.
-    1.0.5   K Hoang      21/07/2020 Fix bug not closing client and releasing socket.               
- *****************************************************************************************************************************/
+    1.0.5   K Hoang      21/07/2020 Fix bug not closing client and releasing socket.    
+    1.0.6   K Hoang      24/07/2020 Add support to all STM32F/L/H/G/WB/MP1 and Seeeduino SAMD21/SAMD51 boards. Restructure examples   
+ ***************************************************************************************************************************************/
 
 #ifndef WiFiWebServer_h
 #define WiFiWebServer_h
@@ -33,7 +34,7 @@
       || defined(ARDUINO_SAMD_NANO_33_IOT) || defined(ARDUINO_SAMD_MKRFox1200) || defined(ARDUINO_SAMD_MKRWAN1300) || defined(ARDUINO_SAMD_MKRWAN1310) \
       || defined(ARDUINO_SAMD_MKRGSM1400) || defined(ARDUINO_SAMD_MKRNB1500) || defined(ARDUINO_SAMD_MKRVIDOR4000) || defined(__SAMD21G18A__) \
       || defined(ARDUINO_SAMD_CIRCUITPLAYGROUND_EXPRESS) || defined(__SAMD21E18A__) || defined(__SAMD51__) || defined(__SAMD51J20A__) || defined(__SAMD51J19A__) \
-      || defined(__SAMD51G19A__) || defined(__SAMD21G18A__) )
+      || defined(__SAMD51G19A__) || defined(__SAMD51P19A__) || defined(__SAMD21G18A__) )
 #if defined(WIFI_USE_SAMD)
 #undef WIFI_USE_SAMD
 #endif
@@ -59,8 +60,10 @@
 #warning Use SAM_DUE architecture from WiFiWebServer
 #endif
 
-#if ( defined(STM32F0) || defined(STM32F1) || defined(STM32F2) || defined(STM32F3)  ||defined(STM32F4) || defined(STM32F7) )
-#warning STM32F board selected
+#if ( defined(STM32F0) || defined(STM32F1) || defined(STM32F2) || defined(STM32F3)  ||defined(STM32F4) || defined(STM32F7) || \
+       defined(STM32L0) || defined(STM32L1) || defined(STM32L4) || defined(STM32H7)  ||defined(STM32G0) || defined(STM32G4) || \
+       defined(STM32WB) || defined(STM32MP1) )
+#warning STM32F/L/H/G/WB/MP1 board selected
 
 #if defined(WIFI_USE_STM32)
 #undef WIFI_USE_STM32
@@ -98,12 +101,38 @@
 #include "utility/mimetable.h"
 #include "utility/RingBuffer.h"
 
-enum HTTPMethod { HTTP_ANY, HTTP_GET, HTTP_HEAD, HTTP_POST, HTTP_PUT, HTTP_PATCH, HTTP_DELETE, HTTP_OPTIONS };
-enum HTTPUploadStatus { UPLOAD_FILE_START, UPLOAD_FILE_WRITE, UPLOAD_FILE_END,
-                        UPLOAD_FILE_ABORTED
-                      };
-enum HTTPClientStatus { HC_NONE, HC_WAIT_READ, HC_WAIT_CLOSE };
-enum HTTPAuthMethod { BASIC_AUTH, DIGEST_AUTH };
+enum HTTPMethod 
+{ 
+  HTTP_ANY, 
+  HTTP_GET,
+  HTTP_HEAD,
+  HTTP_POST, 
+  HTTP_PUT, 
+  HTTP_PATCH, 
+  HTTP_DELETE, 
+  HTTP_OPTIONS 
+};
+
+enum HTTPUploadStatus 
+{ 
+  UPLOAD_FILE_START, 
+  UPLOAD_FILE_WRITE, 
+  UPLOAD_FILE_END,
+  UPLOAD_FILE_ABORTED
+};
+
+enum HTTPClientStatus 
+{ 
+  HC_NONE, 
+  HC_WAIT_READ, 
+  HC_WAIT_CLOSE 
+};
+
+enum HTTPAuthMethod 
+{ 
+  BASIC_AUTH, 
+  DIGEST_AUTH 
+};
 
 #define HTTP_DOWNLOAD_UNIT_SIZE 1460
 
@@ -119,14 +148,15 @@ enum HTTPAuthMethod { BASIC_AUTH, DIGEST_AUTH };
 
 class WiFiWebServer;
 
-typedef struct {
+typedef struct 
+{
   HTTPUploadStatus status;
   String  filename;
   String  name;
   String  type;
-  size_t  totalSize;    // total size of uploaded file so far
-  size_t  currentSize;  // size of data currently in buf
-  size_t  contentLength; // size of entire post request, file size + headers and other request data.
+  size_t  totalSize;      // file size
+  size_t  currentSize;    // size of data currently in buf
+  size_t  contentLength;  // size of entire post request, file size + headers and other request data.
   uint8_t buf[HTTP_UPLOAD_BUFLEN];
 } HTTPUpload;
 
@@ -158,15 +188,21 @@ class WiFiWebServer
     void onNotFound(THandlerFunction fn);  //called when handler is not assigned
     void onFileUpload(THandlerFunction fn); //handle file uploads
 
-    String uri() {
+    String uri() 
+    {
       return _currentUri;
     }
-    HTTPMethod method() {
+    
+    HTTPMethod method() 
+    {
       return _currentMethod;
     }
-    WiFiClient client() {
+    
+    WiFiClient client() 
+    {
       return _currentClient;
     }
+    
     //KH
     #if USE_NEW_WEBSERVER_VERSION
     HTTPUpload& upload() 
@@ -223,11 +259,11 @@ class WiFiWebServer
       using namespace mime;
       setContentLength(file.size());
       
-      //if (String(file.name()).endsWith(".gz") && contentType != "application/x-gzip" && contentType != "application/octet-stream") 
       if (String(file.name()).endsWith(mimeTable[gz].endsWith) && contentType != mimeTable[gz].mimeType && contentType != mimeTable[none].mimeType) 
       {
         sendHeader("Content-Encoding", "gzip");
       }
+      
       send(200, contentType, "");
       return _currentClient.write(file);
     }
@@ -255,48 +291,47 @@ class WiFiWebServer
     void _prepareHeader(String& response, int code, const char* content_type, size_t contentLength);
     bool _collectHeader(const char* headerName, const char* headerValue);
     
-    struct RequestArgument {
+    struct RequestArgument 
+    {
       String key;
       String value;
     };
 
     WiFiServer  _server;
 
-    WiFiClient  _currentClient;
-    HTTPMethod  _currentMethod;
-    String      _currentUri;
-    uint8_t     _currentVersion;
-    HTTPClientStatus _currentStatus;
-    unsigned long _statusChange;
+    WiFiClient        _currentClient;
+    HTTPMethod        _currentMethod;
+    String            _currentUri;
+    uint8_t           _currentVersion;
+    HTTPClientStatus  _currentStatus;
+    unsigned long     _statusChange;
 
-    RequestHandler*  _currentHandler;
-    RequestHandler*  _firstHandler;
-    RequestHandler*  _lastHandler;
-    THandlerFunction _notFoundHandler;
-    THandlerFunction _fileUploadHandler;
+    RequestHandler*   _currentHandler;
+    RequestHandler*   _firstHandler;
+    RequestHandler*   _lastHandler;
+    THandlerFunction  _notFoundHandler;
+    THandlerFunction  _fileUploadHandler;
 
-    int              _currentArgCount;
-    RequestArgument* _currentArgs;
-    
+    int               _currentArgCount;
+    RequestArgument*  _currentArgs;
 
     //KH
     #if USE_NEW_WEBSERVER_VERSION
-    HTTPUpload* _currentUpload;
-    int              _postArgsLen;
-    RequestArgument* _postArgs;
+    HTTPUpload*       _currentUpload;
+    int               _postArgsLen;
+    RequestArgument*  _postArgs;
     
     #else
-    HTTPUpload       _currentUpload;
+    HTTPUpload        _currentUpload;
     #endif
-  
-    int              _headerKeysCount;
-    RequestArgument* _currentHeaders;
-    size_t           _contentLength;
-    String           _responseHeaders;
+    
+    int               _headerKeysCount;
+    RequestArgument*  _currentHeaders;
+    size_t            _contentLength;
+    String            _responseHeaders;
 
-    String           _hostHeader;
-    bool             _chunked;
-
+    String            _hostHeader;
+    bool              _chunked;
 };
 
 #include "WiFiWebServer-impl.h"

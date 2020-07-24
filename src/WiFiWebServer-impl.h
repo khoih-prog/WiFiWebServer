@@ -1,13 +1,13 @@
-/****************************************************************************************************************************
+/**************************************************************************************************************************************
    WiFiWebServer-impl.h - Dead simple web-server.
-   For ESP32-based WiFi shields, such as WiFiNINA W101, W102, W13x, etc
+   For any WiFi shields, such as WiFiNINA W101, W102, W13x, or custom, such as ESP8266/ESP32-AT, Ethernet, etc
 
    WiFiWebServer is a library for the ESP32-based WiFi shields to run WebServer
    Forked and modified from ESP8266 https://github.com/esp8266/Arduino/releases
    Forked and modified from Arduino WiFiNINA library https://www.arduino.cc/en/Reference/WiFiNINA
    Built by Khoi Hoang https://github.com/khoih-prog/WiFiWebServer
    Licensed under MIT license
-   Version: 1.0.5
+   Version: 1.0.6
 
    Original author:
    @file       Esp8266WebServer.h
@@ -21,8 +21,9 @@
     1.0.3   K Hoang      22/04/2020 Add support to nRF52 boards, such as AdaFruit Feather nRF52832, nRF52840 Express, BlueFruit Sense, 
                                     Itsy-Bitsy nRF52840 Express, Metro nRF52840 Express, NINA_B30_ublox, etc. 
     1.0.4   K Hoang      23/04/2020 Add support to MKR1000 boards using WiFi101 and custom WiFi libraries.
-    1.0.5   K Hoang      21/07/2020 Fix bug not closing client and releasing socket.
- *****************************************************************************************************************************/
+    1.0.5   K Hoang      21/07/2020 Fix bug not closing client and releasing socket.    
+    1.0.6   K Hoang      24/07/2020 Add support to all STM32F/L/H/G/WB/MP1 and Seeeduino SAMD21/SAMD51 boards. Restructure examples   
+ ***************************************************************************************************************************************/
 
 #ifndef WiFiWebServer_impl_h
 #define WiFiWebServer_impl_h
@@ -91,19 +92,24 @@ bool WiFiWebServer::authenticate(const char * username, const char * password)
       authReq.trim();
       char toencodeLen = strlen(username) + strlen(password) + 1;
       char *toencode = new char[toencodeLen + 1];
+      
       if (toencode == NULL) 
       {
         authReq = String();
         return false;
       }
+      
       char *encoded = new char[base64_encode_expected_len(toencodeLen) + 1];
+      
       if (encoded == NULL) 
       {
         authReq = String();
         delete[] toencode;
         return false;
       }
+      
       sprintf(toencode, "%s:%s", username, password);
+      
       if (base64_encode_chars(toencode, toencodeLen, encoded) > 0 && authReq.equals(encoded)) 
       {
         authReq = String();
@@ -111,11 +117,14 @@ bool WiFiWebServer::authenticate(const char * username, const char * password)
         delete[] encoded;
         return true;
       }
+      
       delete[] toencode;
       delete[] encoded;
     }
+    
     authReq = String();
   }
+  
   return false;
 }
 
@@ -125,28 +134,35 @@ void WiFiWebServer::requestAuthentication()
   send(401);
 }
 
-void WiFiWebServer::on(const String &uri, WiFiWebServer::THandlerFunction handler) {
+void WiFiWebServer::on(const String &uri, WiFiWebServer::THandlerFunction handler) 
+{
   on(uri, HTTP_ANY, handler);
 }
 
-void WiFiWebServer::on(const String &uri, HTTPMethod method, WiFiWebServer::THandlerFunction fn) {
+void WiFiWebServer::on(const String &uri, HTTPMethod method, WiFiWebServer::THandlerFunction fn) 
+{
   on(uri, method, fn, _fileUploadHandler);
 }
 
-void WiFiWebServer::on(const String &uri, HTTPMethod method, WiFiWebServer::THandlerFunction fn, WiFiWebServer::THandlerFunction ufn) {
+void WiFiWebServer::on(const String &uri, HTTPMethod method, WiFiWebServer::THandlerFunction fn, WiFiWebServer::THandlerFunction ufn) 
+{
   _addRequestHandler(new FunctionRequestHandler(fn, ufn, uri, method));
 }
 
-void WiFiWebServer::addHandler(RequestHandler* handler) {
+void WiFiWebServer::addHandler(RequestHandler* handler) 
+{
   _addRequestHandler(handler);
 }
 
-void WiFiWebServer::_addRequestHandler(RequestHandler* handler) {
-  if (!_lastHandler) {
+void WiFiWebServer::_addRequestHandler(RequestHandler* handler) 
+{
+  if (!_lastHandler) 
+  {
     _firstHandler = handler;
     _lastHandler = handler;
   }
-  else {
+  else 
+  {
     _lastHandler->next(handler);
     _lastHandler = handler;
   }
@@ -160,6 +176,7 @@ void WiFiWebServer::handleClient()
   if (_currentStatus == HC_NONE) 
   {
     WiFiClient client = _server.available();
+    
     if (!client) 
     {
       //WS_LOGDEBUG(F("WiFiWebServer::handleClient: No Client"));
@@ -381,12 +398,12 @@ void WiFiWebServer::_prepareHeader(String& response, int code, const char* conte
   response += "\r\n";
 
   using namespace mime;
+  
   if (!content_type)
       content_type = mimeTable[html].mimeType;
-  //if (!content_type)
-  //  content_type = "text/html";
 
   sendHeader("Content-Type", content_type, true);
+  
   if (_contentLength == CONTENT_LENGTH_NOT_SET) 
   {
     sendHeader("Content-Length", String(contentLength));
@@ -442,6 +459,7 @@ void WiFiWebServer::send(int code, char* content_type, const String& content, si
   WS_LOGDEBUG1(F("content = "), content);
 
   char type[64];
+  
   memccpy((void*)type, content_type, 0, sizeof(type));
   _prepareHeader(header, code, (const char* )type, contentLength);
 
@@ -478,6 +496,7 @@ void WiFiWebServer::send_P(int code, PGM_P content_type, PGM_P content)
 
   String header;
   char type[64];
+  
   memccpy_P((void*)type, (PGM_VOID_P)content_type, 0, sizeof(type));
   _prepareHeader(header, code, (const char* )type, contentLength);
 
@@ -487,15 +506,18 @@ void WiFiWebServer::send_P(int code, PGM_P content_type, PGM_P content)
   WS_LOGDEBUG1(F("header = "), header);
 
   _currentClient.write((const uint8_t *) header.c_str(), header.length());
+  
   if (contentLength)
   {
     sendContent_P(content);
   }
 }
 
-void WiFiWebServer::send_P(int code, PGM_P content_type, PGM_P content, size_t contentLength) {
+void WiFiWebServer::send_P(int code, PGM_P content_type, PGM_P content, size_t contentLength) 
+{
   String header;
   char type[64];
+  
   memccpy_P((void*)type, (PGM_VOID_P)content_type, 0, sizeof(type));
   _prepareHeader(header, code, (const char* )type, contentLength);
 
@@ -505,6 +527,7 @@ void WiFiWebServer::send_P(int code, PGM_P content_type, PGM_P content, size_t c
   WS_LOGDEBUG1(F("header = "), header);
 
   _currentClient.write((const uint8_t *) header.c_str(), header.length());
+  
   if (contentLength)
   {
     sendContent_P(content, contentLength);
@@ -512,19 +535,27 @@ void WiFiWebServer::send_P(int code, PGM_P content_type, PGM_P content, size_t c
 }
 #endif
 
-void WiFiWebServer::sendContent(const String& content) {
+void WiFiWebServer::sendContent(const String& content) 
+{
   const char * footer = "\r\n";
   size_t len = content.length();
-  if (_chunked) {
-    char * chunkSize = (char *)malloc(11);
-    if (chunkSize) {
+  
+  if (_chunked) 
+  {
+    char * chunkSize = (char *) malloc(11);
+    
+    if (chunkSize) 
+    {
       sprintf(chunkSize, "%x%s", len, footer);
       _currentClient.write(chunkSize, strlen(chunkSize));
       free(chunkSize);
     }
   }
+  
   _currentClient.write(content.c_str(), len);
-  if (_chunked) {
+  
+  if (_chunked) 
+  {
     _currentClient.write(footer, 2);
   }
 }
@@ -532,9 +563,13 @@ void WiFiWebServer::sendContent(const String& content) {
 void WiFiWebServer::sendContent(const String& content, size_t size)
 {
   const char * footer = "\r\n";
-  if (_chunked) {
-    char * chunkSize = (char *)malloc(11);
-    if (chunkSize) {
+  
+  if (_chunked) 
+  {
+    char * chunkSize = (char *) malloc(11);
+    
+    if (chunkSize) 
+    {
       WS_LOGDEBUG(F("WiFiWebServer::sendContent: _chunked"));
 
       sprintf(chunkSize, "%x%s", size, footer);
@@ -545,122 +580,163 @@ void WiFiWebServer::sendContent(const String& content, size_t size)
 
   WS_LOGDEBUG1(F("WiFiWebServer::sendContent: Client.write content: "), content);
   _currentClient.write(content.c_str(), size);
+  
   if (_chunked) {
     _currentClient.write(footer, 2);
   }
 }
 
-void WiFiWebServer::sendContent_P(PGM_P content) {
+void WiFiWebServer::sendContent_P(PGM_P content) 
+{
   sendContent_P(content, strlen_P(content));
 }
 
-void WiFiWebServer::sendContent_P(PGM_P content, size_t size) {
+void WiFiWebServer::sendContent_P(PGM_P content, size_t size) 
+{
   const char * footer = "\r\n";
-  if (_chunked) {
-    char * chunkSize = (char *)malloc(11);
-    if (chunkSize) {
+  
+  if (_chunked) 
+  {
+    char * chunkSize = (char *) malloc(11);
+    
+    if (chunkSize) 
+    {
       sprintf(chunkSize, "%x%s", size, footer);
       _currentClient.write(chunkSize, strlen(chunkSize));
       free(chunkSize);
     }
   }
+  
   _currentClient.write(content, size);
-  if (_chunked) {
+  
+  if (_chunked) 
+  {
     _currentClient.write(footer, 2);
   }
 }
 
-String WiFiWebServer::arg(String name) {
-  for (int i = 0; i < _currentArgCount; ++i) {
+String WiFiWebServer::arg(String name) 
+{
+  for (int i = 0; i < _currentArgCount; ++i) 
+  {
     if ( _currentArgs[i].key == name )
       return _currentArgs[i].value;
   }
+  
   return String();
 }
 
-String WiFiWebServer::arg(int i) {
+String WiFiWebServer::arg(int i) 
+{
   if (i < _currentArgCount)
     return _currentArgs[i].value;
+    
   return String();
 }
 
-String WiFiWebServer::argName(int i) {
+String WiFiWebServer::argName(int i) 
+{
   if (i < _currentArgCount)
     return _currentArgs[i].key;
+    
   return String();
 }
 
-int WiFiWebServer::args() {
+int WiFiWebServer::args() 
+{
   return _currentArgCount;
 }
 
-bool WiFiWebServer::hasArg(String  name) {
-  for (int i = 0; i < _currentArgCount; ++i) {
+bool WiFiWebServer::hasArg(String  name) 
+{
+  for (int i = 0; i < _currentArgCount; ++i) 
+  {
     if (_currentArgs[i].key == name)
       return true;
   }
+  
   return false;
 }
 
 
-String WiFiWebServer::header(String name) {
-  for (int i = 0; i < _headerKeysCount; ++i) {
+String WiFiWebServer::header(String name) 
+{
+  for (int i = 0; i < _headerKeysCount; ++i) 
+  {
     if (_currentHeaders[i].key == name)
       return _currentHeaders[i].value;
   }
+  
   return String();
 }
 
-void WiFiWebServer::collectHeaders(const char* headerKeys[], const size_t headerKeysCount) {
+void WiFiWebServer::collectHeaders(const char* headerKeys[], const size_t headerKeysCount) 
+{
   _headerKeysCount = headerKeysCount + 1;
+  
   if (_currentHeaders)
     delete[]_currentHeaders;
+    
   _currentHeaders = new RequestArgument[_headerKeysCount];
   _currentHeaders[0].key = AUTHORIZATION_HEADER;
-  for (int i = 1; i < _headerKeysCount; i++) {
+  
+  for (int i = 1; i < _headerKeysCount; i++) 
+  {
     _currentHeaders[i].key = headerKeys[i - 1];
   }
 }
 
-String WiFiWebServer::header(int i) {
+String WiFiWebServer::header(int i) 
+{
   if (i < _headerKeysCount)
     return _currentHeaders[i].value;
+    
   return String();
 }
 
-String WiFiWebServer::headerName(int i) {
+String WiFiWebServer::headerName(int i) 
+{
   if (i < _headerKeysCount)
     return _currentHeaders[i].key;
+    
   return String();
 }
 
-int WiFiWebServer::headers() {
+int WiFiWebServer::headers() 
+{
   return _headerKeysCount;
 }
 
-bool WiFiWebServer::hasHeader(String name) {
-  for (int i = 0; i < _headerKeysCount; ++i) {
+bool WiFiWebServer::hasHeader(String name) 
+{
+  for (int i = 0; i < _headerKeysCount; ++i) 
+  {
     if ((_currentHeaders[i].key == name) &&  (_currentHeaders[i].value.length() > 0))
       return true;
   }
+  
   return false;
 }
 
-String WiFiWebServer::hostHeader() {
+String WiFiWebServer::hostHeader() 
+{
   return _hostHeader;
 }
 
-void WiFiWebServer::onFileUpload(THandlerFunction fn) {
+void WiFiWebServer::onFileUpload(THandlerFunction fn) 
+{
   _fileUploadHandler = fn;
 }
 
-void WiFiWebServer::onNotFound(THandlerFunction fn) {
+void WiFiWebServer::onNotFound(THandlerFunction fn) 
+{
   _notFoundHandler = fn;
 }
 
 void WiFiWebServer::_handleRequest()
 {
   bool handled = false;
+  
   if (!_currentHandler)
   {
     WS_LOGDEBUG(F("WiFiWebServer::_handleRequest: request handler not found"));
@@ -669,6 +745,7 @@ void WiFiWebServer::_handleRequest()
   {
     WS_LOGDEBUG(F("WiFiWebServer::_handleRequest handle"));
     handled = _currentHandler->handle(*this, _currentMethod, _currentUri);
+    
     if (!handled)
     {
       WS_LOGDEBUG(F("WiFiWebServer::_handleRequest: _handleRequest failed"));
@@ -684,12 +761,17 @@ void WiFiWebServer::_handleRequest()
     _notFoundHandler();
     handled = true;
   }
-  if (!handled) {
+  
+  if (!handled) 
+  {
     using namespace mime;
+    
     send(404, mimeTable[html].mimeType, String("Not found: ") + _currentUri);
     handled = true;
   }
-  if (handled) {
+  
+  if (handled) 
+  {
     _finalizeResponse();
   }
   
@@ -704,7 +786,8 @@ void WiFiWebServer::_finalizeResponse()
   }
 }
 
-String WiFiWebServer::_responseCodeToString(int code) {
+String WiFiWebServer::_responseCodeToString(int code) 
+{
   switch (code) {
     case 100: return F("Continue");
     case 101: return F("Switching Protocols");
