@@ -7,7 +7,7 @@
    Forked and modified from Arduino WiFiNINA library https://www.arduino.cc/en/Reference/WiFiNINA
    Built by Khoi Hoang https://github.com/khoih-prog/WiFiWebServer
    Licensed under MIT license
-   Version: 1.0.6
+   Version: 1.0.7
 
    Original author:
    @file       Esp8266WebServer.h
@@ -22,7 +22,8 @@
                                     Itsy-Bitsy nRF52840 Express, Metro nRF52840 Express, NINA_B30_ublox, etc. 
     1.0.4   K Hoang      23/04/2020 Add support to MKR1000 boards using WiFi101 and custom WiFi libraries.
     1.0.5   K Hoang      21/07/2020 Fix bug not closing client and releasing socket.    
-    1.0.6   K Hoang      24/07/2020 Add support to all STM32F/L/H/G/WB/MP1 and Seeeduino SAMD21/SAMD51 boards. Restructure examples   
+    1.0.6   K Hoang      24/07/2020 Add support to all STM32F/L/H/G/WB/MP1 and Seeeduino SAMD21/SAMD51 boards. Restructure examples 
+    1.0.7   K Hoang      25/09/2020 Restore support to PROGMEM-related commands, such as sendContent_P() and send_P()
  ***************************************************************************************************************************************/
 
 #ifndef WiFiWebServer_h
@@ -35,29 +36,29 @@
       || defined(ARDUINO_SAMD_MKRGSM1400) || defined(ARDUINO_SAMD_MKRNB1500) || defined(ARDUINO_SAMD_MKRVIDOR4000) || defined(__SAMD21G18A__) \
       || defined(ARDUINO_SAMD_CIRCUITPLAYGROUND_EXPRESS) || defined(__SAMD21E18A__) || defined(__SAMD51__) || defined(__SAMD51J20A__) || defined(__SAMD51J19A__) \
       || defined(__SAMD51G19A__) || defined(__SAMD51P19A__) || defined(__SAMD21G18A__) )
-#if defined(WIFI_USE_SAMD)
-#undef WIFI_USE_SAMD
-#endif
-#define WIFI_USE_SAMD      true
-#warning Use SAMD architecture from WiFiWebServer
+  #if defined(WIFI_USE_SAMD)
+    #undef WIFI_USE_SAMD
+  #endif
+  #define WIFI_USE_SAMD      true
+  #warning Use SAMD architecture from WiFiWebServer
 #endif
 
 #if ( defined(NRF52840_FEATHER) || defined(NRF52832_FEATHER) || defined(NRF52_SERIES) || defined(ARDUINO_NRF52_ADAFRUIT) || \
         defined(NRF52840_FEATHER_SENSE) || defined(NRF52840_ITSYBITSY) || defined(NRF52840_CIRCUITPLAY) || defined(NRF52840_CLUE) || \
         defined(NRF52840_METRO) || defined(NRF52840_PCA10056) || defined(PARTICLE_XENON) || defined(NINA_B302_ublox) )
-#if defined(WIFI_USE_NRF528XX)
-#undef WIFI_USE_NRF528XX
-#endif
-#define WIFI_USE_NRF528XX      true
-#warning Use nFR52 architecture from WiFiWebServer
+  #if defined(WIFI_USE_NRF528XX)
+    #undef WIFI_USE_NRF528XX
+  #endif
+  #define WIFI_USE_NRF528XX      true
+  #warning Use nFR52 architecture from WiFiWebServer
 #endif
 
 #if ( defined(ARDUINO_SAM_DUE) || defined(__SAM3X8E__) )
-#if defined(WIFI_USE_SAM_DUE)
-#undef WIFI_USE_SAM_DUE
-#endif
-#define WIFI_USE_SAM_DUE      true
-#warning Use SAM_DUE architecture from WiFiWebServer
+  #if defined(WIFI_USE_SAM_DUE)
+    #undef WIFI_USE_SAM_DUE
+  #endif
+  #define WIFI_USE_SAM_DUE      true
+  #warning Use SAM_DUE architecture from WiFiWebServer
 #endif
 
 #if ( defined(STM32F0) || defined(STM32F1) || defined(STM32F2) || defined(STM32F3)  ||defined(STM32F4) || defined(STM32F7) || \
@@ -65,11 +66,11 @@
        defined(STM32WB) || defined(STM32MP1) )
 #warning STM32F/L/H/G/WB/MP1 board selected
 
-#if defined(WIFI_USE_STM32)
-#undef WIFI_USE_STM32
-#endif
-#define WIFI_USE_STM32      true
-#warning Use STM32 architecture from WiFiWebServer
+  #if defined(WIFI_USE_STM32)
+    #undef WIFI_USE_STM32
+  #endif
+  #define WIFI_USE_STM32      true
+  #warning Use STM32 architecture from WiFiWebServer
 #endif
 
 // To support lambda function in class
@@ -81,25 +82,49 @@
 
 // Modify to use new WiFiNINA_Generic library to support boards besides Nano-33 IoT, MKRWiFi1010, Adafruit MetroM4, etc.
 #if USE_WIFI_NINA
-
-#include <WiFiNINA_Generic.h>
-//#include <WiFiNINA.h>
-#warning Use WiFiNINA from WiFiWebServer
+  #include <WiFiNINA_Generic.h>
+  //#include <WiFiNINA.h>
+  #warning Use WiFiNINA from WiFiWebServer
 #elif USE_WIFI101
-#include <WiFi101.h>
-#warning Use WiFi101 from WiFiWebServer
+  #include <WiFi101.h>
+  #warning Use WiFi101 from WiFiWebServer
 #else
-#if USE_WIFI_CUSTOM
-#warning Use Custom WiFi for WiFiWebServer
+  #if USE_WIFI_CUSTOM
+  #warning Use Custom WiFi for WiFiWebServer
 #else
-#include <WiFi.h>
-#warning Use WiFi.h from WiFiWebServer
+  #include <WiFi.h>
+  #warning Use WiFi.h from WiFiWebServer
 #endif
 
 #endif
 
 #include "utility/mimetable.h"
 #include "utility/RingBuffer.h"
+
+// KH, For PROGMEM commands
+// ESP32/ESP8266 includes <pgmspace.h> by default, and memccpy_P was already defined there
+#if !(ESP32 || ESP8266)
+  #include <avr/pgmspace.h>
+  #define memccpy_P(dest, src, c, n) memccpy((dest), (src), (c), (n))
+#endif
+
+// Permit redefinition of SENDCONTENT_P_BUFFER_SZ in sketch, default is 4K, minimum is 256 bytes
+#ifndef SENDCONTENT_P_BUFFER_SZ
+  #define SENDCONTENT_P_BUFFER_SZ     4096
+  #warning SENDCONTENT_P_BUFFER_SZ using default 4 Kbytes
+#else
+  #if (SENDCONTENT_P_BUFFER_SZ < 256)
+    #undef SENDCONTENT_P_BUFFER_SZ
+    #define SENDCONTENT_P_BUFFER_SZ   256
+    #warning SENDCONTENT_P_BUFFER_SZ reset to min 256 bytes
+  #endif
+#endif
+
+#ifndef PGM_VOID_P
+  #define PGM_VOID_P const void *
+#endif
+
+//////
 
 enum HTTPMethod 
 { 
@@ -136,12 +161,16 @@ enum HTTPAuthMethod
 
 #define HTTP_DOWNLOAD_UNIT_SIZE 1460
 
-#define HTTP_UPLOAD_BUFLEN 2048
+// Permit user to increase HTTP_UPLOAD_BUFLEN larger than default 2K
+//#define HTTP_UPLOAD_BUFLEN 2048
+#if !defined(HTTP_UPLOAD_BUFLEN)
+  #define HTTP_UPLOAD_BUFLEN 2048
+#endif
 
-#define HTTP_MAX_DATA_WAIT 5000 //ms to wait for the client to send the request
-#define HTTP_MAX_POST_WAIT 5000 //ms to wait for POST data to arrive
-#define HTTP_MAX_SEND_WAIT 5000 //ms to wait for data chunk to be ACKed
-#define HTTP_MAX_CLOSE_WAIT 2000 //ms to wait for the client to close the connection
+#define HTTP_MAX_DATA_WAIT    5000 //ms to wait for the client to send the request
+#define HTTP_MAX_POST_WAIT    5000 //ms to wait for POST data to arrive
+#define HTTP_MAX_SEND_WAIT    5000 //ms to wait for data chunk to be ACKed
+#define HTTP_MAX_CLOSE_WAIT   2000 //ms to wait for the client to close the connection
 
 #define CONTENT_LENGTH_UNKNOWN ((size_t) -1)
 #define CONTENT_LENGTH_NOT_SET ((size_t) -2)
@@ -185,7 +214,7 @@ class WiFiWebServer
     void on(const String &uri, HTTPMethod method, THandlerFunction fn);
     void on(const String &uri, HTTPMethod method, THandlerFunction fn, THandlerFunction ufn);
     void addHandler(RequestHandler* handler);
-    void onNotFound(THandlerFunction fn);  //called when handler is not assigned
+    void onNotFound(THandlerFunction fn);   //called when handler is not assigned
     void onFileUpload(THandlerFunction fn); //handle file uploads
 
     String uri() 
@@ -216,19 +245,19 @@ class WiFiWebServer
     }
     #endif
     
-    String arg(String name);        // get request argument value by name
-    String arg(int i);              // get request argument value by number
-    String argName(int i);          // get request argument name by number
-    int args();                     // get arguments count
-    bool hasArg(String name);       // check if argument exists
+    String arg(String name);            // get request argument value by name
+    String arg(int i);                  // get request argument value by number
+    String argName(int i);              // get request argument name by number
+    int args();                         // get arguments count
+    bool hasArg(String name);           // check if argument exists
     void collectHeaders(const char* headerKeys[], const size_t headerKeysCount); // set the request headers to collect
-    String header(String name);      // get request header value by name
-    String header(int i);              // get request header value by number
-    String headerName(int i);          // get request header name by number
-    int headers();                     // get header count
-    bool hasHeader(String name);       // check if header exists
+    String header(String name);         // get request header value by name
+    String header(int i);               // get request header value by number
+    String headerName(int i);           // get request header name by number
+    int headers();                      // get header count
+    bool hasHeader(String name);        // check if header exists
 
-    String hostHeader();            // get request host header if available or empty String if not
+    String hostHeader();                // get request host header if available or empty String if not
 
     // send response to the client
     // code - HTTP response code, can be 200 or 404
@@ -239,18 +268,19 @@ class WiFiWebServer
     void send(int code, const String& content_type, const String& content);
     //KH
     void send(int code, char*  content_type, const String& content, size_t contentLength);
-
-#if !( defined(CORE_TEENSY) || (WIFI_USE_SAMD) || WIFI_USE_SAM_DUE || (WIFI_USE_STM32) || WIFI_USE_NRF528XX )
-    void send_P(int code, PGM_P content_type, PGM_P content);
-    void send_P(int code, PGM_P content_type, PGM_P content, size_t contentLength);
-#endif
-
+    
     void setContentLength(size_t contentLength);
     void sendHeader(const String& name, const String& value, bool first = false);
     void sendContent(const String& content);
     void sendContent(const String& content, size_t size);
+
+    // KH, Restore PROGMEM commands
+    void send_P(int code, PGM_P content_type, PGM_P content);
+    void send_P(int code, PGM_P content_type, PGM_P content, size_t contentLength);
+    
     void sendContent_P(PGM_P content);
     void sendContent_P(PGM_P content, size_t size);
+    //////
 
     static String urlDecode(const String& text);
 

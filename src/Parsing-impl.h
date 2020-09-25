@@ -7,7 +7,7 @@
    Forked and modified from Arduino WiFiNINA library https://www.arduino.cc/en/Reference/WiFiNINA
    Built by Khoi Hoang https://github.com/khoih-prog/WiFiWebServer
    Licensed under MIT license
-   Version: 1.0.6
+   Version: 1.0.7
 
    Original author:
    @file       Esp8266WebServer.h
@@ -22,7 +22,8 @@
                                     Itsy-Bitsy nRF52840 Express, Metro nRF52840 Express, NINA_B30_ublox, etc. 
     1.0.4   K Hoang      23/04/2020 Add support to MKR1000 boards using WiFi101 and custom WiFi libraries.
     1.0.5   K Hoang      21/07/2020 Fix bug not closing client and releasing socket.    
-    1.0.6   K Hoang      24/07/2020 Add support to all STM32F/L/H/G/WB/MP1 and Seeeduino SAMD21/SAMD51 boards. Restructure examples   
+    1.0.6   K Hoang      24/07/2020 Add support to all STM32F/L/H/G/WB/MP1 and Seeeduino SAMD21/SAMD51 boards. Restructure examples 
+    1.0.7   K Hoang      25/09/2020 Restore support to PROGMEM-related commands, such as sendContent_P() and send_P() 
  ***************************************************************************************************************************************/
 
 #ifndef WiFiWebServer_Parsing_impl_h
@@ -133,21 +134,21 @@ bool WiFiWebServer::_parseRequest(WiFiClient& client)
 
   // First line of HTTP request looks like "GET /path HTTP/1.1"
   // Retrieve the "/path" part by finding the spaces
-  int addr_start = req.indexOf(' ');
-  int addr_end = req.indexOf(' ', addr_start + 1);
+  int addr_start  = req.indexOf(' ');
+  int addr_end    = req.indexOf(' ', addr_start + 1);
 
   if (addr_start == -1 || addr_end == -1)
   {
-    WS_LOGDEBUG1(F("WiFiWebServer::_parseRequest: Invalid request: "), req);
+    WS_LOGDEBUG1(F("_parseRequest: Invalid request: "), req);
     return false;
   }
 
-  String methodStr = req.substring(0, addr_start);
-  String url = req.substring(addr_start + 1, addr_end);
+  String methodStr  = req.substring(0, addr_start);
+  String url        = req.substring(addr_start + 1, addr_end);
   String versionEnd = req.substring(addr_end + 8);
-  _currentVersion = atoi(versionEnd.c_str());
-  String searchStr = "";
-  int hasSearch = url.indexOf('?');
+  _currentVersion   = atoi(versionEnd.c_str());
+  String searchStr  = "";
+  int hasSearch     = url.indexOf('?');
 
   if (hasSearch != -1)
   {
@@ -235,9 +236,10 @@ bool WiFiWebServer::_parseRequest(WiFiClient& client)
     String boundaryStr;
     String headerName;
     String headerValue;
-    bool isForm = false;
-    bool isEncoded = false;
-    uint32_t contentLength = 0;
+    
+    bool isForm     = false;
+    bool isEncoded  = false;
+    uint32_t contentLength  = 0;
 
     //parse headers
     while (1)
@@ -246,7 +248,7 @@ bool WiFiWebServer::_parseRequest(WiFiClient& client)
       client.readStringUntil('\n');
 
       if (req == "")
-        break;//no moar headers
+        break;//no more headers
 
       int headerDiv = req.indexOf(':');
 
@@ -255,8 +257,9 @@ bool WiFiWebServer::_parseRequest(WiFiClient& client)
         break;
       }
 
-      headerName = req.substring(0, headerDiv);
+      headerName  = req.substring(0, headerDiv);
       headerValue = req.substring(headerDiv + 1);
+      
       headerValue.trim();
       _collectHeader(headerName.c_str(), headerValue.c_str());
 
@@ -265,9 +268,9 @@ bool WiFiWebServer::_parseRequest(WiFiClient& client)
 
       //KH
       if (headerName.equalsIgnoreCase("Content-Type"))
-        //if (headerName == "Content-Type")
       {
         using namespace mime;
+        
         if (headerValue.startsWith(mimeTable[txt].mimeType))
         {
           isForm = false;
@@ -288,13 +291,11 @@ bool WiFiWebServer::_parseRequest(WiFiClient& client)
       }
       //KH
       else if (headerName.equalsIgnoreCase("Content-Length"))
-        //else if (headerName == "Content-Length")
       {
         contentLength = headerValue.toInt();
       }
       //KH
       else if (headerName.equalsIgnoreCase("Host"))
-        //else if (headerName == "Host")
       {
         _hostHeader = headerValue;
       }
@@ -333,7 +334,7 @@ bool WiFiWebServer::_parseRequest(WiFiClient& client)
       {
         // add key=value: plain={body} (post json or other data)
         RequestArgument& arg = _currentArgs[_currentArgCount++];
-        arg.key = F("plain");
+        arg.key   = F("plain");
         arg.value = plainBuf;
       }
     }
@@ -359,7 +360,7 @@ bool WiFiWebServer::_parseRequest(WiFiClient& client)
       client.readStringUntil('\n');
 
       if (req == "")
-        break;//no moar headers
+        break;//no more headers
 
       int headerDiv = req.indexOf(':');
 
@@ -368,7 +369,7 @@ bool WiFiWebServer::_parseRequest(WiFiClient& client)
         break;
       }
 
-      headerName = req.substring(0, headerDiv);
+      headerName  = req.substring(0, headerDiv);
       headerValue = req.substring(headerDiv + 2);
       _collectHeader(headerName.c_str(), headerValue.c_str());
 
@@ -422,7 +423,7 @@ bool WiFiWebServer::_parseRequest(WiFiClient& client)
       client.readStringUntil('\n');
 
       if (req == "")
-        break;//no moar headers
+        break;//no more headers
 
       int headerDiv = req.indexOf(':');
 
@@ -431,7 +432,7 @@ bool WiFiWebServer::_parseRequest(WiFiClient& client)
         break;
       }
 
-      headerName = req.substring(0, headerDiv);
+      headerName  = req.substring(0, headerDiv);
       headerValue = req.substring(headerDiv + 2);
       _collectHeader(headerName.c_str(), headerValue.c_str());
 
@@ -463,7 +464,6 @@ bool WiFiWebServer::_collectHeader(const char* headerName, const char* headerVal
   {
     //KH
     if (_currentHeaders[i].key.equalsIgnoreCase(headerName))
-      //if (_currentHeaders[i].key == headerName)
     {
       _currentHeaders[i].value = headerValue;
       return true;
@@ -514,7 +514,7 @@ int WiFiWebServer::_parseArgumentsPrivate(const String& data, vl::Func<void(Stri
 
   WS_LOGDEBUG1(F("args: "), data);
 
-  size_t pos = 0;
+  size_t pos    = 0;
   int arg_total = 0;
 
   while (true)
@@ -527,7 +527,7 @@ int WiFiWebServer::_parseArgumentsPrivate(const String& data, vl::Func<void(Stri
     // locate separators
     int equal_index = data.indexOf('=', pos);
     int key_end_pos = equal_index;
-    int next_index = data.indexOf('&', pos);
+    int next_index  = data.indexOf('&', pos);
     int next_index2 = data.indexOf(';', pos);
 
     if ((next_index == -1) || (next_index2 != -1 && next_index2 < next_index))
@@ -623,13 +623,14 @@ void WiFiWebServer::_parseArguments(String data)
   WS_LOGDEBUG1(F("args count: "), _currentArgCount);
 
   _currentArgs = new RequestArgument[_currentArgCount + 1];
+  
   int pos = 0;
   int iarg;
 
   for (iarg = 0; iarg < _currentArgCount;)
   {
-    int equal_sign_index = data.indexOf('=', pos);
-    int next_arg_index = data.indexOf('&', pos);
+    int equal_sign_index  = data.indexOf('=', pos);
+    int next_arg_index    = data.indexOf('&', pos);
 
     WS_LOGDEBUG1(F("pos: "), pos);
     WS_LOGDEBUG1(F("=@ "), equal_sign_index);
@@ -649,7 +650,7 @@ void WiFiWebServer::_parseArguments(String data)
     }
 
     RequestArgument& arg = _currentArgs[iarg];
-    arg.key = data.substring(pos, equal_sign_index);
+    arg.key   = data.substring(pos, equal_sign_index);
     arg.value = data.substring(equal_sign_index + 1, next_arg_index);
 
     WS_LOGDEBUG1(F("arg: "), iarg);
@@ -719,9 +720,10 @@ bool WiFiWebServer::_parseForm(WiFiClient& client, const String& boundary, uint3
   } while (line.length() == 0 && retry < 3);
 
   client.readStringUntil('\n');
+  
   //start reading the form
-  if (line == ("--" + boundary)) {
-
+  if (line == ("--" + boundary)) 
+  {
     if (_postArgs)
       delete[] _postArgs;
 
@@ -734,6 +736,7 @@ bool WiFiWebServer::_parseForm(WiFiClient& client, const String& boundary, uint3
       String argValue;
       String argType;
       String argFilename;
+      
       bool argIsFile = false;
 
       line = client.readStringUntil('\r');
@@ -768,8 +771,9 @@ bool WiFiWebServer::_parseForm(WiFiClient& client, const String& boundary, uint3
           WS_LOGDEBUG1(F("PostArg Name: "), argName);
 
           using namespace mime;
+          
           argType = mimeTable[txt].mimeType;
-          line = client.readStringUntil('\r');
+          line    = client.readStringUntil('\r');
           client.readStringUntil('\n');
 
           if (line.length() > 12 && line.substring(0, 12).equalsIgnoreCase("Content-Type"))
@@ -833,6 +837,7 @@ bool WiFiWebServer::_parseForm(WiFiClient& client, const String& boundary, uint3
 
             _currentUpload->status = UPLOAD_FILE_WRITE;
             uint8_t argByte = _uploadReadByte(client);
+            
 readfile:
             while (argByte != 0x0D)
             {
@@ -905,6 +910,7 @@ readfile:
                   WS_LOGDEBUG(F("Done Parsing POST"));
                   break;
                 }
+                
                 continue;
               }
               else
@@ -913,6 +919,7 @@ readfile:
                 _uploadWriteByte(0x0A);
                 _uploadWriteByte((uint8_t)('-'));
                 _uploadWriteByte((uint8_t)('-'));
+                
                 uint32_t i = 0;
 
                 while (i < boundary.length())
@@ -966,6 +973,7 @@ readfile:
       _postArgs = nullptr;
       _postArgsLen = 0;
     }
+    
     return true;
   }
 
@@ -1015,6 +1023,7 @@ bool WiFiWebServer::_parseForm(WiFiClient& client, String boundary, uint32_t len
       String argValue;
       String argType;
       String argFilename;
+      
       bool argIsFile = false;
 
       line = client.readStringUntil('\r');
@@ -1026,7 +1035,7 @@ bool WiFiWebServer::_parseForm(WiFiClient& client, String boundary, uint32_t len
 
         if (nameStart != -1)
         {
-          argName = line.substring(nameStart + 2);
+          argName   = line.substring(nameStart + 2);
           nameStart = argName.indexOf('=');
 
           if (nameStart == -1)
@@ -1036,8 +1045,8 @@ bool WiFiWebServer::_parseForm(WiFiClient& client, String boundary, uint32_t len
           else
           {
             argFilename = argName.substring(nameStart + 2, argName.length() - 1);
-            argName = argName.substring(0, argName.indexOf('"'));
-            argIsFile = true;
+            argName     = argName.substring(0, argName.indexOf('"'));
+            argIsFile   = true;
 
             WS_LOGDEBUG1(F("PostArg FileName: "), argFilename);
 
@@ -1049,7 +1058,7 @@ bool WiFiWebServer::_parseForm(WiFiClient& client, String boundary, uint32_t len
           WS_LOGDEBUG1(F("PostArg Name: "), argName);
 
           argType = "text/plain";
-          line = client.readStringUntil('\r');
+          line    = client.readStringUntil('\r');
           client.readStringUntil('\n');
 
           if (line.startsWith("Content-Type"))
@@ -1081,7 +1090,7 @@ bool WiFiWebServer::_parseForm(WiFiClient& client, String boundary, uint32_t len
             WS_LOGDEBUG1(F("PostArg Value: "), argValue);
 
             RequestArgument& arg = postArgs[postArgsLen++];
-            arg.key = argName;
+            arg.key   = argName;
             arg.value = argValue;
 
             if (line == ("--" + boundary + "--"))
@@ -1093,12 +1102,12 @@ bool WiFiWebServer::_parseForm(WiFiClient& client, String boundary, uint32_t len
           }
           else
           {
-            _currentUpload.status = UPLOAD_FILE_START;
-            _currentUpload.name = argName;
-            _currentUpload.filename = argFilename;
-            _currentUpload.type = argType;
-            _currentUpload.totalSize = 0;
-            _currentUpload.currentSize = 0;
+            _currentUpload.status       = UPLOAD_FILE_START;
+            _currentUpload.name         = argName;
+            _currentUpload.filename     = argFilename;
+            _currentUpload.type         = argType;
+            _currentUpload.totalSize    = 0;
+            _currentUpload.currentSize  = 0;
 
             WS_LOGDEBUG1(F("Start File: "), _currentUpload.filename);
             WS_LOGDEBUG1(F("Type: "), _currentUpload.type);
@@ -1107,7 +1116,7 @@ bool WiFiWebServer::_parseForm(WiFiClient& client, String boundary, uint32_t len
               _currentHandler->upload(*this, _currentUri, _currentUpload);
 
             _currentUpload.status = UPLOAD_FILE_WRITE;
-            uint8_t argByte = _uploadReadByte(client);
+            uint8_t argByte       = _uploadReadByte(client);
 
 readfile:
             while (argByte != 0x0D)
@@ -1190,6 +1199,7 @@ readfile:
                 _uploadWriteByte(0x0A);
                 _uploadWriteByte((uint8_t)('-'));
                 _uploadWriteByte((uint8_t)('-'));
+                
                 uint32_t i = 0;
 
                 while (i < boundary.length())
@@ -1260,10 +1270,10 @@ bool WiFiWebServer::_parseFormUploadAborted()
 
 String WiFiWebServer::urlDecode(const String& text)
 {
-  String decoded = "";
-  char temp[] = "0x00";
-  unsigned int len = text.length();
-  unsigned int i = 0;
+  String decoded    = "";
+  char temp[]       = "0x00";
+  unsigned int len  = text.length();
+  unsigned int i    = 0;
 
   while (i < len)
   {
@@ -1294,7 +1304,5 @@ String WiFiWebServer::urlDecode(const String& text)
 
   return decoded;
 }
-
-
 
 #endif //WiFiWebServer_Parsing_impl_h

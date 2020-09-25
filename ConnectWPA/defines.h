@@ -313,7 +313,9 @@
 
 #include <WiFiWebServer.h>
 
-char ssid[] = "****";        // your network SSID (name)
-char pass[] = "****";        // your network password
+char ssid[] = "HueNet1";        // your network SSID (name)
+char pass[] = "jenniqqs";        // your network password
+//char ssid[] = "****";        // your network SSID (name)
+//char pass[] = "****";        // your network password
 
 #endif    //defines_h

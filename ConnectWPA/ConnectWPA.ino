@@ -1,5 +1,5 @@
 /****************************************************************************************************************************
-  WebClient.ino - Simple Arduino web server sample for SAMD21 running WiFiNINA shield
+  ConnectWPA.ino - Simple Arduino web server sample for SAMD21 running WiFiNINA shield
   For any WiFi shields, such as WiFiNINA W101, W102, W13x, or custom, such as ESP8266/ESP32-AT, Ethernet, etc
   
   WiFiWebServer is a library for the ESP32-based WiFi shields to run WebServer
@@ -7,16 +7,8 @@
   Based on  and modified from Arduino WiFiNINA library https://www.arduino.cc/en/Reference/WiFiNINA
   Built by Khoi Hoang https://github.com/khoih-prog/WiFiWebServer
   Licensed under MIT license
-  
-  A simple web server that shows the value of the analog input pins via a web page using an ESP8266 module.
-  This sketch will start an access point and print the IP address of your ESP8266 module to the Serial monitor.
-  From there, you can open that address in a web browser to display the web page.
-  The web page will be automatically refreshed each 20 seconds.
-  
-  For more details see: http://yaab-arduino.blogspot.com/p/wifiesp.html
-  
   Version: 1.0.7
-    
+
   Version Modified By   Date      Comments
   ------- -----------  ---------- -----------
   1.0.0   K Hoang      12/02/2020 Initial coding for SAMD21, Nano 33 IoT, etc running WiFiNINA
@@ -29,30 +21,46 @@
   1.0.6   K Hoang      24/07/2020 Add support to all STM32F/L/H/G/WB/MP1 and Seeeduino SAMD21/SAMD51 boards. Restructure examples 
   1.0.7   K Hoang      25/09/2020 Restore support to PROGMEM-related commands, such as sendContent_P() and send_P()
  ***************************************************************************************************************************************/
+
 #include "defines.h"
 
 int status = WL_IDLE_STATUS;     // the Wifi radio's status
+int reqCount = 0;                // number of requests received
 
-char server[] = "arduino.cc";
-
-// Initialize the Web client object
-WiFiClient client;
-
-void printWifiStatus()
+void printWifiData()
 {
-  // print the SSID of the network you're attached to:
-  // you're connected now, so print out the data
-  Serial.print(F("You're connected to the network, IP = "));
-  Serial.println(WiFi.localIP());
+  // print your WiFi shield's IP address
+  IPAddress ip = WiFi.localIP();
+  Serial.print(F("IP Address: "));
+  Serial.println(ip);
 
+  // print your MAC address
+  byte mac[6];
+  WiFi.macAddress(mac);
+  char buf[20];
+  sprintf(buf, "%02X:%02X:%02X:%02X:%02X:%02X", mac[5], mac[4], mac[3], mac[2], mac[1], mac[0]);
+  Serial.print(F("MAC address: "));
+  Serial.println(buf);
+}
+
+void printCurrentNet()
+{
+  // print the SSID of the network you're attached to
   Serial.print(F("SSID: "));
-  Serial.print(WiFi.SSID());
+  Serial.println(WiFi.SSID());
 
-  // print the received signal strength:
-  int32_t rssi = WiFi.RSSI();
-  Serial.print(F(", Signal strength (RSSI):"));
-  Serial.print(rssi);
-  Serial.println(F(" dBm"));
+  // print the MAC address of the router you're attached to
+  byte bssid[6];
+  WiFi.BSSID(bssid);
+  char buf[20];
+  sprintf(buf, "%02X:%02X:%02X:%02X:%02X:%02X", bssid[5], bssid[4], bssid[3], bssid[2], bssid[1], bssid[0]);
+  Serial.print(F("BSSID: "));
+  Serial.println(buf);
+
+  // print the received signal strength
+  long rssi = WiFi.RSSI();
+  Serial.print(F("Signal strength (RSSI): "));
+  Serial.println(rssi);
 }
 
 void setup()
@@ -60,7 +68,7 @@ void setup()
   Serial.begin(115200);
   while (!Serial);
 
-  Serial.print("\nStarting WebClient on " + String(BOARD_NAME));
+  Serial.print("\nStarting ConnectWPA on " + String(BOARD_NAME));
   Serial.println(" with " + String(SHIELD_TYPE));
 
   // check for the presence of the shield
@@ -79,60 +87,28 @@ void setup()
   String fv = WiFi.firmwareVersion();
   if (fv < WIFI_FIRMWARE_LATEST_VERSION)
   {
-    Serial.println(F("Please upgrade the firmware"));
+    Serial.println("Please upgrade the firmware");
   }
 #endif
 
   // attempt to connect to WiFi network
   while ( status != WL_CONNECTED)
   {
-    Serial.print(F("Connecting to SSID: "));
+    Serial.print(F("Connecting to WPA SSID: "));
     Serial.println(ssid);
     // Connect to WPA/WPA2 network
     status = WiFi.begin(ssid, pass);
   }
 
-  // you're connected now, so print out the data
-  printWifiStatus();
-
-  Serial.println();
-  Serial.println(F("Starting connection to server..."));
-
-  // if you get a connection, report back via serial
-  if (client.connect(server, 80))
-  {
-    Serial.println(F("Connected to server"));
-    // Make a HTTP request
-    client.println(F("GET /asciilogo.txt HTTP/1.1"));
-    client.println(F("Host: arduino.cc"));
-    client.println(F("Connection: close"));
-    client.println();
-  }
-}
-
-void printoutData(void)
-{
-  // if there are incoming bytes available
-  // from the server, read them and print them
-  while (client.available())
-  {
-    char c = client.read();
-    Serial.write(c);
-  }
+  Serial.println("You're connected to the network");
 }
 
 void loop()
 {
-  printoutData();
+  // print the network connection information every 10 seconds
+  Serial.println();
+  printCurrentNet();
+  printWifiData();
 
-  // if the server's disconnected, stop the client
-  if (!client.connected())
-  {
-    Serial.println();
-    Serial.println(F("Disconnecting from server..."));
-    client.stop();
-
-    // do nothing forevermore
-    while (true);
-  }
+  delay(10000);
 }

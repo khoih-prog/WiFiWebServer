@@ -1,39 +1,40 @@
 /****************************************************************************************************************************
-   AP_SimpleWebServer.ino - Simple Arduino WiFi Web Server LED Blink sample for SAMD21 running WiFiNINA shield
-   For any WiFi shields, such as WiFiNINA W101, W102, W13x, or custom, such as ESP8266/ESP32-AT, Ethernet, etc
+  AP_SimpleWebServer.ino - Simple Arduino WiFi Web Server LED Blink sample for SAMD21 running WiFiNINA shield
+  For any WiFi shields, such as WiFiNINA W101, W102, W13x, or custom, such as ESP8266/ESP32-AT, Ethernet, etc
+  
+  WiFiWebServer is a library for the ESP32-based WiFi shields to run WebServer
+  Based on and modified from ESP8266 https://github.com/esp8266/Arduino/releases
+  Based on  and modified from Arduino WiFiNINA library https://www.arduino.cc/en/Reference/WiFiNINA
+  Built by Khoi Hoang https://github.com/khoih-prog/WiFiWebServer
+  Licensed under MIT license
+  
+  A simple web server that lets you blink an LED via the web.
+  This sketch will create a new access point (with no password).
+  It will then launch a new server and print out the IP address
+  to the Serial monitor. From there, you can open that address in a web browser
+  to turn on and off the LED on pin 13.
+  
+  If the IP address of your board is yourAddress:
+  http://yourAddress/H turns the LED on
+  http://yourAddress/L turns it off
+  
+  created 25 Nov 2012
+  by Tom Igoe
+  adapted to WiFi AP by Adafruit
+  
+  Version: 1.0.7
     
-    WiFiWebServer is a library for the ESP32-based WiFi shields to run WebServer
-    Based on and modified from ESP8266 https://github.com/esp8266/Arduino/releases
-    Based on  and modified from Arduino WiFiNINA library https://www.arduino.cc/en/Reference/WiFiNINA
-    Built by Khoi Hoang https://github.com/khoih-prog/WiFiWebServer
-    Licensed under MIT license
-
-   A simple web server that lets you blink an LED via the web.
-   This sketch will create a new access point (with no password).
-   It will then launch a new server and print out the IP address
-   to the Serial monitor. From there, you can open that address in a web browser
-   to turn on and off the LED on pin 13.
-
-   If the IP address of your board is yourAddress:
-   http://yourAddress/H turns the LED on
-   http://yourAddress/L turns it off
-
-   created 25 Nov 2012
-   by Tom Igoe
-   adapted to WiFi AP by Adafruit
-
-   Version: 1.0.6
-
-    Version Modified By   Date      Comments
-    ------- -----------  ---------- -----------
-    1.0.0   K Hoang      12/02/2020 Initial coding for SAMD21, Nano 33 IoT, etc running WiFiNINA
-    1.0.1   K Hoang      28/03/2020 Change to use new WiFiNINA_Generic library to support many more boards running WiFiNINA
-    1.0.2   K Hoang      28/03/2020 Add support to SAMD51 and SAM DUE boards
-    1.0.3   K Hoang      22/04/2020 Add support to nRF52 boards, such as AdaFruit Feather nRF52832, nRF52840 Express, BlueFruit Sense,
-                                    Itsy-Bitsy nRF52840 Express, Metro nRF52840 Express, NINA_B30_ublox, etc.
-    1.0.4   K Hoang      23/04/2020 Add support to MKR1000 boards using WiFi101 and custom WiFi libraries.
-    1.0.5   K Hoang      21/07/2020 Fix bug not closing client and releasing socket.
-    1.0.6   K Hoang      24/07/2020 Add support to all STM32F/L/H/G/WB/MP1 and Seeeduino SAMD21/SAMD51 boards. Restructure examples
+  Version Modified By   Date      Comments
+  ------- -----------  ---------- -----------
+  1.0.0   K Hoang      12/02/2020 Initial coding for SAMD21, Nano 33 IoT, etc running WiFiNINA
+  1.0.1   K Hoang      28/03/2020 Change to use new WiFiNINA_Generic library to support many more boards running WiFiNINA
+  1.0.2   K Hoang      28/03/2020 Add support to SAMD51 and SAM DUE boards
+  1.0.3   K Hoang      22/04/2020 Add support to nRF52 boards, such as AdaFruit Feather nRF52832, nRF52840 Express, BlueFruit Sense, 
+                                Itsy-Bitsy nRF52840 Express, Metro nRF52840 Express, NINA_B30_ublox, etc. 
+  1.0.4   K Hoang      23/04/2020 Add support to MKR1000 boards using WiFi101 and custom WiFi libraries.
+  1.0.5   K Hoang      21/07/2020 Fix bug not closing client and releasing socket.    
+  1.0.6   K Hoang      24/07/2020 Add support to all STM32F/L/H/G/WB/MP1 and Seeeduino SAMD21/SAMD51 boards. Restructure examples 
+  1.0.7   K Hoang      25/09/2020 Restore support to PROGMEM-related commands, such as sendContent_P() and send_P()
  ***************************************************************************************************************************************/
 
 #include "defines.h"
@@ -47,16 +48,16 @@ WiFiServer server(80);
 void printWiFiStatus()
 {
   // print the SSID of the network you're attached to:
-  Serial.print("SSID: ");
+  Serial.print(F("SSID: "));
   Serial.println(WiFi.SSID());
 
   // print your WiFi shield's IP address:
   IPAddress ip = WiFi.localIP();
-  Serial.print("IP Address: ");
+  Serial.print(F("IP Address: "));
   Serial.println(ip);
 
   // print where to go in a browser:
-  Serial.print("To see this page in action, open a browser to http://");
+  Serial.print(F("To see this page in action, open a browser to http://"));
   Serial.println(ip);
 }
 
@@ -66,7 +67,8 @@ void setup()
   Serial.begin(115200);
   while (!Serial);
 
-  Serial.println("Access Point Web Server on " + String(BOARD_NAME));
+  Serial.print("AP_SimpleWebServer on " + String(BOARD_NAME));
+  Serial.println(" with " + String(SHIELD_TYPE));
 
   pinMode(led, OUTPUT);      // set the LED pin mode
 
@@ -83,9 +85,10 @@ void setup()
 
 #if USE_WIFI_NINA
   String fv = WiFi.firmwareVersion();
+  
   if (fv < WIFI_FIRMWARE_LATEST_VERSION)
   {
-    Serial.println("Please upgrade the firmware");
+    Serial.println(F("Please upgrade the firmware"));
   }
   else
   {
@@ -99,9 +102,9 @@ void setup()
   // WiFi.config(IPAddress(10, 0, 0, 1));
 
   // print the network name (SSID);
-  Serial.print("Creating access point named: ");
+  Serial.print(F("Creating access point named: "));
   Serial.print(ssid);
-  Serial.print(" and password: ");
+  Serial.print(F(" and password: "));
   Serial.println(pass);
 
   // Create open network. Change this line if you want to create an WEP network:
@@ -113,7 +116,7 @@ void setup()
   
   if (status != WL_AP_LISTENING)
   {
-    Serial.println("Creating access point failed");
+    Serial.println(F("Creating access point failed"));
     // don't continue
     while (true);
   }
@@ -139,11 +142,11 @@ void loop()
     if (status == WL_AP_CONNECTED)
     {
       // a device has connected to the AP
-      Serial.println("Device connected to AP");
+      Serial.println(F("Device connected to AP"));
     } else
     {
       // a device has disconnected from the AP, and we are back in listening mode
-      Serial.println("Device disconnected from AP");
+      Serial.println(F("Device disconnected from AP"));
     }
   }
 
@@ -152,8 +155,9 @@ void loop()
   if (client)
   {
     // if you get a client,
-    Serial.println("new client");           // print a message out the serial port
+    Serial.println(F("New client"));           // print a message out the serial port
     String currentLine = "";                // make a String to hold incoming data from the client
+    
     while (client.connected())
     {
       // loop while the client's connected
@@ -172,13 +176,13 @@ void loop()
           {
             // HTTP headers always start with a response code (e.g. HTTP/1.1 200 OK)
             // and a content-type so the client knows what's coming, then a blank line:
-            client.println("HTTP/1.1 200 OK");
-            client.println("Content-type:text/html");
+            client.println(F("HTTP/1.1 200 OK"));
+            client.println(F("Content-type:text/html"));
             client.println();
 
             // the content of the HTTP response follows the header:
-            client.print("Click <a href=\"/H\">here</a> turn the LED on<br>");
-            client.print("Click <a href=\"/L\">here</a> turn the LED off<br>");
+            client.print(F("Click <a href=\"/H\">here</a> turn the LED on<br>"));
+            client.print(F("Click <a href=\"/L\">here</a> turn the LED off<br>"));
 
             // The HTTP response ends with another blank line:
             client.println();
@@ -198,11 +202,11 @@ void loop()
         }
 
         // Check to see if the client request was "GET /H" or "GET /L":
-        if (currentLine.endsWith("GET /H"))
+        if (currentLine.endsWith(F("GET /H")))
         {
           digitalWrite(led, HIGH);               // GET /H turns the LED on
         }
-        if (currentLine.endsWith("GET /L"))
+        if (currentLine.endsWith(F("GET /L")))
         {
           digitalWrite(led, LOW);                // GET /L turns the LED off
         }
@@ -210,6 +214,6 @@ void loop()
     }
     // close the connection:
     client.stop();
-    Serial.println("client disconnected");
+    Serial.println(F("Client disconnected"));
   }
 }

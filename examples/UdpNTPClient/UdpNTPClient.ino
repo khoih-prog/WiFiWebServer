@@ -1,44 +1,41 @@
 /****************************************************************************************************************************
-    UdpNTPClient.ino - Simple Arduino web server sample for SAMD21 running WiFiNINA shield
-    For any WiFi shields, such as WiFiNINA W101, W102, W13x, or custom, such as ESP8266/ESP32-AT, Ethernet, etc
+  UdpNTPClient.ino - Simple Arduino web server sample for SAMD21 running WiFiNINA shield
+  For any WiFi shields, such as WiFiNINA W101, W102, W13x, or custom, such as ESP8266/ESP32-AT, Ethernet, etc
+  
+  WiFiWebServer is a library for the ESP32-based WiFi shields to run WebServer
+  Based on and modified from ESP8266 https://github.com/esp8266/Arduino/releases
+  Based on  and modified from Arduino WiFiNINA library https://www.arduino.cc/en/Reference/WiFiNINA
+  Built by Khoi Hoang https://github.com/khoih-prog/WiFiWebServer
+  Licensed under MIT license
+  
+  Get the time from a Network Time Protocol (NTP) time server.
+  Demonstrates use of UDP to send and receive data packets
+  For more on NTP time servers and the messages needed to communicate with them,
+  see http://en.wikipedia.org/wiki/Network_Time_Protocol
+  
+  NOTE: The serial buffer size must be larger than 36 + packet size
+  In this example we use an UDP packet of 48 bytes so the buffer must be
+  at least 36+48=84 bytes that exceeds the default buffer size (64).
+  
+  You must modify the serial buffer size to 128
+  For HardwareSerial modify _SS_MAX_RX_BUFF in
+  Arduino\hardware\arduino\avr\cores\arduino\HardwareSerial.h
+  For SoftwareSerial modify _SS_MAX_RX_BUFF in
+  Arduino\hardware\arduino\avr\libraries\SoftwareSerial\SoftwareSerial.h
+  
+  Version: 1.0.7
     
-    WiFiWebServer is a library for the ESP32-based WiFi shields to run WebServer
-    Based on and modified from ESP8266 https://github.com/esp8266/Arduino/releases
-    Based on  and modified from Arduino WiFiNINA library https://www.arduino.cc/en/Reference/WiFiNINA
-    Built by Khoi Hoang https://github.com/khoih-prog/WiFiWebServer
-    Licensed under MIT license
-    
-    Get the time from a Network Time Protocol (NTP) time server.
-    Demonstrates use of UDP to send and receive data packets
-    For more on NTP time servers and the messages needed to communicate with them,
-    see http://en.wikipedia.org/wiki/Network_Time_Protocol
-    
-    NOTE: The serial buffer size must be larger than 36 + packet size
-    In this example we use an UDP packet of 48 bytes so the buffer must be
-    at least 36+48=84 bytes that exceeds the default buffer size (64).
-    
-    You must modify the serial buffer size to 128
-    For HardwareSerial modify _SS_MAX_RX_BUFF in
-    Arduino\hardware\arduino\avr\cores\arduino\HardwareSerial.h
-    For SoftwareSerial modify _SS_MAX_RX_BUFF in
-    Arduino\hardware\arduino\avr\libraries\SoftwareSerial\SoftwareSerial.h
-    
-    Version: 1.0.6
-    
-    Original author:
-    @file       Esp8266WebServer.h
-    @author     Ivan Grokhotkov
-
-    Version Modified By   Date      Comments
-    ------- -----------  ---------- -----------
-    1.0.0   K Hoang      12/02/2020 Initial coding for SAMD21, Nano 33 IoT, etc running WiFiNINA
-    1.0.1   K Hoang      28/03/2020 Change to use new WiFiNINA_Generic library to support many more boards running WiFiNINA
-    1.0.2   K Hoang      28/03/2020 Add support to SAMD51 and SAM DUE boards
-    1.0.3   K Hoang      22/04/2020 Add support to nRF52 boards, such as AdaFruit Feather nRF52832, nRF52840 Express, BlueFruit Sense,
-                                    Itsy-Bitsy nRF52840 Express, Metro nRF52840 Express, NINA_B30_ublox, etc.
-    1.0.4   K Hoang      23/04/2020 Add support to MKR1000 boards using WiFi101 and custom WiFi libraries.
-    1.0.5   K Hoang      21/07/2020 Fix bug not closing client and releasing socket.
-    1.0.6   K Hoang      24/07/2020 Add support to all STM32F/L/H/G/WB/MP1 and Seeeduino SAMD21/SAMD51 boards. Restructure examples
+  Version Modified By   Date      Comments
+  ------- -----------  ---------- -----------
+  1.0.0   K Hoang      12/02/2020 Initial coding for SAMD21, Nano 33 IoT, etc running WiFiNINA
+  1.0.1   K Hoang      28/03/2020 Change to use new WiFiNINA_Generic library to support many more boards running WiFiNINA
+  1.0.2   K Hoang      28/03/2020 Add support to SAMD51 and SAM DUE boards
+  1.0.3   K Hoang      22/04/2020 Add support to nRF52 boards, such as AdaFruit Feather nRF52832, nRF52840 Express, BlueFruit Sense, 
+                                Itsy-Bitsy nRF52840 Express, Metro nRF52840 Express, NINA_B30_ublox, etc. 
+  1.0.4   K Hoang      23/04/2020 Add support to MKR1000 boards using WiFi101 and custom WiFi libraries.
+  1.0.5   K Hoang      21/07/2020 Fix bug not closing client and releasing socket.    
+  1.0.6   K Hoang      24/07/2020 Add support to all STM32F/L/H/G/WB/MP1 and Seeeduino SAMD21/SAMD51 boards. Restructure examples 
+  1.0.7   K Hoang      25/09/2020 Restore support to PROGMEM-related commands, such as sendContent_P() and send_P()
  ***************************************************************************************************************************************/
 
 #include "defines.h"
@@ -88,7 +85,8 @@ void setup()
   Serial.begin(115200);
   while (!Serial);
 
-  Serial.println("\nStarting UdpNTPClient on " + String(BOARD_NAME));
+  Serial.print("\nStarting UdpNTPClient on " + String(BOARD_NAME));
+  Serial.println(" with " + String(SHIELD_TYPE));
 
   // check for the presence of the shield
 #if USE_WIFI_NINA
@@ -106,7 +104,7 @@ void setup()
   String fv = WiFi.firmwareVersion();
   if (fv < WIFI_FIRMWARE_LATEST_VERSION) 
   {
-    Serial.println("Please upgrade the firmware");
+    Serial.println(F("Please upgrade the firmware"));
   }
 #endif
 
@@ -137,7 +135,7 @@ void loop()
   
   if (Udp.parsePacket()) 
   {
-    Serial.println("packet received");
+    Serial.println(F("Packet received"));
     // We've received a packet, read the data from it
     Udp.read(packetBuffer, NTP_PACKET_SIZE); // read the packet into the buffer
 
@@ -149,11 +147,11 @@ void loop()
     // combine the four bytes (two words) into a long integer
     // this is NTP time (seconds since Jan 1 1900):
     unsigned long secsSince1900 = highWord << 16 | lowWord;
-    Serial.print("Seconds since Jan 1 1900 = ");
+    Serial.print(F("Seconds since Jan 1 1900 = "));
     Serial.println(secsSince1900);
 
     // now convert NTP time into everyday time:
-    Serial.print("Unix time = ");
+    Serial.print(F("Unix time = "));
     // Unix time starts on Jan 1 1970. In seconds, that's 2208988800:
     const unsigned long seventyYears = 2208988800UL;
     // subtract seventy years:
@@ -162,7 +160,7 @@ void loop()
     Serial.println(epoch);
 
     // print the hour, minute and second:
-    Serial.print("The UTC time is ");       // UTC is the time at Greenwich Meridian (GMT)
+    Serial.print(F("The UTC time is "));       // UTC is the time at Greenwich Meridian (GMT)
     Serial.print((epoch  % 86400L) / 3600); // print the hour (86400 equals secs per day)
     Serial.print(':');
     

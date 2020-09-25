@@ -7,7 +7,7 @@
    Forked and modified from Arduino WiFiNINA library https://www.arduino.cc/en/Reference/WiFiNINA
    Built by Khoi Hoang https://github.com/khoih-prog/WiFiWebServer
    Licensed under MIT license
-   Version: 1.0.6
+   Version: 1.0.7
 
    Original author:
    @file       Esp8266WebServer.h
@@ -22,7 +22,8 @@
                                     Itsy-Bitsy nRF52840 Express, Metro nRF52840 Express, NINA_B30_ublox, etc. 
     1.0.4   K Hoang      23/04/2020 Add support to MKR1000 boards using WiFi101 and custom WiFi libraries.
     1.0.5   K Hoang      21/07/2020 Fix bug not closing client and releasing socket.    
-    1.0.6   K Hoang      24/07/2020 Add support to all STM32F/L/H/G/WB/MP1 and Seeeduino SAMD21/SAMD51 boards. Restructure examples   
+    1.0.6   K Hoang      24/07/2020 Add support to all STM32F/L/H/G/WB/MP1 and Seeeduino SAMD21/SAMD51 boards. Restructure examples 
+    1.0.7   K Hoang      25/09/2020 Restore support to PROGMEM-related commands, such as sendContent_P() and send_P()
  ***************************************************************************************************************************************/
 
 #ifndef WiFiDebug_h
@@ -47,18 +48,37 @@
 #define _WIFI_LOGLEVEL_       0
 #endif
 
+///////////////////////////////////////
 
-#define WS_LOGERROR(x)    if(_WIFI_LOGLEVEL_>0) { WS_DEBUG_OUTPUT.print("[WIFI] "); WS_DEBUG_OUTPUT.println(x); }
-#define WS_LOGERROR1(x,y) if(_WIFI_LOGLEVEL_>0) { WS_DEBUG_OUTPUT.print("[WIFI] "); WS_DEBUG_OUTPUT.print(x); WS_DEBUG_OUTPUT.print(" "); WS_DEBUG_OUTPUT.println(y); }
-#define WS_LOGWARN(x)     if(_WIFI_LOGLEVEL_>1) { WS_DEBUG_OUTPUT.print("[WIFI] "); WS_DEBUG_OUTPUT.println(x); }
-#define WS_LOGWARN1(x,y)  if(_WIFI_LOGLEVEL_>1) { WS_DEBUG_OUTPUT.print("[WIFI] "); WS_DEBUG_OUTPUT.print(x); WS_DEBUG_OUTPUT.print(" "); WS_DEBUG_OUTPUT.println(y); }
-#define WS_LOGINFO(x)     if(_WIFI_LOGLEVEL_>2) { WS_DEBUG_OUTPUT.print("[WIFI] "); WS_DEBUG_OUTPUT.println(x); }
-#define WS_LOGINFO1(x,y)  if(_WIFI_LOGLEVEL_>2) { WS_DEBUG_OUTPUT.print("[WIFI] "); WS_DEBUG_OUTPUT.print(x); WS_DEBUG_OUTPUT.print(" "); WS_DEBUG_OUTPUT.println(y); }
+#define WS_LOGERROR(x)         if(_WIFI_LOGLEVEL_>0) { WS_DEBUG_OUTPUT.print("[WIFI] "); WS_DEBUG_OUTPUT.println(x); }
+#define WS_LOGERROR0(x)        if(_WIFI_LOGLEVEL_>0) { WS_DEBUG_OUTPUT.print(x); }
+#define WS_LOGERROR1(x,y)      if(_WIFI_LOGLEVEL_>0) { WS_DEBUG_OUTPUT.print("[WIFI] "); WS_DEBUG_OUTPUT.print(x); WS_DEBUG_OUTPUT.print(" "); WS_DEBUG_OUTPUT.println(y); }
+#define WS_LOGERROR2(x,y,z)    if(_WIFI_LOGLEVEL_>0) { WS_DEBUG_OUTPUT.print("[WIFI] "); WS_DEBUG_OUTPUT.print(x); WS_DEBUG_OUTPUT.print(" "); WS_DEBUG_OUTPUT.print(y); WS_DEBUG_OUTPUT.print(" "); WS_DEBUG_OUTPUT.println(z); }
+#define WS_LOGERROR3(x,y,z,w)  if(_WIFI_LOGLEVEL_>0) { WS_DEBUG_OUTPUT.print("[WIFI] "); WS_DEBUG_OUTPUT.print(x); WS_DEBUG_OUTPUT.print(" "); WS_DEBUG_OUTPUT.print(y); WS_DEBUG_OUTPUT.print(" "); WS_DEBUG_OUTPUT.print(z); WS_DEBUG_OUTPUT.print(" "); WS_DEBUG_OUTPUT.println(w); }
 
-#define WS_LOGDEBUG(x)      if(_WIFI_LOGLEVEL_>3) { WS_DEBUG_OUTPUT.println(x); }
-#define WS_LOGDEBUG0(x)     if(_WIFI_LOGLEVEL_>3) { WS_DEBUG_OUTPUT.print(x); }
-#define WS_LOGDEBUG1(x,y)   if(_WIFI_LOGLEVEL_>3) { WS_DEBUG_OUTPUT.print(x); WS_DEBUG_OUTPUT.print(" "); WS_DEBUG_OUTPUT.println(y); }
-#define WS_LOGDEBUG2(x,y,z) if(_WIFI_LOGLEVEL_>3) { WS_DEBUG_OUTPUT.print(x); WS_DEBUG_OUTPUT.print(" "); WS_DEBUG_OUTPUT.print(y); WS_DEBUG_OUTPUT.print(" "); WS_DEBUG_OUTPUT.println(z); }
+///////////////////////////////////////
+
+#define WS_LOGWARN(x)          if(_WIFI_LOGLEVEL_>1) { WS_DEBUG_OUTPUT.print("[WIFI] "); WS_DEBUG_OUTPUT.println(x); }
+#define WS_LOGWARN0(x)         if(_WIFI_LOGLEVEL_>1) { WS_DEBUG_OUTPUT.print(x); }
+#define WS_LOGWARN1(x,y)       if(_WIFI_LOGLEVEL_>1) { WS_DEBUG_OUTPUT.print("[WIFI] "); WS_DEBUG_OUTPUT.print(x); WS_DEBUG_OUTPUT.print(" "); WS_DEBUG_OUTPUT.println(y); }
+#define WS_LOGWARN2(x,y,z)     if(_WIFI_LOGLEVEL_>1) { WS_DEBUG_OUTPUT.print("[WIFI] "); WS_DEBUG_OUTPUT.print(x); WS_DEBUG_OUTPUT.print(" "); WS_DEBUG_OUTPUT.print(y); WS_DEBUG_OUTPUT.print(" "); WS_DEBUG_OUTPUT.println(z); }
+#define WS_LOGWARN3(x,y,z,w)   if(_WIFI_LOGLEVEL_>1) { WS_DEBUG_OUTPUT.print("[WIFI] "); WS_DEBUG_OUTPUT.print(x); WS_DEBUG_OUTPUT.print(" "); WS_DEBUG_OUTPUT.print(y); WS_DEBUG_OUTPUT.print(" "); WS_DEBUG_OUTPUT.print(z); WS_DEBUG_OUTPUT.print(" "); WS_DEBUG_OUTPUT.println(w); }
+
+///////////////////////////////////////
+
+#define WS_LOGINFO(x)          if(_WIFI_LOGLEVEL_>2) { WS_DEBUG_OUTPUT.print("[WIFI] "); WS_DEBUG_OUTPUT.println(x); }
+#define WS_LOGINFO0(x)         if(_WIFI_LOGLEVEL_>2) { WS_DEBUG_OUTPUT.print(x); }
+#define WS_LOGINFO1(x,y)       if(_WIFI_LOGLEVEL_>2) { WS_DEBUG_OUTPUT.print("[WIFI] "); WS_DEBUG_OUTPUT.print(x); WS_DEBUG_OUTPUT.print(" "); WS_DEBUG_OUTPUT.println(y); }
+#define WS_LOGINFO2(x,y,z)     if(_WIFI_LOGLEVEL_>2) { WS_DEBUG_OUTPUT.print("[WIFI] "); WS_DEBUG_OUTPUT.print(x); WS_DEBUG_OUTPUT.print(" "); WS_DEBUG_OUTPUT.print(y); WS_DEBUG_OUTPUT.print(" "); WS_DEBUG_OUTPUT.println(z); }
+#define WS_LOGINFO3(x,y,z,w)   if(_WIFI_LOGLEVEL_>2) { WS_DEBUG_OUTPUT.print("[WIFI] "); WS_DEBUG_OUTPUT.print(x); WS_DEBUG_OUTPUT.print(" "); WS_DEBUG_OUTPUT.print(y); WS_DEBUG_OUTPUT.print(" "); WS_DEBUG_OUTPUT.print(z); WS_DEBUG_OUTPUT.print(" "); WS_DEBUG_OUTPUT.println(w); }
+
+///////////////////////////////////////
+
+#define WS_LOGDEBUG(x)         if(_WIFI_LOGLEVEL_>3) { WS_DEBUG_OUTPUT.print("[WIFI] "); WS_DEBUG_OUTPUT.println(x); }
+#define WS_LOGDEBUG0(x)        if(_WIFI_LOGLEVEL_>3) { WS_DEBUG_OUTPUT.print(x); }
+#define WS_LOGDEBUG1(x,y)      if(_WIFI_LOGLEVEL_>3) { WS_DEBUG_OUTPUT.print("[WIFI] "); WS_DEBUG_OUTPUT.print(x); WS_DEBUG_OUTPUT.print(" "); WS_DEBUG_OUTPUT.println(y); }
+#define WS_LOGDEBUG2(x,y,z)    if(_WIFI_LOGLEVEL_>3) { WS_DEBUG_OUTPUT.print("[WIFI] "); WS_DEBUG_OUTPUT.print(x); WS_DEBUG_OUTPUT.print(" "); WS_DEBUG_OUTPUT.print(y); WS_DEBUG_OUTPUT.print(" "); WS_DEBUG_OUTPUT.println(z); }
+#define WS_LOGDEBUG3(x,y,z,w)  if(_WIFI_LOGLEVEL_>3) { WS_DEBUG_OUTPUT.print("[WIFI] "); WS_DEBUG_OUTPUT.print(x); WS_DEBUG_OUTPUT.print(" "); WS_DEBUG_OUTPUT.print(y); WS_DEBUG_OUTPUT.print(" "); WS_DEBUG_OUTPUT.print(z); WS_DEBUG_OUTPUT.print(" "); WS_DEBUG_OUTPUT.println(w); }
 
 
 #endif    //WiFiDebug_h
