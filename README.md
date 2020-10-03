@@ -5,8 +5,6 @@
 [![GitHub](https://img.shields.io/github/license/mashape/apistatus.svg)](https://github.com/khoih-prog/WiFiWebServer/blob/master/LICENSE)
 [![contributions welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat)](#Contributing)
 [![GitHub issues](https://img.shields.io/github/issues/khoih-prog/WiFiWebServer.svg)](http://github.com/khoih-prog/WiFiWebServer/issues)
-[![star this repo](https://githubbadges.com/star.svg?user=khoih-prog&repo=WiFiWebServer)](https://github.com/khoih-prog/WiFiWebServer)
-[![fork this repo](https://githubbadges.com/fork.svg?user=khoih-prog&repo=WiFiWebServer)](https://github.com/khoih-prog/WiFiWebServer/fork)
 
 ---
 ---
