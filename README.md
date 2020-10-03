@@ -5,14 +5,25 @@
 [![GitHub](https://img.shields.io/github/license/mashape/apistatus.svg)](https://github.com/khoih-prog/WiFiWebServer/blob/master/LICENSE)
 [![contributions welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat)](#Contributing)
 [![GitHub issues](https://img.shields.io/github/issues/khoih-prog/WiFiWebServer.svg)](http://github.com/khoih-prog/WiFiWebServer/issues)
+[![star this repo](https://githubbadges.com/star.svg?user=khoih-prog&repo=WiFiWebServer)](https://github.com/khoih-prog/WiFiWebServer)
+[![fork this repo](https://githubbadges.com/fork.svg?user=khoih-prog&repo=WiFiWebServer)](https://github.com/khoih-prog/WiFiWebServer/fork)
+
+---
+---
+
+### Why do we need this [WiFiWebServer library](https://github.com/khoih-prog/WiFiWebServer)
+
+This is simple-yet-complete WebServer library for **AVR Mega, Teensy, SAM DUE, SAMD21, SAMD51, STM32F/L/H/G/WB/MP1, nRF52, etc. boards using WiFi modules/shields (WiFiNINA, WiFi101, U-Blox W101, W102, ESP8266/ESP32-AT, etc.)**.
+
+**The functions are similar and compatible to ESP8266/ESP32 WebServer libraries** to make our life much easier to port WebServer-related sketches from ESP8266/ESP32.
 
 ---
 
 ### Release v1.0.7
 
-1. Add support to PROGMEM-related commands, such as sendContent_P() and send_P()
-2. Update Platform.ini to support PlatformIO 5.x owner-based dependency declaration.
-3. Clean up code. 
+1. Add support to **PROGMEM-related commands, such as sendContent_P() and send_P()**
+2. Update Platform.ini to support **PlatformIO 5.x owner-based dependency declaration.**
+3. Clean up code.
 4. Update examples.
 
 #### New in v1.0.6
@@ -49,17 +60,22 @@ The original WiFiNINA library only supports **Nano-33 IoT**, Arduino MKR WiFi 10
 This is simple yet complete WebServer library for `AVR Mega, Teensy, SAMD21, STM32, etc.` boards running WiFi modules/shields (WiFiNINA U-Blox W101, W102, etc.). **The functions are similar and compatible to ESP8266/ESP32 WebServer libraries** to make life much easier to port sketches from ESP8266/ESP32.
 
 ---
+---
 
-This [WiFiWebServer library](https://github.com/khoih-prog/WiFiWebServer) currently supports these following boards:
+### Currently Supported Boards
+
+This [**WiFiWebServer library**](https://github.com/khoih-prog/WiFiWebServer) currently supports these following boards:
 
 1. SAM DUE
 
-2. SAMD21 
+2. SAMD21
+
   - Arduino: ZERO, MKR, NANO_33_IOT, etc.
   - Adafruit M0: ItsyBitsy M0, Feather M0, Feather M0 Express, Metro M0 Express, Circuit Playground Express, Trinket M0, PIRkey, HalloWing M0, Crickit M0, etc.
   - Seeeduino:  LoRaWAN, Zero, Femto M0, XIAO M0, Wio GPS Board, etc.
   
-3. SAMD51 
+3. SAMD51
+
   - Adafruit M4 : Metro M4, Grand Central M4, ItsyBitsy M4, Feather M44 Express, Trellis M4, Metro M4 AirLift lite, MONSTER M4SK Express, Hallowing EM4 xpress, etc.
   - Seeeduino: Wio Terminal, Grove UI Wireless
   
@@ -84,23 +100,23 @@ The library provides supports to:
 
 It is based on and modified from:
 
-1. [Ivan Grokhotkov's ESP8266WebServer](https://github.com/esp8266/Arduino/tree/master/libraries/ESP8266WebServer)
+1. [Ivan Grokhotkov's **ESP8266WebServer**](https://github.com/esp8266/Arduino/tree/master/libraries/ESP8266WebServer)
 
-The WiFiWebServer class found in `WiFiWebServer.h` header, is a simple web server that knows how to handle HTTP requests such as GET and POST and can only support one simultaneous client.
+The WiFiWebServer class found in `WiFiWebServer.h` header, is a simple web server that knows how to handle HTTP requests such as GET and POST and can only support one client at a time.
 
 ---
 ---
 
 ## Prerequisite
 
- 1. [`Arduino IDE 1.8.12+` for Arduino](https://www.arduino.cc/en/Main/Software)
- 2. `Arduino AVR core 1.8.3+` for Arduino (Use Arduino Board Manager) for AVR boards
+ 1. [`Arduino IDE 1.8.13+` for Arduino](https://www.arduino.cc/en/Main/Software)
+ 2. [`Arduino AVR core 1.8.3+`](https://github.com/arduino/ArduinoCore-avr) for Arduino AVR boards. Use Arduino Board Manager to install.
  3. [`Teensy core v1.53+`](https://www.pjrc.com/teensy/td_download.html) for Teensy (4.1, 4.0, 3.6, 3.5, 3,2, 3.1, 3.0) boards.
  4. [`Arduino SAM DUE core v1.6.12+`](https://www.arduino.cc/en/Guide/ArduinoDue) for SAM DUE ARM Cortex-M3 boards.
  5. [`Arduino SAMD core 1.8.8+`](https://www.arduino.cc/en/Guide/ArduinoM0) for SAMD ARM Cortex-M0+ boards  (Nano 33 IoT, etc.).
- 6. [`Adafruit SAMD core 1.6.0+`](https://www.adafruit.com/) for SAMD ARM Cortex-M0+ and M4 boards (Itsy-Bitsy M4, etc.)
- 7. [`Seeeduino SAMD core 1.7.8+`](https://www.seeedstudio.com/) for SAMD21/SAMD51 boards (XIAO M0, Wio Terminal, etc.)
- 8. [`Adafruit nRF52 v0.20.5+`](https://www.adafruit.com/) for nRF52 boards such as AdaFruit Feather nRF52840 Express, NINA_B302_ublox, NINA_B112_ublox, etc.
+ 6. [`Adafruit SAMD core 1.6.3+`](https://www.adafruit.com/) for SAMD ARM Cortex-M0+ and M4 boards (Itsy-Bitsy M4, etc.)
+ 7. [`Seeeduino SAMD core 1.7.9+`](https://www.seeedstudio.com/) for SAMD21/SAMD51 boards (XIAO M0, Wio Terminal, etc.)
+ 8. [`Adafruit nRF52 v0.21.0+`](https://www.adafruit.com/) for nRF52 boards such as AdaFruit Feather nRF52840 Express, NINA_B302_ublox, NINA_B112_ublox, etc.
  9. [`Arduino Core for STM32 v1.9.0+`](https://github.com/khoih-prog/Arduino_Core_STM32) for STM32F/L/H/G/WB/MP1 boards 
 10. [`Functional-VLPP library v1.0.1+`](https://github.com/khoih-prog/functional-vlpp) to use server's lambda function. To install. check [![arduino-library-badge](https://www.ardu-badge.com/badge/Functional-Vlpp.svg?)](https://www.ardu-badge.com/Functional-Vlpp)
 11. [`WiFiNINA_Generic library v1.7.1+`](https://github.com/khoih-prog/WiFiNINA_Generic) if using WiFiNINA. To install. check [![arduino-library-badge](https://www.ardu-badge.com/badge/WiFiNINA_Generic.svg?)](https://www.ardu-badge.com/WiFiNINA_Generic).
@@ -113,20 +129,21 @@ The WiFiWebServer class found in `WiFiWebServer.h` header, is a simple web serve
 ## Installation
 
 ### Use Arduino Library Manager
-The best and easiest way is to use `Arduino Library Manager`. Search for `WiFiWebServer`, then select / install the latest version.
+The best and easiest way is to use `Arduino Library Manager`. Search for [**WiFiWebServer**](https://github.com/khoih-prog/WiFiWebServer), then select / install the latest version.
 You can also use this link [![arduino-library-badge](https://www.ardu-badge.com/badge/WiFiWebServer.svg?)](https://www.ardu-badge.com/WiFiWebServer) for more detailed instructions.
 
 ### Manual Install
 
-1. Navigate to [WiFiWebServer](https://github.com/khoih-prog/WiFiWebServer) page.
+1. Navigate to [**WiFiWebServer**](https://github.com/khoih-prog/WiFiWebServer) page.
 2. Download the latest release `WiFiWebServer-master.zip`.
 3. Extract the zip file to `WiFiWebServer-master` directory 
 4. Copy the whole `WiFiWebServer-master` folder to Arduino libraries' directory such as `~/Arduino/libraries/`.
 
 ### VS Code & PlatformIO:
+
 1. Install [VS Code](https://code.visualstudio.com/)
 2. Install [PlatformIO](https://platformio.org/platformio-ide)
-3. Install **WiFiWebServer** library by using [Library Manager](https://docs.platformio.org/en/latest/librarymanager/). Search for WiFiWebServer in [Platform.io Author's Libraries](https://platformio.org/lib/search?query=author:%22Khoi%20Hoang%22)
+3. Install [**WiFiWebServer** library](https://platformio.org/lib/show/7152/WiFiWebServer) by using [Library Manager](https://platformio.org/lib/show/7152/WiFiWebServer/installation). Search for WiFiWebServer in [Platform.io Author's Libraries](https://platformio.org/lib/search?query=author:%22Khoi%20Hoang%22)
 4. Use included [platformio.ini](platformio/platformio.ini) file from examples to ensure that all dependent libraries will installed automatically. Please visit documentation for the other options and examples at [Project Configuration File](https://docs.platformio.org/page/projectconf.html)
 
 ---
@@ -134,16 +151,16 @@ You can also use this link [![arduino-library-badge](https://www.ardu-badge.com/
 
 ### Packages' Patches
 
- 1. **To be able to compile, run and automatically detect and display BOARD_NAME on nRF52840/nRF52832 boards**, you have to copy the whole [nRF52 0.20.5](Packages_Patches/adafruit/hardware/nrf52/0.20.5) directory into Adafruit nRF52 directory (~/.arduino15/packages/adafruit/hardware/nrf52/0.20.5). 
+ 1. **To be able to compile, run and automatically detect and display BOARD_NAME on nRF52840/nRF52832 boards**, you have to copy the whole [nRF52 0.21.0](Packages_Patches/adafruit/hardware/nrf52/0.21.0) directory into Adafruit nRF52 directory (~/.arduino15/packages/adafruit/hardware/nrf52/0.21.0). 
 
-Supposing the Adafruit nRF52 version is 0.20.5. These files must be copied into the directory:
-- `~/.arduino15/packages/adafruit/hardware/nrf52/0.20.5/platform.txt`
-- `~/.arduino15/packages/adafruit/hardware/nrf52/0.20.5/boards.txt`
-- `~/.arduino15/packages/adafruit/hardware/nrf52/0.20.5/variants/NINA_B302_ublox/variant.h`
-- `~/.arduino15/packages/adafruit/hardware/nrf52/0.20.5/variants/NINA_B302_ublox/variant.cpp`
-- `~/.arduino15/packages/adafruit/hardware/nrf52/0.20.5/variants/NINA_B112_ublox/variant.h`
-- `~/.arduino15/packages/adafruit/hardware/nrf52/0.20.5/variants/NINA_B112_ublox/variant.cpp`
-- **`~/.arduino15/packages/adafruit/hardware/nrf52/0.20.5/cores/nRF5/Udp.h`**
+Supposing the Adafruit nRF52 version is 0.21.0. These files must be copied into the directory:
+- `~/.arduino15/packages/adafruit/hardware/nrf52/0.21.0/platform.txt`
+- `~/.arduino15/packages/adafruit/hardware/nrf52/0.21.0/boards.txt`
+- `~/.arduino15/packages/adafruit/hardware/nrf52/0.21.0/variants/NINA_B302_ublox/variant.h`
+- `~/.arduino15/packages/adafruit/hardware/nrf52/0.21.0/variants/NINA_B302_ublox/variant.cpp`
+- `~/.arduino15/packages/adafruit/hardware/nrf52/0.21.0/variants/NINA_B112_ublox/variant.h`
+- `~/.arduino15/packages/adafruit/hardware/nrf52/0.21.0/variants/NINA_B112_ublox/variant.cpp`
+- **`~/.arduino15/packages/adafruit/hardware/nrf52/0.21.0/cores/nRF5/Udp.h`**
 
 Whenever a new version is installed, remember to copy these files into the new version directory. For example, new version is x.yy.z
 These files must be copied into the directory:
@@ -181,6 +198,7 @@ This file must be copied into the directory:
  4. **To be able to compile without error and automatically detect and display BOARD_NAME on Arduino SAMD (Nano-33-IoT, etc) boards**, you have to copy the whole [Arduino SAMD cores 1.8.8](Packages_Patches/arduino/hardware/samd/1.8.8) directory into Arduino SAMD directory (~/.arduino15/packages/arduino/hardware/samd/1.8.8).
  
 Supposing the Arduino SAMD version is 1.8.8. These files must be copied into the directory:
+
 - `~/.arduino15/packages/arduino/hardware/samd/1.8.8/platform.txt`
 - **`~/.arduino15/packages/arduino/hardware/samd/1.8.8/cores/arduino/Arduino.h`**
 
@@ -200,22 +218,22 @@ These files must be copied into the directory:
 
 Whenever the above-mentioned compiler error issue is fixed with the new Arduino SAMD release, you don't need to copy the `Arduino.h` file anymore.
 
- 5. **To be able to automatically detect and display BOARD_NAME on Adafruit SAMD (Itsy-Bitsy M4, etc) boards**, you have to copy the file [Adafruit SAMD platform.txt](Packages_Patches/adafruit/hardware/samd/1.6.0) into Adafruit samd directory (~/.arduino15/packages/adafruit/hardware/samd/1.6.0). 
+ 5. **To be able to automatically detect and display BOARD_NAME on Adafruit SAMD (Itsy-Bitsy M4, etc) boards**, you have to copy the file [Adafruit SAMD platform.txt](Packages_Patches/adafruit/hardware/samd/1.6.3) into Adafruit samd directory (~/.arduino15/packages/adafruit/hardware/samd/1.6.3). 
 
-Supposing the Adafruit SAMD core version is 1.6.0. This file must be copied into the directory:
+Supposing the Adafruit SAMD core version is 1.6.3. This file must be copied into the directory:
 
-- `~/.arduino15/packages/adafruit/hardware/samd/1.6.0/platform.txt`
+- `~/.arduino15/packages/adafruit/hardware/samd/1.6.3/platform.txt`
 
 Whenever a new version is installed, remember to copy this file into the new version directory. For example, new version is x.yy.zz
 This file must be copied into the directory:
 
 - `~/.arduino15/packages/adafruit/hardware/samd/x.yy.zz/platform.txt`
 
- 6. **To be able to automatically detect and display BOARD_NAME on Seeeduino SAMD (XIAO M0, Wio Terminal, etc) boards**, you have to copy the file [Seeeduino SAMD platform.txt](Packages_Patches/Seeeduino/hardware/samd/1.7.8) into Adafruit samd directory (~/.arduino15/packages/Seeeduino/hardware/samd/1.7.8). 
+ 6. **To be able to automatically detect and display BOARD_NAME on Seeeduino SAMD (XIAO M0, Wio Terminal, etc) boards**, you have to copy the file [Seeeduino SAMD platform.txt](Packages_Patches/Seeeduino/hardware/samd/1.7.9) into Adafruit samd directory (~/.arduino15/packages/Seeeduino/hardware/samd/1.7.9). 
 
-Supposing the Seeeduino SAMD core version is 1.7.8. This file must be copied into the directory:
+Supposing the Seeeduino SAMD core version is 1.7.9. This file must be copied into the directory:
 
-- `~/.arduino15/packages/Seeeduino/hardware/samd/1.7.8/platform.txt`
+- `~/.arduino15/packages/Seeeduino/hardware/samd/1.7.9/platform.txt`
 
 Whenever a new version is installed, remember to copy this file into the new version directory. For example, new version is x.yy.zz
 This file must be copied into the directory:
@@ -313,7 +331,7 @@ For example, WiFi_XYZ library uses **WiFi_XYZ.h**
 ---
 ---
 
-#### Usage
+### Usage
 
 #### Class Constructor
 
@@ -953,7 +971,7 @@ char pass[] = "****";        // your network password
 
 ### Debug Terminal Output Samples
 
-The following are debug terminal output and screen shot when running example [AdvancedWebServer](examples/AdvancedWebServer) on Arduino Nano 33 IoT board
+The following are debug terminal output and screen shot when running example [**AdvancedWebServer**](examples/AdvancedWebServer) on Arduino Nano-33-IoT board
 
 <p align="center">
     <img src="https://github.com/khoih-prog/WiFiWebServer/blob/master/pics/AdvancedWebServer.png">
@@ -1153,9 +1171,9 @@ Debug is enabled by default on Serial. Debug Level from 0 to 4. To disable, chan
 
 ### Release v1.0.7
 
-1. Add support to PROGMEM-related commands, such as sendContent_P() and send_P()
-2. Update Platform.ini to support PlatformIO 5.x owner-based dependency declaration.
-3. Clean up code. 
+1. Add support to **PROGMEM-related commands, such as sendContent_P() and send_P()**
+2. Update Platform.ini to support **PlatformIO 5.x owner-based dependency declaration.**
+3. Clean up code.
 4. Update examples.
 
 #### New in v1.0.6
@@ -1197,12 +1215,14 @@ This is simple yet complete WebServer library for `AVR, Teensy, SAMD21, STM32, e
 This [WiFiWebServer library](https://github.com/khoih-prog/WiFiWebServer) currently supports these following boards:
 
 1. SAM DUE
-2. SAMD21 
+2. SAMD21
+
   - Arduino: ZERO, MKR, NANO_33_IOT, etc.
   - Adafruit M0: ItsyBitsy M0, Feather M0, Feather M0 Express, Metro M0 Express, Circuit Playground Express, Trinket M0, PIRkey, HalloWing M0, Crickit M0, etc.
   - Seeeduino:  LoRaWAN, Zero, Femto M0, XIAO M0, Wio GPS Board, etc.
   
-3. SAMD51 
+3. SAMD51
+
   - Adafruit M4 : Metro M4, Grand Central M4, ItsyBitsy M4, Feather M44 Express, Trellis M4, Metro M4 AirLift lite, MONSTER M4SK Express, Hallowing EM4 xpress, etc.
   - Seeeduino: Wio Terminal, Grove UI Wireless
   
@@ -1228,6 +1248,12 @@ The library provides supports to:
 ---
 ---
 
+### Issues
+
+Submit issues to: [WiFiWebServer issues](https://github.com/khoih-prog/WiFiWebServer/issues)
+
+---
+
 ### TO DO
 1. Bug Searching and Killing
 2. Add SSL/TLS Client and Server support
@@ -1239,8 +1265,8 @@ The library provides supports to:
  2. Add support to nRF52.
  3. Add support to SAM DUE.
  4. Add support to all STM32F/L/H/G/WB/MP1.
- 5. Add support to WiFiNINA using [`WiFiNINA_Generic library`](https://github.com/khoih-prog/WiFiNINA_Generic). 
- 6. Add support to [`ESP_AT_Lib library`](https://github.com/khoih-prog/ESP_AT_Lib).
+ 5. Add support to WiFiNINA using [**WiFiNINA_Generic library**](https://github.com/khoih-prog/WiFiNINA_Generic). 
+ 6. Add support to [**ESP_AT_Lib library**](https://github.com/khoih-prog/ESP_AT_Lib).
  7. Add support to [`WiFi101 library`](https://www.arduino.cc/en/Reference/WiFi101).
  8. Add support to [`WiFiEspAT library`](https://github.com/jandrassy/WiFiEspAT).
  9. Add support to PROGMEM-related commands, such as sendContent_P() and send_P()
@@ -1250,13 +1276,13 @@ The library provides supports to:
 
 ## Contributions and Thanks
 
-1. Based on and modified from [Ivan Grokhotkov's ESP8266WebServer](https://github.com/esp8266/Arduino/tree/master/libraries/ESP8266WebServer)
+1. Based on and modified from [**Ivan Grokhotkov's ESP8266WebServer**](https://github.com/esp8266/Arduino/tree/master/libraries/ESP8266WebServer)
 2. Thanks to good work of [Miguel Alexandre Wisintainer](https://github.com/tcpipchip) for initiating, inspriring, working with, developing, debugging and testing. Without that, support to nRF52, especially **U-Blox B302 running as nRF52840 and U-Blox B112 running as nRF52832**, has never been started and finished. See [u-blox nina b](https://github.com/khoih-prog/WiFiNINA_Generic/issues/1)
 
 <table>
   <tr>
     <td align="center"><a href="https://github.com/igrr"><img src="https://github.com/igrr.png" width="100px;" alt="igrr"/><br /><sub><b>⭐️⭐️ Ivan Grokhotkov</b></sub></a><br /></td>
-    <td align="center"><a href="https://github.com/tcpipchip"><img src="https://github.com/tcpipchip.png" width="100px;" alt="tcpipchip"/><br /><sub><b>⭐️ tcpipchip</b></sub></a><br /></td>
+    <td align="center"><a href="https://github.com/tcpipchip"><img src="https://github.com/tcpipchip.png" width="100px;" alt="tcpipchip"/><br /><sub><b>⭐️ Miguel Wisintainer</b></sub></a><br /></td>
   </tr> 
 </table>
 

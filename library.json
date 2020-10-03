@@ -2,7 +2,7 @@
   "name": "WiFiWebServer",
   "version": "1.0.7",
   "keywords": "wifi, wi-fi, WebServer, WiFiNINA, WiFi101, ESP32, Teensy, AVR, Mega, SAM DUE, SAMD21, SAMD51, STM32, U-Blox, W101, W102, W13x, nRF52",
-  "description": "Simple WebServer library for AVR Mega, Teensy, SAM DUE, SAMD21, SAMD51, STM32, nRF52 boards using WiFi, such as WiFiNINA, WiFi101, U-Blox W101, W102, ESP8266/ESP32-AT modules/shields",
+  "description": "Simple WebServer library for AVR Mega, Teensy, SAM DUE, SAMD21, SAMD51, STM32F/L/H/G/WB/MP1, nRF52 boards using WiFi, such as WiFiNINA, WiFi101, U-Blox W101, W102, ESP8266/ESP32-AT modules/shields",
   "authors":
   {
     "name":  "Khoi Hoang",
