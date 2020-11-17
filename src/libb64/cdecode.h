@@ -7,7 +7,7 @@
    Forked and modified from Arduino WiFiNINA library https://www.arduino.cc/en/Reference/WiFiNINA
    Built by Khoi Hoang https://github.com/khoih-prog/WiFiWebServer
    Licensed under MIT license
-   Version: 1.0.7
+   Version: 1.1.0
 
    Original author:
    @file       Esp8266WebServer.h
@@ -24,9 +24,10 @@
     1.0.5   K Hoang      21/07/2020 Fix bug not closing client and releasing socket.    
     1.0.6   K Hoang      24/07/2020 Add support to all STM32F/L/H/G/WB/MP1 and Seeeduino SAMD21/SAMD51 boards. Restructure examples 
     1.0.7   K Hoang      25/09/2020 Restore support to PROGMEM-related commands, such as sendContent_P() and send_P()
+    1.1.0   K Hoang      17/11/2020 Add basic HTTP and WebSockets Client by merging ArduinoHttpClient
  ***************************************************************************************************************************************/
-#ifndef BASE64_CDECODE_H
-#define BASE64_CDECODE_H
+
+#pragma once
 
 #define base64_decode_expected_len(n) ((n * 3) / 4)
 
@@ -55,4 +56,3 @@ int base64_decode_chars(const char* code_in, const int length_in, char* plaintex
 } // extern "C"
 #endif
 
-#endif /* BASE64_CDECODE_H */

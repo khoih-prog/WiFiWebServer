@@ -1,5 +1,5 @@
 /**************************************************************************************************************************************
-   ESP8266_AT_Debug.h - Dead simple web-server.
+   WiFiDebug.h - Dead simple web-server.
    For any WiFi shields, such as WiFiNINA W101, W102, W13x, or custom, such as ESP8266/ESP32-AT, Ethernet, etc
 
    WiFiWebServer is a library for the ESP32-based WiFi shields to run WebServer
@@ -7,7 +7,7 @@
    Forked and modified from Arduino WiFiNINA library https://www.arduino.cc/en/Reference/WiFiNINA
    Built by Khoi Hoang https://github.com/khoih-prog/WiFiWebServer
    Licensed under MIT license
-   Version: 1.0.7
+   Version: 1.1.0
 
    Original author:
    @file       Esp8266WebServer.h
@@ -24,10 +24,10 @@
     1.0.5   K Hoang      21/07/2020 Fix bug not closing client and releasing socket.    
     1.0.6   K Hoang      24/07/2020 Add support to all STM32F/L/H/G/WB/MP1 and Seeeduino SAMD21/SAMD51 boards. Restructure examples 
     1.0.7   K Hoang      25/09/2020 Restore support to PROGMEM-related commands, such as sendContent_P() and send_P()
+    1.1.0   K Hoang      17/11/2020 Add basic HTTP and WebSockets Client by merging ArduinoHttpClient
  ***************************************************************************************************************************************/
 
-#ifndef WiFiDebug_h
-#define WiFiDebug_h
+#pragma once
 
 #include <stdio.h>
 
@@ -80,5 +80,3 @@
 #define WS_LOGDEBUG2(x,y,z)    if(_WIFI_LOGLEVEL_>3) { WS_DEBUG_OUTPUT.print("[WIFI] "); WS_DEBUG_OUTPUT.print(x); WS_DEBUG_OUTPUT.print(" "); WS_DEBUG_OUTPUT.print(y); WS_DEBUG_OUTPUT.print(" "); WS_DEBUG_OUTPUT.println(z); }
 #define WS_LOGDEBUG3(x,y,z,w)  if(_WIFI_LOGLEVEL_>3) { WS_DEBUG_OUTPUT.print("[WIFI] "); WS_DEBUG_OUTPUT.print(x); WS_DEBUG_OUTPUT.print(" "); WS_DEBUG_OUTPUT.print(y); WS_DEBUG_OUTPUT.print(" "); WS_DEBUG_OUTPUT.print(z); WS_DEBUG_OUTPUT.print(" "); WS_DEBUG_OUTPUT.println(w); }
 
-
-#endif    //WiFiDebug_h

@@ -70,6 +70,8 @@ void handleRoot()
   int hr = min / 60;
   int day = hr / 24;
 
+  hr = hr % 24;
+
   snprintf(temp, BUFFER_SIZE - 1,
            "<html>\
 <head>\

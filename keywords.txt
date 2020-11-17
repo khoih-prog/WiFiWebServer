@@ -2,6 +2,10 @@
 # Datatypes (KEYWORD1)
 #######################################
 
+#######################
+# WiFiWebServer
+#######################
+
 WiFiWebServer	KEYWORD1
 HTTPMethod	KEYWORD1
 HTTPUploadStatus  KEYWORD1
@@ -12,6 +16,24 @@ RequestHandler  KEYWORD1
 FunctionRequestHandler  KEYWORD1
 StaticRequestHandler  KEYWORD1
 WiFi_RingBuffer  KEYWORD1
+
+#######################
+# WiFiHttpClient
+#######################
+
+WiFiHttpClient  KEYWORD1
+
+##########################
+# WiFiWebSocketClient
+##########################
+
+WiFiWebSocketClient KEYWORD1
+
+##########################
+# WiFiURLEncoderClass
+##########################
+
+WiFiURLEncoderClass KEYWORD1
 
 #######################################
 # Methods and Functions (KEYWORD2)
@@ -87,6 +109,69 @@ getPos  KEYWORD2
 endsWith  KEYWORD2
 getStr  KEYWORD2
 getStrN KEYWORD2
+
+#######################
+# WiFiHttpClient
+#######################
+
+beginRequest  KEYWORD2
+endRequest  KEYWORD2
+beginBody KEYWORD2
+get KEYWORD2
+post  KEYWORD2
+put KEYWORD2
+patch KEYWORD2
+del KEYWORD2
+startRequest  KEYWORD2
+sendHeader  KEYWORD2
+sendBasicAuth KEYWORD2
+responseStatusCode  KEYWORD2
+headerAvailable KEYWORD2
+readHeaderValue KEYWORD2
+readHeader  KEYWORD2
+skipResponseHeaders KEYWORD2
+endOfHeadersReached KEYWORD2
+endOfBodyReached  KEYWORD2
+endOfStream KEYWORD2
+completed KEYWORD2
+contentLength KEYWORD2
+isResponseChunked KEYWORD2
+responseBody  KEYWORD2
+connectionKeepAlive KEYWORD2
+noDefaultRequestHeaders KEYWORD2
+write KEYWORD2
+available KEYWORD2
+read  KEYWORD2
+peek  KEYWORD2
+flush KEYWORD2
+connect KEYWORD2
+stop  KEYWORD2
+connected KEYWORD2
+httpResponseTimeout KEYWORD2
+setHttpResponseTimeout  KEYWORD2
+
+##########################
+# WiFiWebSocketClient
+##########################
+
+begin KEYWORD2
+beginMessage  KEYWORD2
+endMessage  KEYWORD2
+parseMessage  KEYWORD2
+messageType KEYWORD2
+isFinal KEYWORD2
+readString  KEYWORD2
+ping  KEYWORD2
+write KEYWORD2
+available KEYWORD2
+read  KEYWORD2
+peek  KEYWORD2
+
+##########################
+# WiFiURLEncoderClass
+##########################
+
+encode  KEYWORD2
 
 
 #######################################

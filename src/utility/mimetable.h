@@ -7,7 +7,7 @@
    Forked and modified from Arduino WiFiNINA library https://www.arduino.cc/en/Reference/WiFiNINA
    Built by Khoi Hoang https://github.com/khoih-prog/WiFiWebServer
    Licensed under MIT license
-   Version: 1.0.7
+   Version: 1.1.0
 
    Original author:
    @file       Esp8266WebServer.h
@@ -23,10 +23,11 @@
     1.0.4   K Hoang      23/04/2020 Add support to MKR1000 boards using WiFi101 and custom WiFi libraries.
     1.0.5   K Hoang      21/07/2020 Fix bug not closing client and releasing socket.    
     1.0.6   K Hoang      24/07/2020 Add support to all STM32F/L/H/G/WB/MP1 and Seeeduino SAMD21/SAMD51 boards. Restructure examples 
-    1.0.7   K Hoang      25/09/2020 Restore support to PROGMEM-related commands, such as sendContent_P() and send_P() 
+    1.0.7   K Hoang      25/09/2020 Restore support to PROGMEM-related commands, such as sendContent_P() and send_P()
+    1.1.0   K Hoang      17/11/2020 Add basic HTTP and WebSockets Client by merging ArduinoHttpClient
  ***************************************************************************************************************************************/
-#ifndef __MIMETABLE_H__
-#define __MIMETABLE_H__
+
+#pragma once
 
 namespace mime
 {
@@ -95,5 +96,3 @@ const Entry mimeTable[maxType] =
 //extern const Entry mimeTable[maxType];
 }
 
-
-#endif
