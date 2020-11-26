@@ -21,7 +21,34 @@
       "extras",
       "tests"
     ]
-  },    
+  },
+  "dependencies": 
+  [
+    {
+      "owner": "khoih.prog",
+      "name": "WiFiNINA_Generic",
+      "version": "^1.8.0",
+      "platforms": ["*"]
+    },
+    {
+      "owner": "khoih-prog",
+      "name": "ESP_AT_Lib",
+      "version": "^1.0.0",
+      "platforms": ["*"]
+    },
+    {
+      "owner": "arduino-libraries",
+      "name": "WiFi101",
+      "version": "^0.16.1",
+      "platforms": ["*"]
+    },
+    {
+      "owner": "jandrassy",
+      "name": "WiFiEspAT",
+      "version": "^1.3.1",
+      "platforms": ["*"]
+    }
+  ],
   "frameworks": "*",
   "platforms": "*",
   "examples": "examples/*/*/*.ino"
