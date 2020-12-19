@@ -9,6 +9,62 @@
 ---
 ---
 
+## Table of Contents
+
+* [Why do we need this WiFiWebServer library](#why-do-we-need-this-wifiwebserver-library)
+* [Currently Supported Boards](#currently-supported-boards)
+* [Changelog](#changelog)
+* [Prerequisites](#prerequisites)
+* [Installation](#installation)
+  * [Use Arduino Library Manager](#use-arduino-library-manager)
+  * [Manual Install](#manual-install)
+  * [VS Code & PlatformIO](#vs-code--platformio)
+* [Packages' Patches](#packages-patches)
+  * [1. For Adafruit nRF52840 and nRF52832 boards](#1-for-adafruit-nRF52840-and-nRF52832-boards)
+  * [2. For Teensy boards](#2-for-teensy-boards)
+  * [3. For Arduino SAM DUE boards](#3-for-arduino-sam-due-boards)
+  * [4. For Arduino SAMD boards](#4-for-arduino-samd-boards)
+      * [For core version v1.8.10+](#for-core-version-v1810)
+      * [For core version v1.8.9-](#for-core-version-v189-)
+  * [5. For Adafruit SAMD boards](#5-for-adafruit-samd-boards)
+  * [6. For Seeeduino SAMD boards](#6-for-seeeduino-samd-boards)
+  * [7. For STM32 boards](#7-for-stm32-boards) 
+* [How to configure to use different WiFi Libraries](#how-to-configure-to-use-different-wifi-libraries) 
+* [Usage](#usage) 
+  * [Class Constructor](#class-constructor) 
+  * [Basic Operations](#basic-operations) 
+  * [Advanced Options](#advanced-options) 
+  * [Other Function Calls](#other-function-calls) 
+* [Examples](#examples)
+  * [Original Examples](#original-examples) 
+  * [HTTP and WebSocket Client New Examples](#http-and-websocket-client-new-examples) 
+* [Example AdvancedWebServer](#example-advancedwebserver)
+  * [1. File AdvancedWebServer.ino](#1-file-advancedwebserverino)
+  * [2. File defines.h](#2-file-definesh)
+* [Debug Terminal Output Samples](#debug-terminal-output-samples)
+* [Debug](#debug)
+* [Troubleshooting](#troubleshooting)
+* [Releases](#releases)
+  * [Major Release v1.1.0](#major-release-v110-1)
+  * [Release v1.0.7](#release-v107-1)
+  * [New in v1.0.6](#new-in-v106-1)
+  * [New in v1.0.5](#new-in-v105-1)
+  * [New in v1.0.4](#new-in-v104-1)
+  * [New in v1.0.3](#new-in-v103-1)
+  * [New Version v1.0.2](#new-version-v102-1)
+  * [New Version v1.0.1](#new-version-v101-1)
+  * [Initial Version v1.0.0](#initial-version-v100-1)
+* [Issues](#issues)
+* [TO DO](#to-do)
+* [DONE](#done)
+* [Contributions and Thanks](#contributions-and-thanks)
+* [Contributing](#contributing)
+* [License](#license)
+* [Copyright](#copyright)
+
+---
+---
+
 ### Why do we need this [WiFiWebServer library](https://github.com/khoih-prog/WiFiWebServer)
 
 This [WiFiWebServer library](https://github.com/khoih-prog/WiFiWebServer) is a simple yet complete WebServer library for **AVR, Teensy, SAM DUE, Arduino SAMD21, Adafruit SAMD21/SAMD51, Adafruit nRF52, ESP32/ESP8266, STM32F/L/H/G/WB/MP1, etc. boards, using WiFi modules/shields (WiFiNINA, WiFi101, U-Blox W101, W102, ESP8266/ESP32-AT, etc.)**. 
@@ -69,6 +125,8 @@ The WiFiWebServer class found in `WiFiWebServer.h` header, is a simple web serve
 ---
 ---
 
+## Changelog
+
 ### Major Release v1.1.0
 
 1. Add high-level **HTTP and WebSockets Client** by merging [ArduinoHttpClient Library](https://github.com/arduino-libraries/ArduinoHttpClient)
@@ -120,7 +178,7 @@ This is simple yet complete WebServer library for `AVR Mega, Teensy, SAMD21, STM
 ---
 ---
 
-## Prerequisite
+## Prerequisites
 
  1. [`Arduino IDE 1.8.13+` for Arduino](https://www.arduino.cc/en/Main/Software)
  2. [`Arduino AVR core 1.8.3+`](https://github.com/arduino/ArduinoCore-avr) for Arduino AVR boards. Use Arduino Board Manager to install.
@@ -164,7 +222,9 @@ You can also use this link [![arduino-library-badge](https://www.ardu-badge.com/
 
 ### Packages' Patches
 
- 1. **To be able to compile, run and automatically detect and display BOARD_NAME on nRF52840/nRF52832 boards**, you have to copy the whole [nRF52 0.21.0](Packages_Patches/adafruit/hardware/nrf52/0.21.0) directory into Adafruit nRF52 directory (~/.arduino15/packages/adafruit/hardware/nrf52/0.21.0). 
+#### 1. For Adafruit nRF52840 and nRF52832 boards
+
+**To be able to compile, run and automatically detect and display BOARD_NAME on nRF52840/nRF52832 boards**, you have to copy the whole [nRF52 0.21.0](Packages_Patches/adafruit/hardware/nrf52/0.21.0) directory into Adafruit nRF52 directory (~/.arduino15/packages/adafruit/hardware/nrf52/0.21.0). 
 
 Supposing the Adafruit nRF52 version is 0.21.0. These files must be copied into the directory:
 - `~/.arduino15/packages/adafruit/hardware/nrf52/0.21.0/platform.txt`
@@ -186,7 +246,9 @@ These files must be copied into the directory:
 - `~/.arduino15/packages/adafruit/hardware/nrf52/x.yy.z/variants/NINA_B112_ublox/variant.cpp`
 - **`~/.arduino15/packages/adafruit/hardware/nrf52/x.yy.z/cores/nRF5/Udp.h`**
 
- 2. **To be able to compile and run on Teensy boards**, you have to copy the file [Teensy boards.txt](Packages_Patches/hardware/teensy/avr/boards.txt) into Teensy hardware directory (./arduino-1.8.12/hardware/teensy/avr/boards.txt). 
+#### 2. For Teensy boards
+ 
+ **To be able to compile and run on Teensy boards**, you have to copy the file [Teensy boards.txt](Packages_Patches/hardware/teensy/avr/boards.txt) into Teensy hardware directory (./arduino-1.8.12/hardware/teensy/avr/boards.txt). 
 
 Supposing the Arduino version is 1.8.12. This file must be copied into the directory:
 
@@ -197,7 +259,9 @@ This file must be copied into the directory:
 
 - `./arduino-x.yy.zz/hardware/teensy/avr/boards.txt`
 
- 3. **To be able to compile and run on SAM DUE boards**, you have to copy the whole [SAM DUE](Packages_Patches/arduino/hardware/sam/1.6.12) directory into Arduino sam directory (~/.arduino15/packages/arduino/hardware/sam/1.6.12). 
+#### 3. For Arduino SAM DUE boards
+ 
+ **To be able to compile and run on SAM DUE boards**, you have to copy the whole [SAM DUE](Packages_Patches/arduino/hardware/sam/1.6.12) directory into Arduino sam directory (~/.arduino15/packages/arduino/hardware/sam/1.6.12). 
 
 Supposing the Arduino SAM core version is 1.6.12. This file must be copied into the directory:
 
@@ -208,9 +272,26 @@ This file must be copied into the directory:
 
 - `~/.arduino15/packages/arduino/hardware/sam/x.yy.zz/platform.txt`
 
- 4. ***To be able to compile without error and automatically detect and display BOARD_NAME on Arduino SAMD (Nano-33-IoT, etc) boards***, you have to copy the whole [Arduino SAMD cores 1.8.9](Packages_Patches/arduino/hardware/samd/1.8.9) directory into Arduino SAMD directory (~/.arduino15/packages/arduino/hardware/samd/1.8.9).
+#### 4. For Arduino SAMD boards
  
+ ***To be able to compile without error and automatically detect and display BOARD_NAME on Arduino SAMD (Nano-33-IoT, etc) boards***, you have to copy the whole [Arduino SAMD cores 1.8.10](Packages_Patches/arduino/hardware/samd/1.8.10) directory into Arduino SAMD directory (~/.arduino15/packages/arduino/hardware/samd/1.8.10).
+ 
+#### For core version v1.8.10+
+
+Supposing the Arduino SAMD version is 1.8.10. Now only one file must be copied into the directory:
+
+- `~/.arduino15/packages/arduino/hardware/samd/1.8.10/platform.txt`
+
+Whenever a new version is installed, remember to copy this files into the new version directory. For example, new version is x.yy.zz
+
+This file must be copied into the directory:
+
+- `~/.arduino15/packages/arduino/hardware/samd/x.yy.zz/platform.txt`
+ 
+#### For core version v1.8.9-
+
 Supposing the Arduino SAMD version is 1.8.9. These files must be copied into the directory:
+
 - `~/.arduino15/packages/arduino/hardware/samd/1.8.9/platform.txt`
 - ***`~/.arduino15/packages/arduino/hardware/samd/1.8.9/cores/arduino/Arduino.h`***
 
@@ -230,7 +311,9 @@ These files must be copied into the directory:
 
 Whenever the above-mentioned compiler error issue is fixed with the new Arduino SAMD release, you don't need to copy the `Arduino.h` file anymore.
 
- 5. ***To be able to automatically detect and display BOARD_NAME on Adafruit SAMD (Itsy-Bitsy M4, etc) boards***, you have to copy the file [Adafruit SAMD platform.txt](Packages_Patches/adafruit/hardware/samd/1.6.4) into Adafruit samd directory (~/.arduino15/packages/adafruit/hardware/samd/1.6.4). 
+#### 5. For Adafruit SAMD boards
+ 
+ ***To be able to automatically detect and display BOARD_NAME on Adafruit SAMD (Itsy-Bitsy M4, etc) boards***, you have to copy the file [Adafruit SAMD platform.txt](Packages_Patches/adafruit/hardware/samd/1.6.4) into Adafruit samd directory (~/.arduino15/packages/adafruit/hardware/samd/1.6.4). 
 
 Supposing the Adafruit SAMD core version is 1.6.4. This file must be copied into the directory:
 
@@ -241,7 +324,9 @@ This file must be copied into the directory:
 
 - `~/.arduino15/packages/adafruit/hardware/samd/x.yy.zz/platform.txt`
 
- 6. ***To be able to automatically detect and display BOARD_NAME on Seeeduino SAMD (XIAO M0, Wio Terminal, etc) boards***, you have to copy the file [Seeeduino SAMD platform.txt](Packages_Patches/Seeeduino/hardware/samd/1.8.1) into Adafruit samd directory (~/.arduino15/packages/Seeeduino/hardware/samd/1.8.1). 
+#### 6. For Seeeduino SAMD boards
+ 
+ ***To be able to automatically detect and display BOARD_NAME on Seeeduino SAMD (XIAO M0, Wio Terminal, etc) boards***, you have to copy the file [Seeeduino SAMD platform.txt](Packages_Patches/Seeeduino/hardware/samd/1.8.1) into Adafruit samd directory (~/.arduino15/packages/Seeeduino/hardware/samd/1.8.1). 
 
 Supposing the Seeeduino SAMD core version is 1.8.1. This file must be copied into the directory:
 
@@ -252,7 +337,9 @@ This file must be copied into the directory:
 
 - `~/.arduino15/packages/Seeeduino/hardware/samd/x.yy.zz/platform.txt`
 
-7. **To use Serial1 on some STM32 boards without Serial1 definition (Nucleo-144 NUCLEO_F767ZI, Nucleo-64 NUCLEO_L053R8, etc.) boards**, you have to copy the files [STM32 variant.h](Packages_Patches/STM32/hardware/stm32/1.9.0) into STM32 stm32 directory (~/.arduino15/packages/STM32/hardware/stm32/1.9.0). You have to modify the files corresponding to your boards, this is just an illustration how to do.
+#### 7. For STM32 boards
+
+**To use Serial1 on some STM32 boards without Serial1 definition (Nucleo-144 NUCLEO_F767ZI, Nucleo-64 NUCLEO_L053R8, etc.) boards**, you have to copy the files [STM32 variant.h](Packages_Patches/STM32/hardware/stm32/1.9.0) into STM32 stm32 directory (~/.arduino15/packages/STM32/hardware/stm32/1.9.0). You have to modify the files corresponding to your boards, this is just an illustration how to do.
 
 Supposing the STM32 stm32 core version is 1.9.0. These files must be copied into the directory:
 
@@ -1332,6 +1419,8 @@ Debug is enabled by default on Serial. Debug Level from 0 to 4. To disable, chan
 
 ---
 ---
+
+## Releases
 
 ### Major Release v1.1.0
 
