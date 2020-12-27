@@ -41,7 +41,7 @@
   * [6. For Seeeduino SAMD boards](#6-for-seeeduino-samd-boards)
   * [7. For STM32 boards](#7-for-stm32-boards) 
 * [How to configure to use different WiFi Libraries](#how-to-configure-to-use-different-wifi-libraries) 
-  * [1. Modify pin-to-pin connection in WiFiNINA_Generic library](#1-modify pin-to-pin-connection-in-wifinina_generic-library) 
+  * [1. Modify pin-to-pin connection in WiFiNINA_Generic library](#1-modify-pin-to-pin-connection-in-wifinina_generic-library)
   * [2. How to select which built-in WiFi or shield to use](#2-how-to-select-which-built-in-wifi-or-shield-to-use) 
   * [3. Important](#3-important) 
 * [Usage](#usage) 
@@ -323,13 +323,13 @@ This file must be copied into the directory:
 
 #### 4. For Arduino SAMD boards
  
- ***To be able to compile without error and automatically detect and display BOARD_NAME on Arduino SAMD (Nano-33-IoT, etc) boards***, you have to copy the whole [Arduino SAMD cores 1.8.10](Packages_Patches/arduino/hardware/samd/1.8.10) directory into Arduino SAMD directory (~/.arduino15/packages/arduino/hardware/samd/1.8.10).
+ ***To be able to compile without error and automatically detect and display BOARD_NAME on Arduino SAMD (Nano-33-IoT, etc) boards***, you have to copy the whole [Arduino SAMD cores 1.8.11](Packages_Patches/arduino/hardware/samd/1.8.11) directory into Arduino SAMD directory (~/.arduino15/packages/arduino/hardware/samd/1.8.11).
  
 #### For core version v1.8.10+
 
-Supposing the Arduino SAMD version is 1.8.10. Now only one file must be copied into the directory:
+Supposing the Arduino SAMD version is 1.8.11. Now only one file must be copied into the directory:
 
-- `~/.arduino15/packages/arduino/hardware/samd/1.8.10/platform.txt`
+- `~/.arduino15/packages/arduino/hardware/samd/1.8.11/platform.txt`
 
 Whenever a new version is installed, remember to copy this files into the new version directory. For example, new version is x.yy.zz
 
