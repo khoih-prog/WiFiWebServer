@@ -12,8 +12,19 @@
 ## Table of Contents
 
 * [Why do we need this WiFiWebServer library](#why-do-we-need-this-wifiwebserver-library)
-* [Currently Supported Boards](#currently-supported-boards)
+  * [Features](#features)
+  * [Currently Supported Boards](#currently-supported-boards)
 * [Changelog](#changelog)
+  * [Releases v1.1.1](#releases-v111)
+  * [Major Releases v1.1.0](#major-releases-v110)
+  * [Releases v1.0.7](#releases-v107)
+  * [Releases v1.0.6](#releases-v106)
+  * [Releases v1.0.5](#releases-v105)
+  * [Releases v1.0.4](#releases-v104)
+  * [Releases v1.0.3](#releases-v103)
+  * [Releases v1.0.2](#releases-v102)
+  * [Releases v1.0.1](#releases-v101)
+  * [Initial Releases v1.0.0](#initial-releases-v100)
 * [Prerequisites](#prerequisites)
 * [Installation](#installation)
   * [Use Arduino Library Manager](#use-arduino-library-manager)
@@ -30,6 +41,9 @@
   * [6. For Seeeduino SAMD boards](#6-for-seeeduino-samd-boards)
   * [7. For STM32 boards](#7-for-stm32-boards) 
 * [How to configure to use different WiFi Libraries](#how-to-configure-to-use-different-wifi-libraries) 
+  * [1. Modify pin-to-pin connection in WiFiNINA_Generic library](#1-modify pin-to-pin-connection-in-wifinina_generic-library) 
+  * [2. How to select which built-in WiFi or shield to use](#2-how-to-select-which-built-in-wifi-or-shield-to-use) 
+  * [3. Important](#3-important) 
 * [Usage](#usage) 
   * [Class Constructor](#class-constructor) 
   * [Basic Operations](#basic-operations) 
@@ -37,23 +51,52 @@
   * [Other Function Calls](#other-function-calls) 
 * [Examples](#examples)
   * [Original Examples](#original-examples) 
+    * [ 1. AdvancedWebServer](examples/AdvancedWebServer)
+    * [ 2. AP_SimpleWebServer](examples/AP_SimpleWebServer)
+    * [ 3. ConnectWPA](examples/ConnectWPA)
+    * [ 4. HelloServer](examples/HelloServer)
+    * [ 5. HelloServer2](examples/HelloServer2)
+    * [ 6. HttpBasicAuth](examples/HttpBasicAuth)
+    * [ 7. **MQTTClient_Auth**](examples/MQTTClient_Auth)
+    * [ 8. **MQTTClient_Basic**](examples/MQTTClient_Basic)
+    * [ 9. **MQTT_ThingStream**](examples/MQTT_ThingStream)
+    * [10. PostServer](examples/PostServer)
+    * [11. ScanNetworks](examples/ScanNetworks)
+    * [12. SimpleAuthentication](examples/SimpleAuthentication)
+    * [13. UdpNTPClient](examples/UdpNTPClient)
+    * [14. UdpSendReceive](examples/UdpSendReceive)
+    * [15. WebClient](examples/WebClient) 
+    * [16. WebClientRepeating](examples/WebClientRepeating)
+    * [17. WebServer](examples/WebServer)
+    * [18. WiFiUdpNtpClient](examples/WiFiUdpNtpClient).
   * [HTTP and WebSocket Client New Examples](#http-and-websocket-client-new-examples) 
+    * [ 1. BasicAuthGet](examples/HTTPClient/BasicAuthGet)
+    * [ 2. CustomHeader](examples/HTTPClient/CustomHeader)
+    * [ 3. DweetGet](examples/HTTPClient/DweetGet)
+    * [ 4. DweetPost](examples/HTTPClient/DweetPost)
+    * [ 5. HueBlink](examples/HTTPClient/HueBlink)
+    * [ 6. node_test_server](examples/HTTPClient/node_test_server)
+    * [ 7. PostWithHeaders](examples/HTTPClient/PostWithHeaders)
+    * [ 8. SimpleDelete](examples/HTTPClient/SimpleDelete)
+    * [ 9. SimpleGet](examples/HTTPClient/SimpleGet)
+    * [10. SimpleHTTPExample](examples/HTTPClient/SimpleHTTPExample)
+    * [11. SimplePost](examples/HTTPClient/SimplePost)
+    * [12. SimplePut](examples/HTTPClient/SimplePut)
+    * [13. SimpleWebSocket](examples/HTTPClient/SimpleWebSocket)
 * [Example AdvancedWebServer](#example-advancedwebserver)
   * [1. File AdvancedWebServer.ino](#1-file-advancedwebserverino)
   * [2. File defines.h](#2-file-definesh)
 * [Debug Terminal Output Samples](#debug-terminal-output-samples)
+  * [1. AdvancedWebServer on Arduino SAMD_NANO_33_IOT using WiFiNINA_Generic Library](#1-advancedwebserver-on-arduino-samd_nano_33_iot-using-wifinina_generic-library)
+  * [2. SimpleWebSocket on Arduino SAMD_NANO_33_IOT using WiFiNINA_Generic Library](#2-simplewebsocket-on-arduino-samd_nano_33_iot-using-wifinina_generic-library)
+  * [3. SimpleHTTPExample on Arduino SAMD_NANO_33_IOT using WiFiNINA_Generic Library](#3-simplehttpexample-on-arduino-samd_nano_33_iot-using-wifinina_generic-library)
+  * [4. DweetPost on Arduino SAMD_NANO_33_IOT using WiFiNINA_Generic Library](#4-dweetpost-on-arduino-samd_nano_33_iot-using-wifinina_generic-library)
+  * [5. DweetGet on Arduino SAMD_NANO_33_IOT using WiFiNINA_Generic Library](#5-dweetget-on-arduino-samd_nano_33_iot-using-wifinina_generic-library)
+  * [6. MQTTClient_Auth on Arduino SAMD_NANO_33_IOT using WiFiNINA_Generic Library](#6-mqttclient_auth-on-arduino-samd_nano_33_iot-using-wifinina_generic-library)
+  * [7. MQTT_ThingStream on Arduino SAMD_NANO_33_IOT using WiFiNINA_Generic Library](#7-mqtt_thingstream-on-arduino-samd_nano_33_iot-using-wifinina_generic-library)
 * [Debug](#debug)
 * [Troubleshooting](#troubleshooting)
 * [Releases](#releases)
-  * [Major Release v1.1.0](#major-release-v110-1)
-  * [Release v1.0.7](#release-v107-1)
-  * [New in v1.0.6](#new-in-v106-1)
-  * [New in v1.0.5](#new-in-v105-1)
-  * [New in v1.0.4](#new-in-v104-1)
-  * [New in v1.0.3](#new-in-v103-1)
-  * [New Version v1.0.2](#new-version-v102-1)
-  * [New Version v1.0.1](#new-version-v101-1)
-  * [Initial Version v1.0.0](#initial-version-v100-1)
 * [Issues](#issues)
 * [TO DO](#to-do)
 * [DONE](#done)
@@ -67,15 +110,34 @@
 
 ### Why do we need this [WiFiWebServer library](https://github.com/khoih-prog/WiFiWebServer)
 
+#### Features
+
 This [WiFiWebServer library](https://github.com/khoih-prog/WiFiWebServer) is a simple yet complete WebServer library for **AVR, Teensy, SAM DUE, Arduino SAMD21, Adafruit SAMD21/SAMD51, Adafruit nRF52, ESP32/ESP8266, STM32F/L/H/G/WB/MP1, etc. boards, using WiFi modules/shields (WiFiNINA, WiFi101, U-Blox W101, W102, ESP8266/ESP32-AT, etc.)**. 
 
 The functions are similar and compatible to those of [`ESP32 WebServer`](https://github.com/espressif/arduino-esp32/tree/master/libraries/WebServer) and [`ESP8266WebServer`](https://github.com/esp8266/Arduino/tree/master/libraries/ESP8266WebServer) libraries to make life much easier to port sketches from ESP8266/ESP32.
 
 This [**WiFiWebServer library**](https://github.com/khoih-prog/WiFiWebServer), from v1.1.0, also provides high-level **HTTP and WebSocket Client** with the functions are similar and compatible to those of [**ArduinoHttpClient Library**](https://github.com/arduino-libraries/ArduinoHttpClient)
 
+The library provides supports to:
+
+1. WiFi Client, STA and AP mode
+2. TCP Server and Client
+3. UDP Server and Client
+4. HTTP Server and Client
+5. HTTP GET and POST requests, provides argument parsing, handles one client at a time.
+6. **High-level HTTP (GET, POST, PUT, PATCH, DELETE) and WebSocket Client**. From v1.1.0.
+
+It is based on and modified from:
+
+1. [Ivan Grokhotkov's ESP8266WebServer](https://github.com/esp8266/Arduino/tree/master/libraries/ESP8266WebServer)
+2. [Ivan Grokhotkov's ESP32 WebServer](https://github.com/espressif/arduino-esp32/tree/master/libraries/WebServer)
+3. [ArduinoHttpClient Library](https://github.com/arduino-libraries/ArduinoHttpClient)
+
+The WiFiWebServer class found in `WiFiWebServer.h` header, is a simple web server that knows how to handle HTTP requests such as GET and POST and can only support one client at a time.
+
 ---
 
-### Currently Supported Boards
+#### Currently Supported Boards
 
 This [**WiFiWebServer library**](https://github.com/khoih-prog/WiFiWebServer) currently supports these following boards:
 
@@ -104,72 +166,59 @@ and these following WiFi shields/modules:
 4. ESP8266/ESP32-AT command
 
 ---
-
-The library provides supports to:
-
-1. WiFi Client, STA and AP mode
-2. TCP Server and Client
-3. UDP Server and Client
-4. HTTP Server and Client
-5. HTTP GET and POST requests, provides argument parsing, handles one client at a time.
-6. **High-level HTTP (GET, POST, PUT, PATCH, DELETE) and WebSocket Client**. From v1.1.0.
-
-It is based on and modified from:
-
-1. [Ivan Grokhotkov's ESP8266WebServer](https://github.com/esp8266/Arduino/tree/master/libraries/ESP8266WebServer)
-2. [Ivan Grokhotkov's ESP32 WebServer](https://github.com/espressif/arduino-esp32/tree/master/libraries/WebServer)
-3. [ArduinoHttpClient Library](https://github.com/arduino-libraries/ArduinoHttpClient)
-
-The WiFiWebServer class found in `WiFiWebServer.h` header, is a simple web server that knows how to handle HTTP requests such as GET and POST and can only support one client at a time.
-
----
 ---
 
 ## Changelog
 
-### Major Release v1.1.0
+### Releases v1.1.1
+
+1. Clean-up all compiler warnings possible.
+2. Add MQTT examples
+3. Add Version String 
+
+### Major Releases v1.1.0
 
 1. Add high-level **HTTP and WebSockets Client** by merging [ArduinoHttpClient Library](https://github.com/arduino-libraries/ArduinoHttpClient)
 2. Add many more examples for HTTP and WebSockets Client.
 
-### Release v1.0.7
+### Releases v1.0.7
 
 1. Add support to **PROGMEM-related commands, such as sendContent_P() and send_P()**
 2. Update Platform.ini to support **PlatformIO 5.x owner-based dependency declaration.**
 3. Clean up code.
 4. Update examples.
 
-#### New in v1.0.6
+#### Releases v1.0.6
 
 1. Add support to all **STM32F/L/H/G/WB/MP1** boards.
 2. Add support to **Seeeduino SAMD21/SAMD51** boards.
 3. Restructure examples. Clean-up code.
 
-#### New in v1.0.5
+#### Releases v1.0.5
 
 1. Fix bug not closing client and releasing socket exposed in NINA Firmware v1.4.0.
 2. Enhance examples.
 
-#### New in v1.0.4
+#### Releases v1.0.4
 
 1. Add support to boards using **WiFi101 built-in or shield**. For example MKR1000, Teensy, Mega, etc..
 2. Support any future custom WiFi library that meets the no-compiling-error requirements.
 
-#### New in v1.0.3
+#### Releases v1.0.3
 
 1. Add support to **nRF52** boards, such as **AdaFruit Feather nRF52832, nRF52840 Express, BlueFruit Sense, Itsy-Bitsy nRF52840 Express, Metro nRF52840 Express, NINA_B302_ublox, etc.**
 
-#### New Version v1.0.2
+#### Releases v1.0.2
 
 1. Add support to **SAM51 (Itsy-Bitsy M4, Metro M4, Grand Central M4, Feather M4 Express, etc.) and SAM DUE**.
 
-#### New Version v1.0.1
+#### Releases v1.0.1
 
 1. Use new [`WiFiNINA_Generic library`](https://github.com/khoih-prog/WiFiNINA_Generic) to provide support to many more boards running WiFiNINA.
 
 The original WiFiNINA library only supports **Nano-33 IoT**, Arduino MKR WiFi 1010, Arduino MKR VIDOR 4000 and Arduino UNO WiFi Rev.2.
 
-#### Initial Version v1.0.0
+#### Initial Releases v1.0.0
 
 This is simple yet complete WebServer library for `AVR Mega, Teensy, SAMD21, STM32, etc.` boards running WiFi modules/shields (WiFiNINA U-Blox W101, W102, etc.). **The functions are similar and compatible to ESP8266/ESP32 WebServer libraries** to make life much easier to port sketches from ESP8266/ESP32.
 
@@ -184,7 +233,7 @@ This is simple yet complete WebServer library for `AVR Mega, Teensy, SAMD21, STM
  2. [`Arduino AVR core 1.8.3+`](https://github.com/arduino/ArduinoCore-avr) for Arduino AVR boards. Use Arduino Board Manager to install.
  3. [`Teensy core v1.53+`](https://www.pjrc.com/teensy/td_download.html) for Teensy (4.1, 4.0, 3.6, 3.5, 3,2, 3.1, 3.0) boards.
  4. [`Arduino SAM DUE core v1.6.12+`](https://www.arduino.cc/en/Guide/ArduinoDue) for SAM DUE ARM Cortex-M3 boards.
- 5. [`Arduino SAMD core 1.8.9+`](https://www.arduino.cc/en/Guide/ArduinoM0) for SAMD ARM Cortex-M0+ boards  (Nano 33 IoT, etc.).
+ 5. [`Arduino SAMD core 1.8.11+`](https://www.arduino.cc/en/Guide/ArduinoM0) for SAMD ARM Cortex-M0+ boards  (Nano 33 IoT, etc.).
  6. [`Adafruit SAMD core 1.6.4+`](https://www.adafruit.com/) for SAMD ARM Cortex-M0+ and M4 boards (Itsy-Bitsy M4, etc.)
  7. [`Seeeduino SAMD core 1.8.1+`](https://www.seeedstudio.com/) for SAMD21/SAMD51 boards (XIAO M0, Wio Terminal, etc.)
  8. [`Adafruit nRF52 v0.21.0+`](https://www.adafruit.com/) for nRF52 boards such as AdaFruit Feather nRF52840 Express, NINA_B302_ublox, NINA_B112_ublox, etc.
@@ -357,7 +406,9 @@ theses files must be copied into the corresponding directory:
 
 ### How to configure to use different WiFi Libraries
 
-1. Please change the pin-to-pin connection in `~/Arduino/libraries/src/WiFiNINA_Pinout_Generic.h` to match actual connection if using WiFiNINA with [`WiFiNINA_Generic library`](https://github.com/khoih-prog/WiFiNINA_Generic).
+#### 1. Modify pin-to-pin connection in WiFiNINA_Generic library
+
+Please change the pin-to-pin connection in `~/Arduino/libraries/src/WiFiNINA_Pinout_Generic.h` to match actual connection if using WiFiNINA with [`WiFiNINA_Generic library`](https://github.com/khoih-prog/WiFiNINA_Generic).
 
 For example
 
@@ -380,7 +431,7 @@ For example
   #define SPIWIFI_RESET    27   //NINA_RESETN            //27
 ```
 
-2. **How to select which built-in WiFi or shield to use**
+#### 2. How to select which built-in WiFi or shield to use
 
 - To use W102-based WiFiNINA, define in the sketch:
 
@@ -422,7 +473,7 @@ For example, WiFi_XYZ library uses **WiFi_XYZ.h**
 #include <WiFiWebServer.h>
 ```
 
-#### Important:
+#### 3. Important
 
 - The **WiFiEsp, WiFi_Link libraries are not supported**. Don't use unless you know how to modify those libraries.
 - Requests to support for any custom WiFi library will be ignored. **Use at your own risk**.
@@ -1087,15 +1138,17 @@ char pass[] = "****";        // your network password
 
 ### Debug Terminal Output Samples
 
-1. The following are debug terminal output and screen shot when running example [**AdvancedWebServer**](examples/AdvancedWebServer) on Arduino Nano-33-IoT board
+#### 1. AdvancedWebServer on Arduino SAMD_NANO_33_IOT using WiFiNINA_Generic Library
+
+The following are debug terminal output and screen shot when running example [**AdvancedWebServer**](examples/AdvancedWebServer) on **SAMD_NANO_33_IOT with WiFiNINA using WiFiNINA_Generic Library**
 
 <p align="center">
     <img src="https://github.com/khoih-prog/WiFiWebServer/blob/master/pics/AdvancedWebServer.png">
 </p>
 
 ```
-
 Starting AdvancedServer on SAMD_NANO_33_IOT
+WiFiWebServer v1.1.1
 [NN] ===============================
 [NN] 
 Used/default SPI pinout: 
@@ -1269,10 +1322,13 @@ Connection: close
 
 ---
 
-2. The terminal output of **SAMD_NANO_33_IOT with WiFiNINA using WiFiNINA_Generic Library** running [SimpleWebSocket example](examples/HTTPClient/SimpleWebSocket) to demonstrate newly-added WebSocket Client feature.
+#### 2. SimpleWebSocket on Arduino SAMD_NANO_33_IOT using WiFiNINA_Generic Library
+
+The terminal output of **SAMD_NANO_33_IOT with WiFiNINA using WiFiNINA_Generic Library** running [SimpleWebSocket example](examples/HTTPClient/SimpleWebSocket) to demonstrate newly-added WebSocket Client feature.
 
 ```
 Starting SimpleWebSocket on SAMD_NANO_33_IOT with WiFiNINA using WiFiNINA_Generic Library
+WiFiWebServer v1.1.1
 Connecting to SSID: HueNet1
 You're connected to the network, IP = 192.168.2.98
 SSID: HueNet1, Signal strength (RSSI):-24 dBm
@@ -1300,10 +1356,13 @@ Received a message:
 
 ---
 
-3. The terminal output of **SAMD_NANO_33_IOT with WiFiNINA using WiFiNINA_Generic Library** running [SimpleHTTPExample example](examples/HTTPClient/SimpleHTTPExample) to demonstrate newly-added HTTP Client feature.
+#### 3. SimpleHTTPExample on Arduino SAMD_NANO_33_IOT using WiFiNINA_Generic Library
+
+The terminal output of **SAMD_NANO_33_IOT with WiFiNINA using WiFiNINA_Generic Library** running [SimpleHTTPExample example](examples/HTTPClient/SimpleHTTPExample) to demonstrate newly-added HTTP Client feature.
 
 ```
 Starting SimpleHTTPExample on SAMD_NANO_33_IOT with WiFiNINA using WiFiNINA_Generic Library
+WiFiWebServer v1.1.1
 Connecting to SSID: HueNet1
 You're connected to the network, IP = 192.168.2.98
 SSID: HueNet1, Signal strength (RSSI):-21 dBm
@@ -1357,10 +1416,13 @@ Body returned follows:
 
 ---
 
-4. The terminal output of **SAMD_NANO_33_IOT with WiFiNINA using WiFiNINA_Generic Library** running [DweetPost example](examples/HTTPClient/DweetPost) to demonstrate newly-added HTTP Client feature.
+#### 4. DweetPost on Arduino SAMD_NANO_33_IOT using WiFiNINA_Generic Library
+
+The terminal output of **SAMD_NANO_33_IOT with WiFiNINA using WiFiNINA_Generic Library** running [DweetPost example](examples/HTTPClient/DweetPost) to demonstrate newly-added HTTP Client feature.
 
 ```
 Starting DweetPost on SAMD_NANO_33_IOT with WiFiNINA using WiFiNINA_Generic Library
+WiFiWebServer v1.1.1
 Connecting to SSID: HueNet1
 You're connected to the network, IP = 192.168.2.98
 SSID: HueNet1, Signal strength (RSSI):-22 dBm
@@ -1377,10 +1439,13 @@ Wait ten seconds
 
 ---
 
-5. The terminal output of **SAMD_NANO_33_IOT with WiFiNINA using WiFiNINA_Generic Library** running [DweetGet example](examples/HTTPClient/DweetGet) to demonstrate newly-added HTTP Client feature.
+#### 5. DweetGet on Arduino SAMD_NANO_33_IOT using WiFiNINA_Generic Library
+
+The terminal output of **SAMD_NANO_33_IOT with WiFiNINA using WiFiNINA_Generic Library** running [DweetGet example](examples/HTTPClient/DweetGet) to demonstrate newly-added HTTP Client feature.
 
 ```
 Starting DweetGet on SAMD_NANO_33_IOT with WiFiNINA using WiFiNINA_Generic Library
+WiFiWebServer v1.1.1
 Connecting to SSID: HueNet1
 You're connected to the network, IP = 192.168.2.98
 SSID: HueNet1, Signal strength (RSSI):-25 dBm
@@ -1402,6 +1467,56 @@ Wait ten seconds
 ```
 
 ---
+
+#### 6. MQTTClient_Auth on Arduino SAMD_NANO_33_IOT using WiFiNINA_Generic Library
+
+The terminal output of **SAMD_NANO_33_IOT with WiFiNINA using WiFiNINA_Generic Library** running [MQTTClient_Auth example](examples/MQTTClient_Auth) to demonstrate newly-added MQTT Client feature.
+
+
+```
+Starting MQTTClient_Auth on SAMD_NANO_33_IOT with WiFiNINA using WiFiNINA_Generic Library
+WiFiWebServer v1.1.1
+Please upgrade the firmware
+Connecting to WPA SSID: HueNet1
+Connected! IP address: 192.168.2.98
+Attempting MQTT connection to broker.emqx.io...connected
+Message Send : MQTT_Pub => Hello from MQTTClient_Auth on SAMD_NANO_33_IOT with WiFiNINA using WiFiNINA_Generic Library
+Message arrived [MQTT_Pub] Hello from MQTTClient_Auth on SAMD_NANO_33_IOT with WiFiNINA using WiFiNINA_Generic Library
+Message Send : MQTT_Pub => Hello from MQTTClient_Auth on SAMD_NANO_33_IOT with WiFiNINA using WiFiNINA_Generic Library
+Message arrived [MQTT_Pub] Hello from MQTTClient_Auth on SAMD_NANO_33_IOT with WiFiNINA using WiFiNINA_Generic Library
+```
+
+---
+
+#### 7. MQTT_ThingStream on Arduino SAMD_NANO_33_IOT using WiFiNINA_Generic Library
+
+The terminal output of **SAMD_NANO_33_IOT with WiFiNINA using WiFiNINA_Generic Library** running [MQTT_ThingStream example](examples/MQTT_ThingStream) to demonstrate newly-added MQTT Client feature.
+
+
+```
+Start MQTT_ThingStream on SAMD_NANO_33_IOT
+Starting MQTTClient_Auth on SAMD_NANO_33_IOT with WiFiNINA using WiFiNINA_Generic Library
+WiFiWebServer v1.1.1
+Please upgrade the firmware
+Connecting to WPA SSID: HueNet1
+Connected! IP address: 192.168.2.98
+***************************************
+STM32_Pub
+***************************************
+Attempting MQTT connection to broker.emqx.io
+...connected
+Published connection message successfully!
+Subcribed to: STM32_Sub
+MQTT Message Send : STM32_Pub => Hello from MQTT_ThingStream on SAMD_NANO_33_IOT with WiFiNINA using WiFiNINA_Generic Library
+MQTT Message receive [STM32_Pub] Hello from MQTT_ThingStream on SAMD_NANO_33_IOT with WiFiNINA using WiFiNINA_Generic Library
+MQTT Message Send : STM32_Pub => Hello from MQTT_ThingStream on SAMD_NANO_33_IOT with WiFiNINA using WiFiNINA_Generic Library
+MQTT Message receive [STM32_Pub] Hello from MQTT_ThingStream on SAMD_NANO_33_IOT with WiFiNINA using WiFiNINA_Generic Library
+MQTT Message Send : STM32_Pub => Hello from MQTT_ThingStream on SAMD_NANO_33_IOT with WiFiNINA using WiFiNINA_Generic Library
+MQTT Message receive [STM32_Pub] Hello from MQTT_ThingStream on SAMD_NANO_33_IOT with WiFiNINA using WiFiNINA_Generic Library
+
+```
+
+---
 ---
 
 ### Debug
@@ -1418,53 +1533,66 @@ Debug is enabled by default on Serial. Debug Level from 0 to 4. To disable, chan
 ```
 
 ---
+
+## Troubleshooting
+
+If you get compilation errors, more often than not, you may need to install a newer version of the board's core, applying Libraries' Patches, Packages' Patches or this library latest version.
+
+
+---
 ---
 
 ## Releases
 
-### Major Release v1.1.0
+### Releases v1.1.1
+
+1. Clean-up all compiler warnings possible.
+2. Add MQTT examples
+3. Add Version String
+
+### Major Releases v1.1.0
 
 1. Add high-level **HTTP and WebSockets Client** by merging [ArduinoHttpClient Library](https://github.com/arduino-libraries/ArduinoHttpClient)
 2. Add many more examples for HTTP and WebSockets Client.
 
-### Release v1.0.7
+### Releases v1.0.7
 
 1. Add support to **PROGMEM-related commands, such as sendContent_P() and send_P()**
 2. Update Platform.ini to support **PlatformIO 5.x owner-based dependency declaration.**
 3. Clean up code.
 4. Update examples.
 
-#### New in v1.0.6
+#### Releases v1.0.6
 
 1. Add support to all **STM32F/L/H/G/WB/MP1** boards.
 2. Add support to **Seeeduino SAMD21/SAMD51** boards.
 3. Restructure examples. Clean-up code.
 
-#### New in v1.0.5
+#### Releases v1.0.5
 
 1. Fix bug not closing client and releasing socket exposed in NINA Firmware v1.4.0.
 2. Enhance examples.
 
-#### New in v1.0.4
+#### Releases v1.0.4
 
 1. Add support to boards using **WiFi101 built-in or shield**. For example MKR1000, Teensy, Mega, etc..
 2. Support any future custom WiFi library that meets the no-compiling-error requirements.
 
-#### New in v1.0.3
+#### Releases v1.0.3
 
 1. Add support to **nRF52** boards, such as **AdaFruit Feather nRF52832, nRF52840 Express, BlueFruit Sense, Itsy-Bitsy nRF52840 Express, Metro nRF52840 Express, NINA_B302_ublox, etc.**
 
-#### New Version v1.0.2
+#### Releases v1.0.2
 
 1. Add support to **SAM51 (Itsy-Bitsy M4, Metro M4, Grand Central M4, Feather M4 Express, etc.) and SAM DUE**.
 
-#### New Version v1.0.1
+#### Releases v1.0.1
 
 1. Use new [`WiFiNINA_Generic library`](https://github.com/khoih-prog/WiFiNINA_Generic) to provide support to many more boards running WiFiNINA.
 
 The original WiFiNINA library only supports **Nano-33 IoT**, Arduino MKR WiFi 1010, Arduino MKR VIDOR 4000 and Arduino UNO WiFi Rev.2.
 
-#### Initial Version v1.0.0
+#### Initial Releases v1.0.0
 
 This is simple yet complete WebServer library for `AVR Mega, Teensy, SAMD21, STM32, etc.` boards running WiFi modules/shields (WiFiNINA U-Blox W101, W102, etc.). **The functions are similar and compatible to ESP8266/ESP32 WebServer libraries** to make life much easier to port sketches from ESP8266/ESP32.
 

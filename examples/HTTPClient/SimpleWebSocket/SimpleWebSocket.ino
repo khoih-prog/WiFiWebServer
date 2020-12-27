@@ -53,8 +53,11 @@ void setup()
   Serial.begin(115200);
   while (!Serial);
 
-  Serial.print("\nStarting SimpleWebSocket on " + String(BOARD_NAME));
-  Serial.println(" with " + String(SHIELD_TYPE));
+  Serial.print(F("\nStarting SimpleWebSocket on "));
+  Serial.print(BOARD_NAME);
+  Serial.print(F(" with "));
+  Serial.println(SHIELD_TYPE); 
+  Serial.println(WIFI_WEBSERVER_VERSION);
 
   // check for the presence of the shield
 #if USE_WIFI_NINA

@@ -7,7 +7,7 @@
    Forked and modified from Arduino WiFiNINA library https://www.arduino.cc/en/Reference/WiFiNINA
    Built by Khoi Hoang https://github.com/khoih-prog/WiFiWebServer
    Licensed under MIT license
-   Version: 1.1.0
+   Version: 1.1.1
 
    Original author:
    @file       Esp8266WebServer.h
@@ -25,6 +25,7 @@
     1.0.6   K Hoang      24/07/2020 Add support to all STM32F/L/H/G/WB/MP1 and Seeeduino SAMD21/SAMD51 boards. Restructure examples 
     1.0.7   K Hoang      25/09/2020 Restore support to PROGMEM-related commands, such as sendContent_P() and send_P()
     1.1.0   K Hoang      17/11/2020 Add basic HTTP and WebSockets Client by merging ArduinoHttpClient
+    1.1.1   K Hoang      27/12/2020 Suppress all possible compiler warnings
  ***************************************************************************************************************************************/
 
 #pragma once
@@ -32,10 +33,10 @@
 #include "RequestHandler.h"
 #include "mimetable.h"
 
-class FunctionRequestHandler : public RequestHandler 
+class FunctionRequestHandler : public RequestHandler
 {
   public:
-  
+
     FunctionRequestHandler(WiFiWebServer::THandlerFunction fn, WiFiWebServer::THandlerFunction ufn, const String &uri, HTTPMethod method)
       : _fn(fn)
       , _ufn(ufn)
@@ -44,7 +45,7 @@ class FunctionRequestHandler : public RequestHandler
     {
     }
 
-    bool canHandle(HTTPMethod requestMethod, String requestUri) override  
+    bool canHandle(HTTPMethod requestMethod, String requestUri) override
     {
       if (_method != HTTP_ANY && _method != requestMethod)
         return false;
@@ -56,7 +57,7 @@ class FunctionRequestHandler : public RequestHandler
       {
         String _uristart = _uri;
         _uristart.replace("/*", "");
-        
+
         if (requestUri.startsWith(_uristart))
           return true;
       }
@@ -64,7 +65,7 @@ class FunctionRequestHandler : public RequestHandler
       return false;
     }
 
-    bool canUpload(String requestUri) override  
+    bool canUpload(String requestUri) override
     {
       if (!_ufn || !canHandle(HTTP_POST, requestUri))
         return false;
@@ -72,45 +73,40 @@ class FunctionRequestHandler : public RequestHandler
       return true;
     }
 
-    bool handle(WiFiWebServer& server, HTTPMethod requestMethod, String requestUri) override 
+    bool handle(WiFiWebServer& server, HTTPMethod requestMethod, String requestUri) override
     {
-      (void) server;
+      WFW_UNUSED(server);
       
       if (!canHandle(requestMethod, requestUri))
         return false;
 
-      //WS_LOGINFO(F("ReqHandler::handle"));
-
       _fn();
-
-     //WS_LOGINFO(F("ReqHandler::handle done"));
       return true;
     }
 
-    void upload(WiFiWebServer& server, String requestUri, HTTPUpload& upload) override 
+    void upload(WiFiWebServer& server, String requestUri, HTTPUpload& upload) override
     {
-      (void) server;
-      (void) upload;
-        
+      WFW_UNUSED(server);
+      WFW_UNUSED(upload);
+      
       if (canUpload(requestUri))
         _ufn();
     }
 
   protected:
-  
     WiFiWebServer::THandlerFunction _fn;
     WiFiWebServer::THandlerFunction _ufn;
     String _uri;
     HTTPMethod _method;
 };
 
-class StaticRequestHandler : public RequestHandler 
+class StaticRequestHandler : public RequestHandler
 {
   public:
 
-    bool canHandle(HTTPMethod requestMethod, String requestUri) override  
+    bool canHandle(HTTPMethod requestMethod, String requestUri) override
     {
-      if ((requestMethod != HTTP_GET) && (requestMethod != HTTP_HEAD))
+      if (requestMethod != HTTP_GET)
         return false;
 
       if ((_isFile && requestUri != _uri) || !requestUri.startsWith(_uri))
@@ -140,7 +136,6 @@ class StaticRequestHandler : public RequestHandler
 
       // Fall-through and just return default type
       strcpy(buff, mimeTable[sizeof(mimeTable) / sizeof(mimeTable[0]) - 1].mimeType);
-      
       return String(buff);
     }
 

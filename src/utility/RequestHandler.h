@@ -7,7 +7,7 @@
    Forked and modified from Arduino WiFiNINA library https://www.arduino.cc/en/Reference/WiFiNINA
    Built by Khoi Hoang https://github.com/khoih-prog/WiFiWebServer
    Licensed under MIT license
-   Version: 1.1.0
+   Version: 1.1.1
 
    Original author:
    @file       Esp8266WebServer.h
@@ -25,9 +25,15 @@
     1.0.6   K Hoang      24/07/2020 Add support to all STM32F/L/H/G/WB/MP1 and Seeeduino SAMD21/SAMD51 boards. Restructure examples 
     1.0.7   K Hoang      25/09/2020 Restore support to PROGMEM-related commands, such as sendContent_P() and send_P()
     1.1.0   K Hoang      17/11/2020 Add basic HTTP and WebSockets Client by merging ArduinoHttpClient
+    1.1.1   K Hoang      27/12/2020 Suppress all possible compiler warnings
  ***************************************************************************************************************************************/
 
 #pragma once
+
+#ifndef WFW_UNUSED
+  #define WFW_UNUSED(x) (void)(x)
+#endif
+
 
 class RequestHandler
 {
@@ -37,20 +43,34 @@ class RequestHandler
 
     virtual bool canHandle(HTTPMethod method, String uri)
     {
+      WFW_UNUSED(method);
+      WFW_UNUSED(uri);
+      
       return false;
     }
 
     virtual bool canUpload(String uri)
     {
+      WFW_UNUSED(uri);
+      
       return false;
     }
 
     virtual bool handle(WiFiWebServer& server, HTTPMethod requestMethod, String requestUri)
     {
+      WFW_UNUSED(server);
+      WFW_UNUSED(requestMethod);
+      WFW_UNUSED(requestUri);
+      
       return false;
     }
 
-    virtual void upload(WiFiWebServer& server, String requestUri, HTTPUpload& upload) {}
+    virtual void upload(WiFiWebServer& server, String requestUri, HTTPUpload& upload) 
+    {
+      WFW_UNUSED(server);
+      WFW_UNUSED(requestUri);
+      WFW_UNUSED(upload);
+    }
 
     RequestHandler* next()
     {
@@ -66,4 +86,3 @@ class RequestHandler
 
     RequestHandler* _next = nullptr;
 };
-
