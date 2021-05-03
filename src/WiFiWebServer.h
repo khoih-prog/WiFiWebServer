@@ -339,27 +339,27 @@ class WiFiWebServer
     HTTPClientStatus  _currentStatus;
     unsigned long     _statusChange;
 
-    RequestHandler*   _currentHandler;
-    RequestHandler*   _firstHandler;
-    RequestHandler*   _lastHandler;
+    RequestHandler*   _currentHandler = nullptr;
+    RequestHandler*   _firstHandler = nullptr;
+    RequestHandler*   _lastHandler = nullptr;
     THandlerFunction  _notFoundHandler;
     THandlerFunction  _fileUploadHandler;
 
     int               _currentArgCount;
-    RequestArgument*  _currentArgs;
-
-    //KH
+    RequestArgument*  _currentArgs = nullptr;
+ = nullptr
+    //KH = nullptr
     #if USE_NEW_WEBSERVER_VERSION
-    HTTPUpload*       _currentUpload;
+    HTTPUpload*       _currentUpload = nullptr;
     int               _postArgsLen;
-    RequestArgument*  _postArgs;
+    RequestArgument*  _postArgs = nullptr;
     
     #else
     HTTPUpload        _currentUpload;
     #endif
     
     int               _headerKeysCount;
-    RequestArgument*  _currentHeaders;
+    RequestArgument*  _currentHeaders = nullptr;
     size_t            _contentLength;
     String            _responseHeaders;
 
