@@ -40,8 +40,6 @@
 
 const char * AUTHORIZATION_HEADER = "Authorization";
 
-#if 1
-
 WiFiWebServer::WiFiWebServer(int port)
   : _server(port)
   , _currentMethod(HTTP_ANY)
@@ -62,26 +60,6 @@ WiFiWebServer::WiFiWebServer(int port)
   , _chunked(false)
 {
 }
-
-#else
-
-WiFiWebServer::WiFiWebServer(int port)
-  : _server(port)
-  , _currentMethod(HTTP_ANY)
-  , _currentVersion(0)
-  , _currentHandler(0)
-  , _firstHandler(0)
-  , _lastHandler(0)
-  , _currentArgCount(0)
-  , _currentArgs(0)
-  , _headerKeysCount(0)
-  , _currentHeaders(0)
-  , _contentLength(0)
-  , _chunked(false)
-{
-}
-
-#endif
 
 WiFiWebServer::~WiFiWebServer() 
 {
