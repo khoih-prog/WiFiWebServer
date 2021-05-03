@@ -87,7 +87,7 @@ class WiFiHttpClient : public Client
   public:
     static const int kNoContentLengthHeader = -1;
     static const int kHttpPort = 80;
-    static const char* kUserAgent = nullptr;
+    static const char* kUserAgent;
 
     // FIXME Write longer API request, using port and user-agent, example
     // FIXME Update tempToPachube example to calculate Content-Length correctly
@@ -452,8 +452,8 @@ class WiFiHttpClient : public Client
     */
     void flushClientRx();
    
-    static const char* kContentLengthPrefix = nullptr;
-    static const char* kTransferEncodingChunked = nullptr;
+    static const char* kContentLengthPrefix;
+    static const char* kTransferEncodingChunked;
     
     typedef enum
     {
