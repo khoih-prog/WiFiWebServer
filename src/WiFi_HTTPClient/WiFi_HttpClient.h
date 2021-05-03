@@ -87,7 +87,7 @@ class WiFiHttpClient : public Client
   public:
     static const int kNoContentLengthHeader = -1;
     static const int kHttpPort = 80;
-    static const char* kUserAgent;
+    static const char* kUserAgent = nullptr;
 
     // FIXME Write longer API request, using port and user-agent, example
     // FIXME Update tempToPachube example to calculate Content-Length correctly
@@ -452,8 +452,8 @@ class WiFiHttpClient : public Client
     */
     void flushClientRx();
    
-    static const char* kContentLengthPrefix;
-    static const char* kTransferEncodingChunked;
+    static const char* kContentLengthPrefix = nullptr;
+    static const char* kTransferEncodingChunked = nullptr;
     
     typedef enum
     {
@@ -471,9 +471,9 @@ class WiFiHttpClient : public Client
     } tHttpState;
 
     // Client we're using
-    Client* iClient;
+    Client* iClient = nullptr;
     // Server we are connecting to
-    const char* iServerName;
+    const char* iServerName = nullptr;
     IPAddress iServerAddress;
     // Port of server we are connecting to
     uint16_t iServerPort;
@@ -486,9 +486,9 @@ class WiFiHttpClient : public Client
     // How many bytes of the response body have been read by the user
     int iBodyLengthConsumed;
     // How far through a Content-Length header prefix we are
-    const char* iContentLengthPtr;
+    const char* iContentLengthPtr = nullptr;
     // How far through a Transfer-Encoding chunked header we are
-    const char* iTransferEncodingChunkedPtr;
+    const char* iTransferEncodingChunkedPtr = nullptr;
     // Stores if the response body is chunked
     bool iIsChunked;
     // Stores the value of the current chunk length, if present

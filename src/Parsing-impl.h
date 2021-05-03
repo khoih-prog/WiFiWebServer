@@ -219,7 +219,7 @@ bool WiFiWebServer::_parseRequest(WiFiClient& client)
   WS_LOGDEBUG1(F("search: "), searchStr);
 
   //attach handler
-  RequestHandler* handler;
+  RequestHandler* handler = nullptr;
 
   for (handler = _firstHandler; handler; handler = handler->next())
   {
