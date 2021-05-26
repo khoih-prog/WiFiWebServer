@@ -1765,7 +1765,7 @@ The following are debug terminal output and screen shot when running example [**
     <img src="https://github.com/khoih-prog/WiFiWebServer/blob/master/pics/AdvancedWebServer_NanoRP2040Connect.png">
 </p>
 
-```
+
 ```
 Starting AdvancedServer on Nano RP2040 Connect with WiFiNINA using WiFiNINA_Generic Library
 WiFiWebServer v1.2.0
@@ -1886,7 +1886,7 @@ Connection: close
 Content-Type: image/svg+xml
 Content-Length: 1954
 Connection: close
-```
+
 ```
 
 ---
