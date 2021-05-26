@@ -1,8 +1,8 @@
 {
   "name": "WiFiWebServer",
-  "version": "1.1.1",
-  "keywords": "wifi, wi-fi, WebServer, WiFiNINA, WiFi101, ESP32, Teensy, AVR, Mega, SAM DUE, SAMD21, SAMD51, STM32, U-Blox, W101, W102, W13x, nRF52, HTTP-Client, WebSocket-Client, server, client, websocket",
-  "description": "Simple WiFiWebServer, HTTP Client and WebSocket Client library for AVR Mega, Teensy, SAM DUE, SAMD21, SAMD51, STM32F/L/H/G/WB/MP1, nRF52 boards using WiFi, such as WiFiNINA, WiFi101, U-Blox W101, W102, ESP8266/ESP32-AT modules/shields",
+  "version": "1.2.0",
+  "keywords": "wifi, wi-fi, WebServer, WiFiNINA, WiFi101, ESP32, Teensy, AVR, Mega, SAM DUE, SAMD, STM32, nRF52, rpi-pico, rp2040, HTTP-Client, WebSocket-Client, server, client, websocket",
+  "description": "Simple WiFiWebServer, HTTP Client and WebSocket Client library for AVR Mega, Teensy, SAM DUE, SAMD21, SAMD51, STM32F/L/H/G/WB/MP1, nRF52, RP2040-based (Nano-RP2040-Connect, RASPBERRY_PI_PICO, etc.) boards using WiFi, such as WiFiNINA, WiFi101, U-Blox W101, W102, ESP8266/ESP32-AT modules/shields",
   "authors":
   {
     "name":  "Khoi Hoang",
@@ -27,13 +27,13 @@
     {
       "owner": "khoih.prog",
       "name": "WiFiNINA_Generic",
-      "version": ">=1.8.0",
+      "version": ">=1.8.10",
       "platforms": ["*"]
     },
     {
       "owner": "khoih-prog",
       "name": "ESP_AT_Lib",
-      "version": ">=1.0.0",
+      "version": ">=1.2.0",
       "platforms": ["*"]
     },
     {
