@@ -61,7 +61,18 @@ void setup()
 
   pinMode(led, OUTPUT);      // set the LED pin mode
 
-  #if USE_WIFI_NINA
+#if WIFI_USING_ESP_AT
+
+  // initialize serial for ESP module
+  EspSerial.begin(115200);
+  // initialize ESP module
+  WiFi.init(&EspSerial);
+
+  Serial.println(F("WiFi shield init done"));
+  
+#endif    
+
+#if USE_WIFI_NINA
   if (WiFi.status() == WL_NO_MODULE)
 #else
   if (WiFi.status() == WL_NO_SHIELD)

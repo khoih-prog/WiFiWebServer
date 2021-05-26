@@ -18,23 +18,54 @@
 #define _WIFI_LOGLEVEL_             3
 #define _WIFININA_LOGLEVEL_         3
 
-#define USE_WIFI_NINA         true
-//#define USE_WIFI_NINA         false
+#if (ESP32)
 
-// If not USE_WIFI_NINA, you can USE_WIFI_CUSTOM, then include the custom WiFi library here 
-#define USE_WIFI_CUSTOM       true
+  #define USE_WIFI_NINA         false
 
-#if (!USE_WIFI_NINA && USE_WIFI_CUSTOM)
-  //#include "WiFi_XYZ.h"
-  #include "WiFiEspAT.h"
-#endif
+  // To use the default WiFi library here 
+  #define USE_WIFI_CUSTOM       false
 
-#if defined(ARDUINO_SAMD_MKR1000)
-  #if defined(USE_WIFI_NINA)
-    #undef USE_WIFI_NINA
-  #endif
+#elif (ESP8266)
+
+  #define USE_WIFI_NINA         false
+
+  // To use the default WiFi library here 
+  #define USE_WIFI_CUSTOM       true
+
+#elif ( defined(ARDUINO_SAMD_MKR1000)  || defined(ARDUINO_SAMD_MKRWIFI1010) )
+
   #define USE_WIFI_NINA         false
   #define USE_WIFI101           true
+  #define USE_WIFI_CUSTOM       false
+
+#elif ( defined(ARDUINO_NANO_RP2040_CONNECT) || defined(ARDUINO_SAMD_NANO_33_IOT) )
+
+  #define USE_WIFI_NINA         true
+  #define USE_WIFI101           false
+  #define USE_WIFI_CUSTOM       false
+
+#else  
+
+  #define USE_WIFI_NINA         false
+  #define USE_WIFI101           false
+  
+  // If not USE_WIFI_NINA, you can USE_WIFI_CUSTOM, then include the custom WiFi library here 
+  #define USE_WIFI_CUSTOM       true
+
+#endif
+
+#if (!USE_WIFI_NINA && USE_WIFI_CUSTOM)
+  #if (ESP8266)
+    #include "ESP8266WiFi.h"
+  #else
+    //#include "WiFi_XYZ.h"
+    #include "WiFiEspAT.h"
+    #define WIFI_USING_ESP_AT     true
+  #endif
+#endif
+
+#if WIFI_USING_ESP_AT
+  #define EspSerial       Serial1
 #endif
 
 #if USE_WIFI_NINA
@@ -43,6 +74,9 @@
 #elif USE_WIFI101
   #warning Using WiFi101 using WiFi101 Library
   #define SHIELD_TYPE           "WiFi101 using WiFi101 Library"
+#elif (ESP32 || ESP8266)
+  #warning Using ESP WiFi with WiFi Library
+  #define SHIELD_TYPE           "ESP WiFi using WiFi Library"  
 #elif USE_WIFI_CUSTOM
   #warning Using Custom WiFi using Custom WiFi Library
   #define SHIELD_TYPE           "Custom WiFi using Custom WiFi Library"
@@ -290,12 +324,24 @@
     #define BOARD_TYPE  "STM32 Unknown"
   #endif
 
+#elif defined(ESP32)
+  #warning ESP32 board selected
+  #define BOARD_TYPE  "ESP32"
+#elif defined(ESP8266)
+  #warning ESP8266 board selected
+  #define BOARD_TYPE  "ESP8266"
 #else
   #define BOARD_TYPE      "AVR Mega"
 #endif
 
 #ifndef BOARD_NAME
-  #define BOARD_NAME    BOARD_TYPE
+  #if defined(ARDUINO_BOARD)
+    #define BOARD_NAME    ARDUINO_BOARD
+  #elif defined(BOARD_TYPE)
+    #define BOARD_NAME    BOARD_TYPE
+  #else
+    #define BOARD_NAME    "Unknown Board"
+  #endif  
 #endif
 
 #include <WiFiHttpClient.h>

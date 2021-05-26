@@ -47,7 +47,7 @@ const int led = 13;
 
 void handleRoot()
 {
-#define BUFFER_SIZE     400
+#define BUFFER_SIZE     500
   
   digitalWrite(led, 1);
   char temp[BUFFER_SIZE];
@@ -104,8 +104,6 @@ void handleNotFound()
   digitalWrite(led, 0);
 }
 
-String out;
-
 void drawGraph()
 {
   String out;
@@ -119,7 +117,7 @@ void drawGraph()
 
   for (int x = 10; x < 300; x += 10)
   {
-    int y2 = ( rand() + millis() ) % 130;
+    int y2 = ( rand() ) % 130;
     sprintf(temp, "<line x1=\"%d\" y1=\"%d\" x2=\"%d\" y2=\"%d\" stroke-width=\"2\" />\n", x, 140 - y, x + 10, 140 - y2);
     out += temp;
     y = y2;
@@ -143,6 +141,18 @@ void setup(void)
   Serial.println(SHIELD_TYPE); 
   Serial.println(WIFI_WEBSERVER_VERSION);
 
+#if WIFI_USING_ESP_AT
+
+  // initialize serial for ESP module
+  EspSerial.begin(115200);
+  // initialize ESP module
+  WiFi.init(&EspSerial);
+
+  Serial.println(F("WiFi shield init done"));
+  
+#endif  
+
+#if ! (ESP32 || ESP8266)
   // check for the presence of the shield
 #if USE_WIFI_NINA
   if (WiFi.status() == WL_NO_MODULE)
@@ -154,6 +164,7 @@ void setup(void)
     // don't continue
     while (true);
   }
+#endif
 
 #if USE_WIFI_NINA
   String fv = WiFi.firmwareVersion();
@@ -163,14 +174,38 @@ void setup(void)
   }
 #endif
 
+#if (ESP32 || ESP8266)
+    WiFi.mode(WIFI_STA);
+
+    if (WiFi.status() != WL_CONNECTED)
+    {
+      if (strlen(pass) >= 8)
+      {
+        WiFi.begin(ssid, pass);
+      } 
+      else
+      {
+        WiFi.begin(ssid);
+      }
+    }
+    
+    while (WiFi.status() != WL_CONNECTED)
+    {
+      delay(500);
+    }
+
+#else
+
   // attempt to connect to WiFi network
   while ( status != WL_CONNECTED)
   {
+    //delay(500);
     Serial.print(F("Connecting to WPA SSID: "));
     Serial.println(ssid);
     // Connect to WPA/WPA2 network
     status = WiFi.begin(ssid, pass);
   }
+#endif
 
   server.on(F("/"), handleRoot);
   server.on(F("/test.svg"), drawGraph);

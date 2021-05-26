@@ -80,11 +80,22 @@ void setup(void)
   Serial.begin(115200);
   while (!Serial);
 
-  Serial.print(F("\nStarting Hell on "));
+  Serial.print(F("\nStarting HelloServer on "));
   Serial.print(BOARD_NAME);
   Serial.print(F(" with "));
   Serial.println(SHIELD_TYPE); 
   Serial.println(WIFI_WEBSERVER_VERSION);
+
+#if WIFI_USING_ESP_AT
+
+  // initialize serial for ESP module
+  EspSerial.begin(115200);
+  // initialize ESP module
+  WiFi.init(&EspSerial);
+
+  Serial.println(F("WiFi shield init done"));
+  
+#endif
 
   // check for the presence of the shield
 #if USE_WIFI_NINA

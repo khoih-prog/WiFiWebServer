@@ -64,6 +64,18 @@ void setup()
   Serial.println(SHIELD_TYPE); 
   Serial.println(WIFI_WEBSERVER_VERSION);
 
+
+#if WIFI_USING_ESP_AT
+
+  // initialize serial for ESP module
+  EspSerial.begin(115200);
+  // initialize ESP module
+  WiFi.init(&EspSerial);
+
+  Serial.println(F("WiFi shield init done"));
+  
+#endif
+
   // check for the presence of the shield
 #if USE_WIFI_NINA
   if (WiFi.status() == WL_NO_MODULE)
