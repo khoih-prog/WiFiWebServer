@@ -101,6 +101,7 @@
   * [6. MQTTClient_Auth on Arduino SAMD_NANO_33_IOT using WiFiNINA_Generic Library](#6-mqttclient_auth-on-arduino-samd_nano_33_iot-using-wifinina_generic-library)
   * [7. MQTT_ThingStream on Arduino SAMD_NANO_33_IOT using WiFiNINA_Generic Library](#7-mqtt_thingstream-on-arduino-samd_nano_33_iot-using-wifinina_generic-library)
   * [8. WebClientRepeating on RASPBERRY_PI_PICO with Custom WiFi using Custom WiFi Library](#8-webclientrepeating-on-raspberry_pi_pico-with-custom-wifi-using-custom-wifi-library)
+  * [9. AdvancedWebServer on Arduino Nano RP2040 Connect with WiFiNINA using WiFiNINA_Generic Library](#9-advancedwebserver-on-arduino-nano-rp2040-connect-with-wifinina-using-wifinina_generic-library)
 * [Debug](#debug)
 * [Troubleshooting](#troubleshooting)
 * [Releases](#releases)
