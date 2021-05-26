@@ -101,7 +101,6 @@
   * [6. MQTTClient_Auth on Arduino SAMD_NANO_33_IOT using WiFiNINA_Generic Library](#6-mqttclient_auth-on-arduino-samd_nano_33_iot-using-wifinina_generic-library)
   * [7. MQTT_ThingStream on Arduino SAMD_NANO_33_IOT using WiFiNINA_Generic Library](#7-mqtt_thingstream-on-arduino-samd_nano_33_iot-using-wifinina_generic-library)
   * [8. WebClientRepeating on RASPBERRY_PI_PICO with Custom WiFi using Custom WiFi Library](#8-webclientrepeating-on-raspberry_pi_pico-with-custom-wifi-using-custom-wifi-library)
-  WebClientRepeating on RASPBERRY_PI_PICO with Custom WiFi using Custom WiFi Library
 * [Debug](#debug)
 * [Troubleshooting](#troubleshooting)
 * [Releases](#releases)
@@ -186,7 +185,7 @@ and these following WiFi shields/modules:
 1. Add support to **Arduino Nano RP2040 Connect** using [**Arduino mbed OS for Nano boards**](https://github.com/arduino/ArduinoCore-mbed).
 2. Add support to RP2040-based boards, such as **RASPBERRY_PI_PICO, ADAFRUIT_FEATHER_RP2040 and GENERIC_RP2040**, using [**Earle Philhower's arduino-pico** v1.5.1+ core](https://github.com/earlephilhower/arduino-pico).
 3. Add support to RP2040-based boards, such as **RASPBERRY_PI_PICO, ADAFRUIT_FEATHER_RP2040 and GENERIC_RP2040**, using [**Arduino-mbed RP2040** v2.1.0+ core](https://github.com/arduino/ArduinoCore-mbed).
-4. Add to examples the support to ESP32-AT/ESP8266-AT WiFi, using [`WiFiEspAT library v1.3.1+`](https://github.com/jandrassy/WiFiEspAT)
+4. Add to examples the support to ESP32-AT/ESP8266-AT WiFi, using [`WiFiEspAT library`](https://github.com/jandrassy/WiFiEspAT)
 5. Fix bugs
 6. Update `Packages' Patches`
 
