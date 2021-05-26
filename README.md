@@ -1755,6 +1755,140 @@ Accept-Ranges: bytes
 ```
 
 ---
+
+#### 9. AdvancedWebServer on Arduino Nano RP2040 Connect with WiFiNINA using WiFiNINA_Generic Library
+
+The following are debug terminal output and screen shot when running example [**AdvancedWebServer**](examples/AdvancedWebServer) on **Nano RP2040 Connect with WiFiNINA using WiFiNINA_Generic Library**
+
+<p align="center">
+    <img src="https://github.com/khoih-prog/WiFiWebServer/blob/master/pics/AdvancedWebServer_NanoRP2040Connect.png">
+</p>
+
+```
+```
+Starting AdvancedServer on Nano RP2040 Connect with WiFiNINA using WiFiNINA_Generic Library
+WiFiWebServer v1.2.0
+Connecting to WPA SSID: HueNet1
+HTTP server started @ 192.168.2.153
+H[WIFI] handleClient: New Client
+[WIFI] method:  GET
+[WIFI] url:  /
+[WIFI] search:
+[WIFI] headerName: Host
+[WIFI] headerValue: 192.168.2.153
+[WIFI] headerName: Connection
+[WIFI] headerValue: keep-alive
+[WIFI] headerName: Cache-Control
+[WIFI] headerValue: max-age=0
+[WIFI] headerName: Upgrade-Insecure-Requests
+[WIFI] headerValue: 1
+[WIFI] headerName: DNT
+[WIFI] headerValue: 1
+[WIFI] headerName: User-Agent
+[WIFI] headerValue: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.77 Safari/537.36
+[WIFI] headerName: Accept
+[WIFI] headerValue: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9
+[WIFI] headerName: Referer
+[WIFI] headerValue: http://192.168.2.153/
+[WIFI] headerName: Accept-Encoding
+[WIFI] headerValue: gzip, deflate
+[WIFI] headerName: Accept-Language
+[WIFI] headerValue: en-GB,en-US;q=0.9,en;q=0.8,vi;q=0.7
+[WIFI] args:
+[WIFI] args count:  0
+[WIFI] args:
+[WIFI] args count:  0
+[WIFI] Request: /
+[WIFI] Arguments: 
+[WIFI] Final list of key/value pairs:
+[WIFI] _handleRequest handle
+[WIFI] send1: len =  392
+[WIFI] content =  <html><head><meta http-equiv='refresh' content='5'/><title>Nano RP2040 Connect</title><style>body { background-color: #cccccc; font-family: Arial, Helvetica, Sans-Serif; Color: #000088; }</style></head><body><h1>Hello from Nano RP2040 Connect</h1><h3>running WiFiWebServer</h3><h3>on WiFiNINA using WiFiNINA_Generic Library</h3><p>Uptime: 0 d 00:00:12</p><img src="/test.svg" /></body></html>
+[WIFI] _prepareHeader sendHeader Conn close
+[WIFI] send1: write header =  HTTP/1.1 200 OK
+Content-Type: text/html
+Content-Length: 392
+Connection: close
+
+
+[WIFI] sendContent: Client.write content:  <html><head><meta http-equiv='refresh' content='5'/><title>Nano RP2040 Connect</title><style>body { background-color: #cccccc; font-family: Arial, Helvetica, Sans-Serif; Color: #000088; }</style></head><body><h1>Hello from Nano RP2040 Connect</h1><h3>running WiFiWebServer</h3><h3>on WiFiNINA using WiFiNINA_Generic Library</h3><p>Uptime: 0 d 00:00:12</p><img src="/test.svg" /></body></html>
+[WIFI] _handleRequest OK
+[WIFI] handleClient: Client disconnected
+[WIFI] handleClient: Don't keepCurrentClient
+[WIFI] handleClient: Client disconnected
+[WIFI] handleClient: New Client
+[WIFI] method:  GET
+[WIFI] url:  /test.svg
+[WIFI] search:  
+[WIFI] headerName: Host
+[WIFI] headerValue: 192.168.2.153
+[WIFI] headerName: Connection
+[WIFI] headerValue: keep-alive
+[WIFI] headerName: User-Agent
+[WIFI] headerValue: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.77 Safari/537.36
+[WIFI] headerName: DNT
+[WIFI] headerValue: 1
+[WIFI] headerName: Accept
+[WIFI] headerValue: image/avif,image/webp,image/apng,image/svg+xml,image/*,*/*;q=0.8
+[WIFI] headerName: Referer
+[WIFI] headerValue: http://192.168.2.153/
+[WIFI] headerName: Accept-Encoding
+[WIFI] headerValue: gzip, deflate
+[WIFI] headerName: Accept-Language
+[WIFI] headerValue: en-GB,en-US;q=0.9,en;q=0.8,vi;q=0.7
+[WIFI] args:  
+[WIFI] args count:  0
+[WIFI] args:  
+[WIFI] args count:  0
+[WIFI] Request: /test.svg
+[WIFI] Arguments: 
+[WIFI] Final list of key/value pairs:
+[WIFI] _handleRequest handle
+[WIFI] send1: len =  1954
+[WIFI] content =  <svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="310" height="150">
+<rect width="310" height="150" fill="rgb(250, 230, 210)" stroke-width="3" stroke="rgb(0, 0, 0)" />
+<g stroke="blue">
+<line x1="10" y1="77" x2="20" y2="92" stroke-width="2" />
+<line x1="20" y1="92" x2="30" y2="123" stroke-width="2" />
+<line x1="30" y1="123" x2="40" y2="136" stroke-width="2" />
+<line x1="40" y1="136" x2="50" y2="115" stroke-width="2" />
+<line x1="50" y1="115" x2="60" y2="47" stroke-width="2" />
+<line x1="60" y1="47" x2="70" y2="123" stroke-width="2" />
+<line x1="70" y1="123" x2="80" y2="89" stroke-width="2" />
+<line x1="80" y1="89" x2="90" y2="129" stroke-width="2" />
+<line x1="90" y1="129" x2="100" y2="56" stroke-width="2" />
+<line x1="100" y1="56" x2="110" y2="83" stroke-width="2" />
+<line x1="110" y1="83" x2="120" y2="33" stroke-width="2" />
+<line x1="120" y1="33" x2="130" y2="11" stroke-width="2" />
+<line x1="130" y1="11" x2="140" y2="99" stroke-width="2" />
+<line x1="140" y1="99" x2="150" y2="96" stroke-width="2" />
+<line x1="150" y1="96" x2="160" y2="31" stroke-width="2" />
+<line x1="160" y1="31" x2="170" y2="44" stroke-width="2" />
+<line x1="170" y1="44" x2="180" y2="118" stroke-width="2" />
+<line x1="180" y1="118" x2="190" y2="105" stroke-width="2" />
+<line x1="190" y1="105" x2="200" y2="62" stroke-width="2" />
+<line x1="200" y1="62" x2="210" y2="57" stroke-width="2" />
+<line x1="210" y1="57" x2="220" y2="77" stroke-width="2" />
+<line x1="220" y1="77" x2="230" y2="111" stroke-width="2" />
+<line x1="230" y1="111" x2="240" y2="55" stroke-width="2" />
+<line x1="240" y1="55" x2="250" y2="133" stroke-width="2" />
+<line x1="250" y1="133" x2="260" y2="110" stroke-width="2" />
+<line x1="260" y1="110" x2="270" y2="34" stroke-width="2" />
+<line x1="270" y1="34" x2="280" y2="121" stroke-width="2" />
+<line x1="280" y1="121" x2="290" y2="99" stroke-width="2" />
+<line x1="290" y1="99" x2="300" y2="14" stroke-width="2" />
+</g>
+</svg>
+
+[WIFI] _prepareHeader sendHeader Conn close
+[WIFI] send1: write header =  HTTP/1.1 200 OK
+Content-Type: image/svg+xml
+Content-Length: 1954
+Connection: close
+```
+```
+
+---
 ---
 
 ### Debug
