@@ -12,7 +12,7 @@
   @file       Esp8266WebServer.h
   @author     Ivan Grokhotkov
 
-  Version: 1.2.0
+  Version: 1.3.0
 
   Version Modified By   Date      Comments
   ------- -----------  ---------- -----------
@@ -28,11 +28,12 @@
   1.1.0   K Hoang      17/11/2020 Add basic HTTP and WebSockets Client by merging ArduinoHttpClient
   1.1.1   K Hoang      27/12/2020 Suppress all possible compiler warnings
   1.2.0   K Hoang      26/05/2021 Add support to RP2040-based boards using Arduino-pico and Arduino mbed_rp2040 core
+  1.3.0   K Hoang      14/08/2021 Add support to Adafruit nRF52 core v0.22.0+
  ***************************************************************************************************************************************/
 
 #pragma once
 
-#define WIFI_WEBSERVER_VERSION          "WiFiWebServer v1.2.0"
+#define WIFI_WEBSERVER_VERSION          "WiFiWebServer v1.3.0"
 
 #define WIFI_WEBSERVER_VERSION_MAJOR    1
 #define WIFI_WEBSERVER_VERSION_MINOR    2
@@ -54,14 +55,18 @@
   #warning Use SAMD architecture from WiFiWebServer
 #endif
 
-#if ( defined(NRF52840_FEATHER) || defined(NRF52832_FEATHER) || defined(NRF52_SERIES) || defined(ARDUINO_NRF52_ADAFRUIT) || \
-        defined(NRF52840_FEATHER_SENSE) || defined(NRF52840_ITSYBITSY) || defined(NRF52840_CIRCUITPLAY) || defined(NRF52840_CLUE) || \
-        defined(NRF52840_METRO) || defined(NRF52840_PCA10056) || defined(PARTICLE_XENON) || defined(NINA_B302_ublox) )
+#if (defined(NRF52840_FEATHER) || defined(NRF52832_FEATHER) || defined(NRF52_SERIES) || defined(ARDUINO_NRF52_ADAFRUIT) || \
+     defined(NRF52840_FEATHER_SENSE) || defined(NRF52840_ITSYBITSY) || defined(NRF52840_CIRCUITPLAY) || \
+     defined(NRF52840_CLUE) || defined(NRF52840_METRO) || defined(NRF52840_PCA10056) || defined(PARTICLE_XENON) || \
+     defined(MDBT50Q_RX) || defined(NINA_B302_ublox) || defined(NINA_B112_ublox) )
   #if defined(WIFI_USE_NRF528XX)
     #undef WIFI_USE_NRF528XX
   #endif
   #define WIFI_USE_NRF528XX      true
   #warning Use nFR52 architecture from WiFiWebServer
+  
+  #include <Adafruit_TinyUSB.h>
+
 #endif
 
 #if ( defined(ARDUINO_SAM_DUE) || defined(__SAM3X8E__) )
