@@ -35,6 +35,7 @@
 
 1. Add support to ESP32/ESP8266 to use in some rare use-cases
 2. Update `Packages' Patches`
+3. Split `changelog.md` from `README.md`
 
 ### Releases v1.3.0
 
