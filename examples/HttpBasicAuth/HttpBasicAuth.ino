@@ -41,33 +41,45 @@ void setup()
   
 #endif
 
+#if !(ESP32 || ESP8266)
+  
   // check for the presence of the shield
-#if USE_WIFI_NINA
-  if (WiFi.status() == WL_NO_MODULE)
-#else
-  if (WiFi.status() == WL_NO_SHIELD)
-#endif
-  {
-    Serial.println(F("WiFi shield not present"));
-    // don't continue
-    while (true);
-  }
+  #if USE_WIFI_NINA
+    if (WiFi.status() == WL_NO_MODULE)
+  #else
+    if (WiFi.status() == WL_NO_SHIELD)
+  #endif
+    {
+      Serial.println(F("WiFi shield not present"));
+      // don't continue
+      while (true);
+    }
 
-#if USE_WIFI_NINA
-  String fv = WiFi.firmwareVersion();
-  if (fv < WIFI_FIRMWARE_LATEST_VERSION)
-  {
-    Serial.println(F("Please upgrade the firmware"));
-  }
+  #if USE_WIFI_NINA
+    String fv = WiFi.firmwareVersion();
+    
+    if (fv < WIFI_FIRMWARE_LATEST_VERSION)
+    {
+      Serial.println(F("Please upgrade the firmware"));
+    }
+  #endif
+  
 #endif
 
+  Serial.print(F("Connecting to SSID: "));
+  Serial.println(ssid);
+  
+  status = WiFi.begin(ssid, pass);
+
+  delay(1000);
+   
   // attempt to connect to WiFi network
   while ( status != WL_CONNECTED)
   {
-    Serial.print(F("Connecting to WPA SSID: "));
-    Serial.println(ssid);
+    delay(500);
+        
     // Connect to WPA/WPA2 network
-    status = WiFi.begin(ssid, pass);
+    status = WiFi.status();
   }
 
   server.on(F("/"), []()

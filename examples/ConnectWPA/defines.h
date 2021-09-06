@@ -12,6 +12,10 @@
 #ifndef defines_h
 #define defines_h
 
+#if (ESP32 || ESP8266)
+  #error This code is not intended to run on the ESP8266 or ESP32 platform! Please check your Tools->Board setting.
+#endif
+
 #define DEBUG_WIFI_WEBSERVER_PORT   Serial
 
 // Debug Level from 0 to 4
@@ -346,7 +350,7 @@
 
 #include <WiFiWebServer.h>
 
-char ssid[] = "****";        // your network SSID (name)
-char pass[] = "****";        // your network password
+char ssid[] = "YOUR_SSID";        // your network SSID (name)
+char pass[] = "12345678";        // your network password
 
 #endif    //defines_h
