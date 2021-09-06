@@ -15,7 +15,7 @@
   * [Features](#features)
   * [Currently Supported Boards](#currently-supported-boards)
   * [Currently supported WiFi shields/modules](#currently-supported-wifi-shieldsmodules)
-** [Prerequisites](#prerequisites)
+* [Prerequisites](#prerequisites)
 * [Installation](#installation)
   * [Use Arduino Library Manager](#use-arduino-library-manager)
   * [Manual Install](#manual-install)
@@ -1916,30 +1916,42 @@ If you get compilation errors, more often than not, you may need to install a ne
 ---
 ---
 
-This [WiFiWebServer library](https://github.com/khoih-prog/WiFiWebServer) currently supports these following boards:
+#### Supported Boards
 
-1. SAM DUE
-2. SAMD21
+This [**WiFiWebServer library**](https://github.com/khoih-prog/WiFiWebServer) currently supports these following boards:
+
+ 1. SAM DUE
+
+ 2. SAMD21
 
   - Arduino: ZERO, MKR, NANO_33_IOT, etc.
-  - Adafruit M0: ItsyBitsy M0, Feather M0, Feather M0 Express, Metro M0 Express, Circuit Playground Express, Trinket M0, PIRkey, HalloWing M0, Crickit M0, etc.
+  - Adafruit SAMD21 (M0) : ItsyBitsy M0, Feather M0, Feather M0 Express, Metro M0 Express, Circuit Playground Express, Trinket M0, PIRkey, HalloWing M0, Crickit M0, etc.
   - Seeeduino:  LoRaWAN, Zero, Femto M0, XIAO M0, Wio GPS Board, etc.
   
-3. SAMD51
+ 3. SAMD51
 
-  - Adafruit M4 : Metro M4, Grand Central M4, ItsyBitsy M4, Feather M44 Express, Trellis M4, Metro M4 AirLift lite, MONSTER M4SK Express, Hallowing EM4 xpress, etc.
+  - Adafruit SAMD51 (M4) : Metro M4, Grand Central M4, ItsyBitsy M4, Feather M44 Express, Trellis M4, Metro M4 AirLift lite, MONSTER M4SK Express, Hallowing EM4 xpress, etc.
   - Seeeduino: Wio Terminal, Grove UI Wireless
   
-4. Teensy (4.1, 4.0, 3.6, 3.5, 3,2, 3.1, 3.0, LC)
-5. All STM32F/L/H/G/WB/MP1 with more than 32KB flash memory.
-6. AVR Mega1280, 2560, ADK.
+ 4. Teensy (4.1, 4.0, 3.6, 3.5, 3,2, 3.1, 3.0, LC)
+ 5. All STM32F/L/H/G/WB/MP1 with more than 32KB flash memory.
+ 6. AVR Mega1280, 2560, ADK.
 
-and these following WiFi shields/modules:
+ 7. RP2040-based boards, such as **Nano RP2040 Connect**, using [**Arduino mbed OS for Nano boards**](https://github.com/arduino/ArduinoCore-mbed).
+ 8. RP2040-based boards, such as **RASPBERRY_PI_PICO, ADAFRUIT_FEATHER_RP2040 and GENERIC_RP2040**, using [**Arduino-mbed RP2040** v2.1.0+ core](https://github.com/arduino/ArduinoCore-mbed) or [**Earle Philhower's arduino-pico** core v1.5.1+](https://github.com/earlephilhower/arduino-pico).
 
-1. WiFiNINA
-2. WiFi101
-3. U-Blox W101, W102
-4. ESP8266/ESP32-AT command
+ 9. **ESP32**
+10. **ESP8266**
+
+---
+
+#### Supported WiFi shields/modules
+
+1. WiFiNINA using [`WiFiNINA_Generic library`](https://github.com/khoih-prog/WiFiNINA_Generic)
+2. WiFi101 using [`WiFi101 library`](https://github.com/arduino-libraries/WiFi101)
+3. u-blox W101, W102 using [`WiFiNINA_Generic library`](https://github.com/khoih-prog/WiFiNINA_Generic)
+4. ESP8266-AT command using [`WiFiEspAT library`](https://github.com/jandrassy/WiFiEspAT)
+5. ESP8266/ESP32-AT command using [`ESP_AT_Lib library`](https://github.com/khoih-prog/ESP_AT_Lib)
 
 ---
 
