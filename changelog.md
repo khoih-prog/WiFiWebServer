@@ -12,6 +12,7 @@
 ## Table of Contents
 
 * [Changelog](#changelog)
+  * [Major Releases v1.4.0](#major-releases-v140)
   * [Releases v1.3.1](#releases-v131)
   * [Releases v1.3.0](#releases-v130)
   * [Major Releases v1.2.0](#major-releases-v120)
@@ -30,6 +31,11 @@
 ---
 
 ## Changelog
+
+### Major Releases v1.4.0
+
+1. Add support to **Portenta_H7** using [**Arduino mbed_portenta core**](https://github.com/arduino/ArduinoCore-mbed).
+2. Update `Packages' Patches` for **Portenta_H7**
 
 ### Releases v1.3.1
 

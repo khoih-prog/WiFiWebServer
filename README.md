@@ -35,6 +35,7 @@
   * [8. For RP2040-based boards using Earle Philhower arduino-pico core](#8-for-rp2040-based-boards-using-earle-philhower-arduino-pico-core)
     * [8.1. To use BOARD_NAME](#81-to-use-board_name)
     * [8.2. To avoid compile error relating to microsecondsToClockCycles](#82-to-avoid-compile-error-relating-to-microsecondstoclockcycles)
+  * [9. For Portenta_H7 boards using Arduino IDE in Linux](#9-for-portenta_h7-boards-using-arduino-ide-in-linux)
 * [How to configure to use different WiFi Libraries](#how-to-configure-to-use-different-wifi-libraries) 
   * [1. Modify pin-to-pin connection in WiFiNINA_Generic library](#1-modify-pin-to-pin-connection-in-wifinina_generic-library)
   * [2. How to select which built-in WiFi or shield to use](#2-how-to-select-which-built-in-wifi-or-shield-to-use) 
@@ -92,6 +93,9 @@
   * [8. WebClientRepeating on RASPBERRY_PI_PICO with Custom WiFi using Custom WiFi Library](#8-webclientrepeating-on-raspberry_pi_pico-with-custom-wifi-using-custom-wifi-library)
   * [9. AdvancedWebServer on Arduino Nano RP2040 Connect with WiFiNINA using WiFiNINA_Generic Library](#9-advancedwebserver-on-arduino-nano-rp2040-connect-with-wifinina-using-wifinina_generic-library)
   * [10. SimpleHTTPExample on ESP32_DEV](#10-simplehttpexample-on-esp32_dev)
+  * [11. AdvancedWebServer on PORTENTA_H7_M7 with Portenta_H7 WiFi](#11-advancedwebserver-on-portenta_h7_m7-with-portenta_h7-wifi)
+  * [12. MQTTClient_Auth on ESP32_DEV](#12-mqttclient_auth-on-portenta_h7_m7-with-portenta_h7-wifi)
+  * [13. WebClientRepeating on ESP32_DEV](#13-webclientrepeating-on-portenta_h7_m7-with-portenta_h7-wifi)
 * [Debug](#debug)
 * [Troubleshooting](#troubleshooting)
 * [Releases](#releases)
@@ -110,7 +114,7 @@
 
 #### Features
 
-This [WiFiWebServer library](https://github.com/khoih-prog/WiFiWebServer) is a simple yet complete WebServer library for **AVR, Teensy, SAM DUE, Arduino SAMD21, Adafruit SAMD21/SAMD51, Adafruit nRF52, ESP32/ESP8266, STM32F/L/H/G/WB/MP1, etc. boards, using WiFi modules/shields (WiFiNINA, WiFi101, U-Blox W101, W102, ESP8266/ESP32-AT, etc.)**. 
+This [WiFiWebServer library](https://github.com/khoih-prog/WiFiWebServer) is a simple yet complete WebServer library for **AVR, Portenta_H7, Teensy, SAM DUE, Arduino SAMD21, Adafruit SAMD21/SAMD51, Adafruit nRF52, ESP32/ESP8266, STM32F/L/H/G/WB/MP1, etc. boards, using WiFi modules/shields (WiFiNINA, WiFi101, U-Blox W101, W102, ESP8266/ESP32-AT, etc.)**. 
 
 The functions are similar and compatible to those of [`ESP32 WebServer`](https://github.com/espressif/arduino-esp32/tree/master/libraries/WebServer) and [`ESP8266WebServer`](https://github.com/esp8266/Arduino/tree/master/libraries/ESP8266WebServer) libraries to make life much easier to port sketches from ESP8266/ESP32.
 
@@ -162,6 +166,8 @@ This [**WiFiWebServer library**](https://github.com/khoih-prog/WiFiWebServer) cu
  9. **ESP32**
 10. **ESP8266**
 
+11. **Portenta_H7**
+
 ---
 
 #### Currently supported WiFi shields/modules
@@ -171,6 +177,7 @@ This [**WiFiWebServer library**](https://github.com/khoih-prog/WiFiWebServer) cu
 3. u-blox W101, W102 using [`WiFiNINA_Generic library`](https://github.com/khoih-prog/WiFiNINA_Generic)
 4. ESP8266-AT command using [`WiFiEspAT library`](https://github.com/jandrassy/WiFiEspAT)
 5. ESP8266/ESP32-AT command using [`ESP_AT_Lib library`](https://github.com/khoih-prog/ESP_AT_Lib)
+6. Built-in WiFi of Portenta_H7, ESP32, ESP8266
 
 ----
 ---
@@ -193,7 +200,7 @@ This [**WiFiWebServer library**](https://github.com/khoih-prog/WiFiWebServer) cu
 
 12. [`Earle Philhower's arduino-pico core v1.9.4+`](https://github.com/earlephilhower/arduino-pico) for RP2040-based boards such as **RASPBERRY_PI_PICO, ADAFRUIT_FEATHER_RP2040 and GENERIC_RP2040**, etc. [![GitHub release](https://img.shields.io/github/release/earlephilhower/arduino-pico.svg)](https://github.com/earlephilhower/arduino-pico/releases/latest)
 
-13. [`Arduino mbed_rp2040 core 2.4.1+`](https://github.com/arduino/ArduinoCore-mbed) for Arduino (Use Arduino Board Manager) RP2040-based boards, such as RASPBERRY_PI_PICO. [![GitHub release](https://img.shields.io/github/release/arduino/ArduinoCore-mbed.svg)](https://github.com/arduino/ArduinoCore-mbed/releases/latest)
+13. [`ArduinoCore-mbed mbed_rp2040, mbed_nano, mbed_portenta core 2.4.1+`](https://github.com/arduino/ArduinoCore-mbed) for Arduino (Use Arduino Board Manager) **Portenta_H7, RP2040-based boards, such as Nano_RP2040_Connect, RASPBERRY_PI_PICO**. [![GitHub release](https://img.shields.io/github/release/arduino/ArduinoCore-mbed.svg)](https://github.com/arduino/ArduinoCore-mbed/releases/latest)
 
 14. [`Functional-VLPP library v1.0.2+`](https://github.com/khoih-prog/functional-vlpp) to use server's lambda function. To install. check [![arduino-library-badge](https://www.ardu-badge.com/badge/Functional-Vlpp.svg?)](https://www.ardu-badge.com/Functional-Vlpp)
 15. [`WiFiNINA_Generic library v1.8.13+`](https://github.com/khoih-prog/WiFiNINA_Generic) if using WiFiNINA. To install. check [![arduino-library-badge](https://www.ardu-badge.com/badge/WiFiNINA_Generic.svg?)](https://www.ardu-badge.com/WiFiNINA_Generic).
@@ -419,6 +426,37 @@ This file must be copied to replace:
 - `~/.arduino15/packages/rp2040/hardware/rp2040/x.yy.zz/cores/rp2040/Arduino.h`
 
 With core after v1.5.0, this step is not necessary anymore thanks to the PR [Add defs for compatibility #142](https://github.com/earlephilhower/arduino-pico/pull/142).
+
+
+#### 9. For Portenta_H7 boards using Arduino IDE in Linux
+
+  **To be able to upload firmware to Portenta_H7 using Arduino IDE in Linux (Ubuntu, etc.)**, you have to copy the file [portenta_post_install.sh](Packages_Patches/mbed_portenta/2.4.1) into mbed_portenta directory (~/.arduino15/packages/arduino/hardware/mbed_portenta/2.4.1). 
+  
+  Then run the following command using `sudo`
+  
+```
+$ cd ~/.arduino15/packages/arduino/hardware/mbed_portenta/2.4.1
+$ chmod 755 portenta_post_install.sh
+$ sudo ./portenta_post_install.sh
+```
+
+This will create the file `/etc/udev/rules.d/49-portenta_h7.rules` as follows:
+
+```
+# Portenta H7 bootloader mode UDEV rules
+
+SUBSYSTEMS=="usb", ATTRS{idVendor}=="2341", ATTRS{idProduct}=="035b", GROUP="plugdev", MODE="0666"
+```
+
+Supposing the ArduinoCore-mbed core version is 2.4.1. Now only one file must be copied into the directory:
+
+- `~/.arduino15/packages/arduino/hardware/mbed_portenta/2.4.1/portenta_post_install.sh`
+
+Whenever a new version is installed, remember to copy this files into the new version directory. For example, new version is x.yy.zz
+
+This file must be copied into the directory:
+
+- `~/.arduino15/packages/arduino/hardware/mbed_portenta/x.yy.zz/portenta_post_install.sh`
 
 
 ---
@@ -800,10 +838,8 @@ void setup(void)
   Serial.begin(115200);
   while (!Serial);
 
-  Serial.print(F("\nStarting AdvancedServer on "));
-  Serial.print(BOARD_NAME);
-  Serial.print(F(" with "));
-  Serial.println(SHIELD_TYPE); 
+  Serial.print(F("\nStarting AdvancedWebServer on ")); Serial.print(BOARD_NAME);
+  Serial.print(F(" with ")); Serial.println(SHIELD_TYPE); 
   Serial.println(WIFI_WEBSERVER_VERSION);
 
 #if WIFI_USING_ESP_AT
@@ -902,10 +938,31 @@ void loop(void)
 #define DEBUG_WIFI_WEBSERVER_PORT   Serial
 
 // Debug Level from 0 to 4
-#define _WIFI_LOGLEVEL_             3
+#define _WIFI_LOGLEVEL_             1
 #define _WIFININA_LOGLEVEL_         3
 
-#if (ESP32)
+#if ( defined(ARDUINO_PORTENTA_H7_M7) || defined(ARDUINO_PORTENTA_H7_M4) )
+
+  #if defined(BOARD_NAME)
+    #undef BOARD_NAME
+  #endif
+
+  #if defined(CORE_CM7)
+    #warning Using Portenta H7 M7 core
+    #define BOARD_NAME            "PORTENTA_H7_M7"
+  #else
+    #warning Using Portenta H7 M4 core
+    #define BOARD_NAME            "PORTENTA_H7_M4"
+  #endif
+
+  #define USE_WIFI_PORTENTA_H7  true
+
+  #define USE_WIFI_NINA         false
+
+  // To use the default WiFi library here 
+  #define USE_WIFI_CUSTOM       false
+  
+#elif (ESP32)
 
   #define USE_WIFI_NINA         false
 
@@ -956,7 +1013,10 @@ void loop(void)
   #error WIFI_USING_ESP_AT is not supported for AdvancedWebServer
 #endif
 
-#if USE_WIFI_NINA
+#if USE_WIFI_PORTENTA_H7
+  #warning Using Portenta H7 WiFi
+  #define SHIELD_TYPE           "Portenta_H7 WiFi"
+#elif USE_WIFI_NINA
   #warning Using WiFiNINA using WiFiNINA_Generic Library
   #define SHIELD_TYPE           "WiFiNINA using WiFiNINA_Generic Library"
 #elif USE_WIFI101
@@ -1002,7 +1062,7 @@ void loop(void)
 
 #if ( defined(STM32F0) || defined(STM32F1) || defined(STM32F2) || defined(STM32F3)  ||defined(STM32F4) || defined(STM32F7) || \
        defined(STM32L0) || defined(STM32L1) || defined(STM32L4) || defined(STM32H7)  ||defined(STM32G0) || defined(STM32G4) || \
-       defined(STM32WB) || defined(STM32MP1) )
+       defined(STM32WB) || defined(STM32MP1) ) && ! ( defined(ARDUINO_PORTENTA_H7_M7) || defined(ARDUINO_PORTENTA_H7_M4) )
   #if defined(WIFI_USE_STM32)
     #undef WIFI_USE_STM32
   #endif
@@ -1255,7 +1315,7 @@ The following are debug terminal output and screen shot when running example [**
 
 ```
 Starting AdvancedServer on SAMD_NANO_33_IOT
-WiFiWebServer v1.3.1
+WiFiWebServer v1.4.0
 [NN] ===============================
 [NN] 
 Used/default SPI pinout: 
@@ -1435,7 +1495,7 @@ The terminal output of **SAMD_NANO_33_IOT with WiFiNINA using WiFiNINA_Generic L
 
 ```
 Starting SimpleWebSocket on SAMD_NANO_33_IOT with WiFiNINA using WiFiNINA_Generic Library
-WiFiWebServer v1.3.1
+WiFiWebServer v1.4.0
 Connecting to SSID: HueNet1
 You're connected to the network, IP = 192.168.2.98
 SSID: HueNet1, Signal strength (RSSI):-24 dBm
@@ -1469,7 +1529,7 @@ The terminal output of **SAMD_NANO_33_IOT with WiFiNINA using WiFiNINA_Generic L
 
 ```
 Starting SimpleHTTPExample on SAMD_NANO_33_IOT with WiFiNINA using WiFiNINA_Generic Library
-WiFiWebServer v1.3.1
+WiFiWebServer v1.4.0
 Connecting to SSID: HueNet1
 You're connected to the network, IP = 192.168.2.98
 SSID: HueNet1, Signal strength (RSSI):-21 dBm
@@ -1529,7 +1589,7 @@ The terminal output of **SAMD_NANO_33_IOT with WiFiNINA using WiFiNINA_Generic L
 
 ```
 Starting DweetPost on SAMD_NANO_33_IOT with WiFiNINA using WiFiNINA_Generic Library
-WiFiWebServer v1.3.1
+WiFiWebServer v1.4.0
 Connecting to SSID: HueNet1
 You're connected to the network, IP = 192.168.2.98
 SSID: HueNet1, Signal strength (RSSI):-22 dBm
@@ -1552,7 +1612,7 @@ The terminal output of **SAMD_NANO_33_IOT with WiFiNINA using WiFiNINA_Generic L
 
 ```
 Starting DweetGet on SAMD_NANO_33_IOT with WiFiNINA using WiFiNINA_Generic Library
-WiFiWebServer v1.3.1
+WiFiWebServer v1.4.0
 Connecting to SSID: HueNet1
 You're connected to the network, IP = 192.168.2.98
 SSID: HueNet1, Signal strength (RSSI):-25 dBm
@@ -1582,7 +1642,7 @@ The terminal output of **SAMD_NANO_33_IOT with WiFiNINA using WiFiNINA_Generic L
 
 ```
 Starting MQTTClient_Auth on SAMD_NANO_33_IOT with WiFiNINA using WiFiNINA_Generic Library
-WiFiWebServer v1.3.1
+WiFiWebServer v1.4.0
 Please upgrade the firmware
 Connecting to WPA SSID: HueNet1
 Connected! IP address: 192.168.2.98
@@ -1603,7 +1663,7 @@ The terminal output of **SAMD_NANO_33_IOT with WiFiNINA using WiFiNINA_Generic L
 ```
 Start MQTT_ThingStream on SAMD_NANO_33_IOT
 Starting MQTTClient_Auth on SAMD_NANO_33_IOT with WiFiNINA using WiFiNINA_Generic Library
-WiFiWebServer v1.3.1
+WiFiWebServer v1.4.0
 Please upgrade the firmware
 Connecting to WPA SSID: HueNet1
 Connected! IP address: 192.168.2.98
@@ -1631,7 +1691,7 @@ The terminal output of **RASPBERRY_PI_PICO with Custom WiFi (ESP8266-AT) using C
 
 ```
 Starting WebClientRepeating on RASPBERRY_PI_PICO with Custom WiFi using Custom WiFi Library
-WiFiWebServer v1.3.1
+WiFiWebServer v1.4.0
 WiFi shield init done
 Connecting to SSID: HueNet1
 You're connected to the network, IP = 192.168.2.76
@@ -1704,15 +1764,15 @@ The following are debug terminal output and screen shot when running example [**
 
 ```
 Starting AdvancedServer on Nano RP2040 Connect with WiFiNINA using WiFiNINA_Generic Library
-WiFiWebServer v1.3.1
+WiFiWebServer v1.4.0
 Connecting to WPA SSID: HueNet1
-HTTP server started @ 192.168.2.153
+HTTP server started @ 192.168.2.130
 H[WIFI] handleClient: New Client
 [WIFI] method:  GET
 [WIFI] url:  /
 [WIFI] search:
 [WIFI] headerName: Host
-[WIFI] headerValue: 192.168.2.153
+[WIFI] headerValue: 192.168.2.130
 [WIFI] headerName: Connection
 [WIFI] headerValue: keep-alive
 [WIFI] headerName: Cache-Control
@@ -1726,7 +1786,7 @@ H[WIFI] handleClient: New Client
 [WIFI] headerName: Accept
 [WIFI] headerValue: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9
 [WIFI] headerName: Referer
-[WIFI] headerValue: http://192.168.2.153/
+[WIFI] headerValue: http://192.168.2.130/
 [WIFI] headerName: Accept-Encoding
 [WIFI] headerValue: gzip, deflate
 [WIFI] headerName: Accept-Language
@@ -1758,7 +1818,7 @@ Connection: close
 [WIFI] url:  /test.svg
 [WIFI] search:  
 [WIFI] headerName: Host
-[WIFI] headerValue: 192.168.2.153
+[WIFI] headerValue: 192.168.2.130
 [WIFI] headerName: Connection
 [WIFI] headerValue: keep-alive
 [WIFI] headerName: User-Agent
@@ -1768,7 +1828,7 @@ Connection: close
 [WIFI] headerName: Accept
 [WIFI] headerValue: image/avif,image/webp,image/apng,image/svg+xml,image/*,*/*;q=0.8
 [WIFI] headerName: Referer
-[WIFI] headerValue: http://192.168.2.153/
+[WIFI] headerValue: http://192.168.2.130/
 [WIFI] headerName: Accept-Encoding
 [WIFI] headerValue: gzip, deflate
 [WIFI] headerName: Accept-Language
@@ -1827,8 +1887,6 @@ Connection: close
 
 ---
 
----
-
 #### 10. SimpleHTTPExample on ESP32_DEV
 
 The terminal output of **ESP32_DEV** running [SimpleHTTPExample example](examples/HTTPClient/SimpleHTTPExample) to demonstrate newly-added HTTP Client feature.
@@ -1837,7 +1895,7 @@ The terminal output of **ESP32_DEV** running [SimpleHTTPExample example](example
 
 
 Starting SimpleHTTPExample on ESP32_DEV with ESP WiFi using WiFi Library
-WiFiWebServer v1.3.1
+WiFiWebServer v1.4.0
 Connecting to SSID: HueNet1
 You're connected to the network, IP = 192.168.2.80
 SSID: HueNet1, Signal strength (RSSI):-23 dBm
@@ -1890,7 +1948,113 @@ Got status code: 200
 Content length is: 2263  
 ```
 
+---
 
+
+#### 11. AdvancedWebServer on PORTENTA_H7_M7 with Portenta_H7 WiFi
+
+The following are debug terminal output and screen shot when running example [**AdvancedWebServer**](examples/AdvancedWebServer) on **PORTENTA_H7_M7 with Portenta_H7 WiFi**
+
+<p align="center">
+    <img src="https://github.com/khoih-prog/WiFiWebServer/blob/master/pics/AdvancedWebServer_Portenta_H7.png">
+</p>
+
+
+```
+Starting AdvancedServer on PORTENTA_H7_M7 with Portenta_H7 WiFi
+WiFiWebServer v1.4.0
+Connecting to WPA SSID: HueNet1
+HTTP server started @ 192.168.2.130
+```
+
+---
+
+#### 12. MQTTClient_Auth on PORTENTA_H7_M7 with Portenta_H7 WiFi
+
+The terminal output of **PORTENTA_H7_M7 with Portenta_H7 WiFi** running [MQTTClient_Auth example](examples/MQTTClient_Auth) to demonstrate MQTT Client feature.
+
+
+```
+Starting MQTTClient_Auth on PORTENTA_H7_M7 with Portenta_H7 WiFi
+WiFiWebServer v1.4.0
+Connecting to SSID: HueNet1
+Connected! IP address: 192.168.2.130
+Attempting MQTT connection to broker.emqx.io...connected
+Message Send : MQTT_Pub => Hello from MQTTClient_Auth on PORTENTA_H7_M7 with Portenta_H7 WiFi
+Message arrived [MQTT_Pub] Hello from MQTTClient_Auth on PORTENTA_H7_M7 with Portenta_H7 WiFi
+Message Send : MQTT_Pub => Hello from MQTTClient_Auth on PORTENTA_H7_M7 with Portenta_H7 WiFi
+Message arrived [MQTT_Pub] Hello from MQTTClient_Auth on PORTENTA_H7_M7 with Portenta_H7 WiFi
+```
+
+---
+
+
+#### 13. WebClientRepeating on PORTENTA_H7_M7 with Portenta_H7 WiFi
+
+The terminal output of **PORTENTA_H7_M7 with Portenta_H7 WiFi** running [WebClientRepeating example](examples/WebClientRepeating).
+
+
+```
+Starting WebClientRepeating on PORTENTA_H7_M7 with Portenta_H7 WiFi
+WiFiWebServer v1.4.0
+Connecting to SSID: HueNet1
+You're connected to the network, IP = 192.168.2.130
+SSID: HueNet1, Signal strength (RSSI):-33 dBm
+
+Connecting...
+HTTP/1.1 200 OK
+Server: nginx/1.4.2
+Date: Wed, 08 Sep 2021 01:29:41 GMT
+Content-Type: text/plain
+Content-Length: 2263
+Last-Modified: Wed, 02 Oct 2013 13:46:47 GMT
+Connection: close
+Vary: Accept-Encoding
+ETag: "524c23c7-8d7"
+Accept-Ranges: bytes
+
+
+           `:;;;,`                      .:;;:.           
+        .;;;;;;;;;;;`                :;;;;;;;;;;:     TM 
+      `;;;;;;;;;;;;;;;`            :;;;;;;;;;;;;;;;      
+     :;;;;;;;;;;;;;;;;;;         `;;;;;;;;;;;;;;;;;;     
+    ;;;;;;;;;;;;;;;;;;;;;       .;;;;;;;;;;;;;;;;;;;;    
+   ;;;;;;;;:`   `;;;;;;;;;     ,;;;;;;;;.`   .;;;;;;;;   
+  .;;;;;;,         :;;;;;;;   .;;;;;;;          ;;;;;;;  
+  ;;;;;;             ;;;;;;;  ;;;;;;,            ;;;;;;. 
+ ,;;;;;               ;;;;;;.;;;;;;`              ;;;;;; 
+ ;;;;;.                ;;;;;;;;;;;`      ```       ;;;;;`
+ ;;;;;                  ;;;;;;;;;,       ;;;       .;;;;;
+`;;;;:                  `;;;;;;;;        ;;;        ;;;;;
+,;;;;`    `,,,,,,,,      ;;;;;;;      .,,;;;,,,     ;;;;;
+:;;;;`    .;;;;;;;;       ;;;;;,      :;;;;;;;;     ;;;;;
+:;;;;`    .;;;;;;;;      `;;;;;;      :;;;;;;;;     ;;;;;
+.;;;;.                   ;;;;;;;.        ;;;        ;;;;;
+ ;;;;;                  ;;;;;;;;;        ;;;        ;;;;;
+ ;;;;;                 .;;;;;;;;;;       ;;;       ;;;;;,
+ ;;;;;;               `;;;;;;;;;;;;                ;;;;; 
+ `;;;;;,             .;;;;;; ;;;;;;;              ;;;;;; 
+  ;;;;;;:           :;;;;;;.  ;;;;;;;            ;;;;;;  
+   ;;;;;;;`       .;;;;;;;,    ;;;;;;;;        ;;;;;;;:  
+    ;;;;;;;;;:,:;;;;;;;;;:      ;;;;;;;;;;:,;;;;;;;;;;   
+    `;;;;;;;;;;;;;;;;;;;.        ;;;;;;;;;;;;;;;;;;;;    
+      ;;;;;;;;;;;;;;;;;           :;;;;;;;;;;;;;;;;:     
+       ,;;;;;;;;;;;;;,              ;;;;;;;;;;;;;;       
+         .;;;;;;;;;`                  ,;;;;;;;;:         
+                                                         
+                                                         
+                                                         
+                                                         
+    ;;;   ;;;;;`  ;;;;:  .;;  ;; ,;;;;;, ;;. `;,  ;;;;   
+    ;;;   ;;:;;;  ;;;;;; .;;  ;; ,;;;;;: ;;; `;, ;;;:;;  
+   ,;:;   ;;  ;;  ;;  ;; .;;  ;;   ,;,   ;;;,`;, ;;  ;;  
+   ;; ;:  ;;  ;;  ;;  ;; .;;  ;;   ,;,   ;;;;`;, ;;  ;;. 
+   ;: ;;  ;;;;;:  ;;  ;; .;;  ;;   ,;,   ;;`;;;, ;;  ;;` 
+  ,;;;;;  ;;`;;   ;;  ;; .;;  ;;   ,;,   ;; ;;;, ;;  ;;  
+  ;;  ,;, ;; .;;  ;;;;;:  ;;;;;: ,;;;;;: ;;  ;;, ;;;;;;  
+  ;;   ;; ;;  ;;` ;;;;.   `;;;:  ,;;;;;, ;;  ;;,  ;;;;   
+
+```
 ---
 ---
 
@@ -1943,6 +2107,8 @@ This [**WiFiWebServer library**](https://github.com/khoih-prog/WiFiWebServer) cu
  9. **ESP32**
 10. **ESP8266**
 
+11. **Portenta_H7**
+
 ---
 
 #### Supported WiFi shields/modules
@@ -1952,6 +2118,7 @@ This [**WiFiWebServer library**](https://github.com/khoih-prog/WiFiWebServer) cu
 3. u-blox W101, W102 using [`WiFiNINA_Generic library`](https://github.com/khoih-prog/WiFiNINA_Generic)
 4. ESP8266-AT command using [`WiFiEspAT library`](https://github.com/jandrassy/WiFiEspAT)
 5. ESP8266/ESP32-AT command using [`ESP_AT_Lib library`](https://github.com/khoih-prog/ESP_AT_Lib)
+6. Built-in WiFi of Portenta_H7, ESP32, ESP8266
 
 ---
 
@@ -1992,7 +2159,9 @@ Submit issues to: [WiFiWebServer issues](https://github.com/khoih-prog/WiFiWebSe
 10. Add **High-level HTTP (GET, POST, PUT, PATCH, DELETE) and WebSocket Client**
 11. Add support to **Arduino Nano RP2040 Connect** using [**Arduino mbed OS for Nano boards**](https://github.com/arduino/ArduinoCore-mbed).
 12. Add support to RP2040-based boards, such as **RASPBERRY_PI_PICO, ADAFRUIT_FEATHER_RP2040 and GENERIC_RP2040**, using [**Earle Philhower's arduino-pico** core](https://github.com/earlephilhower/arduino-pico).
-13. Add support to RP2040-based boards, such as **RASPBERRY_PI_PICO, ADAFRUIT_FEATHER_RP2040 and GENERIC_RP2040**, using [**Arduino-mbed RP2040** core](https://github.com/arduino/ArduinoCore-mbed).
+13. Add support to RP2040-based boards, such as **RASPBERRY_PI_PICO, ADAFRUIT_FEATHER_RP2040 and GENERIC_RP2040**, using [**Arduino-mbed mbed_rp2040** core](https://github.com/arduino/ArduinoCore-mbed).
+14. Add support to **Portenta_H7 boards**, using [**Arduino-mbed mbed_portenta** core](https://github.com/arduino/ArduinoCore-mbed).
+
 
 ---
 ---

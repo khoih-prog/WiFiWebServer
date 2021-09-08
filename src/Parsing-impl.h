@@ -12,7 +12,7 @@
   @file       Esp8266WebServer.h
   @author     Ivan Grokhotkov
 
-  Version: 1.3.1
+  Version: 1.4.0
 
   Version Modified By   Date      Comments
   ------- -----------  ---------- -----------
@@ -30,6 +30,7 @@
   1.2.0   K Hoang      26/05/2021 Add support to RP2040-based boards using Arduino-pico and Arduino mbed_rp2040 core
   1.3.0   K Hoang      14/08/2021 Add support to Adafruit nRF52 core v0.22.0+
   1.3.1   K Hoang      06/09/2021 Add support to ESP32/ESP8266 to use in some rare use-cases
+  1.4.0   K Hoang      07/09/2021 Add support to Portenta H7
  ***************************************************************************************************************************************/
 
 #pragma once
@@ -74,6 +75,8 @@ static bool readBytesWithTimeout(WiFiClient& client, size_t maxLength, String& d
 }
 
 #else
+
+#if !WIFI_USE_PORTENTA_H7
 
 static char* readBytesWithTimeout(WiFiClient& client, size_t maxLength, size_t& dataLength, int timeout_ms)
 {
@@ -122,8 +125,9 @@ static char* readBytesWithTimeout(WiFiClient& client, size_t maxLength, size_t& 
 
   return buf;
 }
+#endif    // #if !WIFI_USE_PORTENTA_H7
 
-#endif
+#endif    // #if USE_NEW_WEBSERVER_VERSION
 
 bool WiFiWebServer::_parseRequest(WiFiClient& client)
 {

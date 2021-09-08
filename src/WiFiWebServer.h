@@ -12,7 +12,7 @@
   @file       Esp8266WebServer.h
   @author     Ivan Grokhotkov
 
-  Version: 1.3.1
+  Version: 1.4.0
 
   Version Modified By   Date      Comments
   ------- -----------  ---------- -----------
@@ -30,19 +30,34 @@
   1.2.0   K Hoang      26/05/2021 Add support to RP2040-based boards using Arduino-pico and Arduino mbed_rp2040 core
   1.3.0   K Hoang      14/08/2021 Add support to Adafruit nRF52 core v0.22.0+
   1.3.1   K Hoang      06/09/2021 Add support to ESP32/ESP8266 to use in some rare use-cases
+  1.4.0   K Hoang      07/09/2021 Add support to Portenta H7
  ***************************************************************************************************************************************/
 
 #pragma once
 
-#define WIFI_WEBSERVER_VERSION          "WiFiWebServer v1.3.1"
+#define WIFI_WEBSERVER_VERSION          "WiFiWebServer v1.4.0"
 
 #define WIFI_WEBSERVER_VERSION_MAJOR    1
-#define WIFI_WEBSERVER_VERSION_MINOR    2
+#define WIFI_WEBSERVER_VERSION_MINOR    4
 #define WIFI_WEBSERVER_VERSION_PATCH    0
 
-#define WEBSOCKETS2_GENERIC_VERSION_INT      1002000
+#define WEBSOCKETS2_GENERIC_VERSION_INT      1004000
 
 #define USE_NEW_WEBSERVER_VERSION     true
+
+#if ( defined(ARDUINO_PORTENTA_H7_M7) || defined(ARDUINO_PORTENTA_H7_M4) )
+  #if defined(WIFI_USE_PORTENTA_H7)
+    #undef WIFI_USE_PORTENTA_H7
+  #endif
+  #define WIFI_USE_PORTENTA_H7        true
+  
+  #if defined(USE_NEW_WEBSERVER_VERSION)
+    #undef USE_NEW_WEBSERVER_VERSION
+  #endif
+  #define USE_NEW_WEBSERVER_VERSION   false
+  
+  #warning Use mbed-portenta architecture for PORTENTA_H7 from WiFiWebServer
+#endif
 
 #if    ( defined(ARDUINO_SAMD_ZERO) || defined(ARDUINO_SAMD_MKR1000) || defined(ARDUINO_SAMD_MKRWIFI1010) \
       || defined(ARDUINO_SAMD_NANO_33_IOT) || defined(ARDUINO_SAMD_MKRFox1200) || defined(ARDUINO_SAMD_MKRWAN1300) || defined(ARDUINO_SAMD_MKRWAN1310) \
@@ -80,7 +95,7 @@
 
 #if ( defined(STM32F0) || defined(STM32F1) || defined(STM32F2) || defined(STM32F3)  ||defined(STM32F4) || defined(STM32F7) || \
        defined(STM32L0) || defined(STM32L1) || defined(STM32L4) || defined(STM32H7)  ||defined(STM32G0) || defined(STM32G4) || \
-       defined(STM32WB) || defined(STM32MP1) )
+       defined(STM32WB) || defined(STM32MP1) ) && !( defined(ARDUINO_PORTENTA_H7_M7) || defined(ARDUINO_PORTENTA_H7_M4) )
   #warning STM32F/L/H/G/WB/MP1 board selected
 
   #if defined(WIFI_USE_STM32)
@@ -105,7 +120,7 @@
 #include <functional-vlpp.h>
 
 #if !defined(USE_WIFI_NINA)
-#define USE_WIFI_NINA     true
+  #define USE_WIFI_NINA     true
 #endif
 
 // Modify to use new WiFiNINA_Generic library to support boards besides Nano-33 IoT, MKRWiFi1010, Adafruit MetroM4, etc.

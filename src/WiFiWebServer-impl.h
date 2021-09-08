@@ -12,7 +12,7 @@
   @file       Esp8266WebServer.h
   @author     Ivan Grokhotkov
 
-  Version: 1.3.1
+  Version: 1.4.0
 
   Version Modified By   Date      Comments
   ------- -----------  ---------- -----------
@@ -30,6 +30,7 @@
   1.2.0   K Hoang      26/05/2021 Add support to RP2040-based boards using Arduino-pico and Arduino mbed_rp2040 core
   1.3.0   K Hoang      14/08/2021 Add support to Adafruit nRF52 core v0.22.0+
   1.3.1   K Hoang      06/09/2021 Add support to ESP32/ESP8266 to use in some rare use-cases
+  1.4.0   K Hoang      07/09/2021 Add support to Portenta H7
  ***************************************************************************************************************************************/
 
 #pragma once
@@ -231,7 +232,8 @@ void WiFiWebServer::handleClient()
         }
       } 
       else 
-      { // !_currentClient.available()
+      { 
+        // !_currentClient.available()
         if (millis() - _statusChange <= HTTP_MAX_DATA_WAIT) 
         {
           keepCurrentClient = true;
@@ -271,6 +273,7 @@ void WiFiWebServer::handleClient()
  
 #else
 
+// KH, rewritten for Portenta H7 from v1.4.0
 void WiFiWebServer::handleClient() 
 {
   if (_currentStatus == HC_NONE) 
@@ -291,26 +294,27 @@ void WiFiWebServer::handleClient()
   
   if (!_currentClient.connected()) 
   {
-    _currentClient = WiFiClient();
     _currentStatus = HC_NONE;
-    return;
+    
+    goto stopClient;
   }
 
   // Wait for data from client to become available
   if (_currentStatus == HC_WAIT_READ) 
   {
-    WS_LOGDEBUG(F("handleClient: _currentStatus = HC_WAIT_READ"));
+    //WS_LOGDEBUG(F("handleClient: _currentStatus = HC_WAIT_READ"));
     
     if (!_currentClient.available()) 
     {
-      WS_LOGDEBUG(F("handleClient: Client not available"));
-      
+      //WS_LOGDEBUG(F("handleClient: Client not available"));
+            
       if (millis() - _statusChange > HTTP_MAX_DATA_WAIT) 
       {
         WS_LOGDEBUG(F("handleClient: HTTP_MAX_DATA_WAIT Timeout"));
 
-        _currentClient = WiFiClient();
         _currentStatus = HC_NONE;
+        
+        goto stopClient;
       }
       
       yield();
@@ -323,9 +327,9 @@ void WiFiWebServer::handleClient()
     {
       WS_LOGDEBUG(F("handleClient: Can't parse request"));
 
-      _currentClient = WiFiClient();
       _currentStatus = HC_NONE;
-      return;
+      
+      goto stopClient;
     }
 
     _currentClient.setTimeout(HTTP_MAX_SEND_WAIT);
@@ -337,10 +341,10 @@ void WiFiWebServer::handleClient()
     if (!_currentClient.connected()) 
     {
       WS_LOGINFO(F("handleClient: Connection closed"));
-
-      _currentClient = WiFiClient();
+     
       _currentStatus = HC_NONE;
-      return;
+            
+      goto stopClient;
     } 
     else 
     {
@@ -354,7 +358,6 @@ void WiFiWebServer::handleClient()
   {
     if (millis() - _statusChange > HTTP_MAX_CLOSE_WAIT) 
     {
-      _currentClient = WiFiClient();
       _currentStatus = HC_NONE;
 
       WS_LOGDEBUG(F("handleClient: HTTP_MAX_CLOSE_WAIT Timeout"));
@@ -367,6 +370,8 @@ void WiFiWebServer::handleClient()
       return;
     }
   }
+  
+stopClient:
   
   // KH, fix bug relating to New NINA FW 1.4.0. Have to close the connection
   _currentClient.stop();
@@ -807,6 +812,8 @@ void WiFiWebServer::_handleRequest()
 
   if (!handled && _notFoundHandler) 
   {
+    WS_LOGDEBUG(F("_handleRequest: Call _notFoundHandler"));
+    
     _notFoundHandler();
     handled = true;
   }
@@ -815,18 +822,28 @@ void WiFiWebServer::_handleRequest()
   {
     using namespace mime;
     
+    WS_LOGDEBUG(F("_handleRequest: Send Not found"));
+    
     send(404, mimeTable[html].mimeType, String("Not found: ") + _currentUri);
     handled = true;
   }
   
   if (handled) 
   {
+    WS_LOGDEBUG(F("_handleRequest: _finalizeResponse"));
+    
     _finalizeResponse();
   }
-  
+
+#if WIFI_USE_PORTENTA_H7
+  WS_LOGDEBUG(F("_handleRequest: Clear _currentUri"));
+  //_currentUri = String();
+  WS_LOGDEBUG(F("_handleRequest: Done Clear _currentUri"));
+#else
   // RM & KH fix
   //_currentUri = String();
   _currentUri = *(new String());
+#endif  
 }
 
 void WiFiWebServer::_finalizeResponse() 
