@@ -27,6 +27,7 @@ int port = 8080;
 
 WiFiClient      client;
 WiFiHttpClient  httpClient(client, serverAddress);
+//WiFiHttpClient  httpClient(client, serverAddress, port);
 
 int status = WL_IDLE_STATUS;     // the Wifi radio's status
 
@@ -52,10 +53,8 @@ void setup()
   Serial.begin(115200);
   while (!Serial);
 
-  Serial.print(F("\nStarting BasicAuthGet on "));
-  Serial.print(BOARD_NAME);
-  Serial.print(F(" with "));
-  Serial.println(SHIELD_TYPE); 
+  Serial.print(F("\nStarting BasicAuthGet on ")); Serial.print(BOARD_NAME);
+  Serial.print(F(" with ")); Serial.println(SHIELD_TYPE); 
   Serial.println(WIFI_WEBSERVER_VERSION);
 
 #if WIFI_USING_ESP_AT

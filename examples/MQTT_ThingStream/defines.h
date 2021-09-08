@@ -15,10 +15,31 @@
 #define DEBUG_WIFI_WEBSERVER_PORT   Serial
 
 // Debug Level from 0 to 4
-#define _WIFI_LOGLEVEL_             3
+#define _WIFI_LOGLEVEL_             4
 #define _WIFININA_LOGLEVEL_         3
 
-#if (ESP32)
+#if ( defined(ARDUINO_PORTENTA_H7_M7) || defined(ARDUINO_PORTENTA_H7_M4) )
+
+  #if defined(BOARD_NAME)
+    #undef BOARD_NAME
+  #endif
+
+  #if defined(CORE_CM7)
+    #warning Using Portenta H7 M7 core
+    #define BOARD_NAME            "PORTENTA_H7_M7"
+  #else
+    #warning Using Portenta H7 M4 core
+    #define BOARD_NAME            "PORTENTA_H7_M4"
+  #endif
+
+  #define USE_WIFI_PORTENTA_H7  true
+
+  #define USE_WIFI_NINA         false
+
+  // To use the default WiFi library here 
+  #define USE_WIFI_CUSTOM       false
+  
+#elif (ESP32)
 
   #define USE_WIFI_NINA         false
 
@@ -66,9 +87,13 @@
 
 #if WIFI_USING_ESP_AT
   #define EspSerial       Serial1
+  #error WIFI_USING_ESP_AT is not supported for AdvancedWebServer
 #endif
 
-#if USE_WIFI_NINA
+#if USE_WIFI_PORTENTA_H7
+  #warning Using Portenta H7 WiFi
+  #define SHIELD_TYPE           "Portenta_H7 WiFi"
+#elif USE_WIFI_NINA
   #warning Using WiFiNINA using WiFiNINA_Generic Library
   #define SHIELD_TYPE           "WiFiNINA using WiFiNINA_Generic Library"
 #elif USE_WIFI101
@@ -114,7 +139,7 @@
 
 #if ( defined(STM32F0) || defined(STM32F1) || defined(STM32F2) || defined(STM32F3)  ||defined(STM32F4) || defined(STM32F7) || \
        defined(STM32L0) || defined(STM32L1) || defined(STM32L4) || defined(STM32H7)  ||defined(STM32G0) || defined(STM32G4) || \
-       defined(STM32WB) || defined(STM32MP1) )
+       defined(STM32WB) || defined(STM32MP1) ) && ! ( defined(ARDUINO_PORTENTA_H7_M7) || defined(ARDUINO_PORTENTA_H7_M4) )
   #if defined(WIFI_USE_STM32)
     #undef WIFI_USE_STM32
   #endif

@@ -17,17 +17,15 @@ int reqCount = 0;                // number of requests received
 WiFiWebServer server(80);
 
 const char* www_username = "admin";
-const char* www_password = "wifinina";
+const char* www_password = "http_auth";
 
 void setup()
 {
   Serial.begin(115200);
   while (!Serial);
 
-  Serial.print(F("\nStarting HTTPBasicAuth on "));
-  Serial.print(BOARD_NAME);
-  Serial.print(F(" with "));
-  Serial.println(SHIELD_TYPE); 
+  Serial.print(F("\nStarting HTTPBasicAuth on ")); Serial.print(BOARD_NAME);
+  Serial.print(F(" with ")); Serial.println(SHIELD_TYPE); 
   Serial.println(WIFI_WEBSERVER_VERSION);
 
 #if WIFI_USING_ESP_AT

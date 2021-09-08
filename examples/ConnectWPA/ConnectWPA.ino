@@ -21,13 +21,17 @@ void printWifiData()
   Serial.print(F("IP Address: "));
   Serial.println(ip);
 
+#if !USE_WIFI_PORTENTA_H7
   // print your MAC address
   byte mac[6];
-  WiFi.macAddress(mac);
+  uint8_t mac[6];
+  
+  WiFi.macAddress((uint8_t *) mac);
   char buf[20];
   sprintf(buf, "%02X:%02X:%02X:%02X:%02X:%02X", mac[5], mac[4], mac[3], mac[2], mac[1], mac[0]);
   Serial.print(F("MAC address: "));
   Serial.println(buf);
+#endif  
 }
 
 void printCurrentNet()
@@ -55,10 +59,8 @@ void setup()
   Serial.begin(115200);
   while (!Serial);
 
-  Serial.print(F("\nStarting ConnectWPA on "));
-  Serial.print(BOARD_NAME);
-  Serial.print(F(" with "));
-  Serial.println(SHIELD_TYPE); 
+  Serial.print(F("\nStarting ConnectWPA on ")); Serial.print(BOARD_NAME);
+  Serial.print(F(" with ")); Serial.println(SHIELD_TYPE); 
   Serial.println(WIFI_WEBSERVER_VERSION);
 
 #if WIFI_USING_ESP_AT

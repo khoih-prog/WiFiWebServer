@@ -119,10 +119,8 @@ void setup(void)
   Serial.begin(115200);
   while (!Serial);
 
-  Serial.print(F("\nStarting POSTServer on "));
-  Serial.print(BOARD_NAME);
-  Serial.print(F(" with "));
-  Serial.println(SHIELD_TYPE); 
+  Serial.print(F("\nStarting PostServer on ")); Serial.print(BOARD_NAME);
+  Serial.print(F(" with ")); Serial.println(SHIELD_TYPE); 
   Serial.println(WIFI_WEBSERVER_VERSION);
 
 #if WIFI_USING_ESP_AT

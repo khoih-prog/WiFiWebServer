@@ -34,7 +34,7 @@ int status = WL_IDLE_STATUS;     // the Wifi radio's status
 const char my_cert[]  = "FIXME";
 const char my_key[]   = "FIXME";
 
-#define USING_THINGSTREAM_IO      false //true
+#define USING_THINGSTREAM_IO      false   //true
 
 #if USING_THINGSTREAM_IO
 
@@ -146,11 +146,8 @@ void setup()
   Serial.begin(115200);
   while (!Serial);
 
-  Serial.print("\nStart MQTT_ThingStream on " + String(BOARD_NAME));
-  Serial.print(F("\nStarting MQTTClient_Auth on "));
-  Serial.print(BOARD_NAME);
-  Serial.print(F(" with "));
-  Serial.println(SHIELD_TYPE); 
+  Serial.print(F("\nStarting MQTT_ThingStream on ")); Serial.print(BOARD_NAME);
+  Serial.print(F(" with ")); Serial.println(SHIELD_TYPE); 
   Serial.println(WIFI_WEBSERVER_VERSION);
 
 #if WIFI_USING_ESP_AT

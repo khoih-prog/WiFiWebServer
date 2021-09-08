@@ -21,6 +21,7 @@
 int status = WL_IDLE_STATUS;     // the Wifi radio's status
 int reqCount = 0;                // number of requests received
 
+#if !USE_WIFI_PORTENTA_H7
 void printMacAddress()
 {
   // get your MAC address
@@ -33,6 +34,7 @@ void printMacAddress()
   Serial.print("MAC address: ");
   Serial.println(buf);
 }
+#endif
 
 void listNetworks()
 {
@@ -108,10 +110,8 @@ void setup()
   Serial.begin(115200);
   while (!Serial);
 
-  Serial.print(F("\nStarting ScanNetworks on "));
-  Serial.print(BOARD_NAME);
-  Serial.print(F(" with "));
-  Serial.println(SHIELD_TYPE); 
+  Serial.print(F("\nStarting ScanNetworks on ")); Serial.print(BOARD_NAME);
+  Serial.print(F(" with ")); Serial.println(SHIELD_TYPE); 
   Serial.println(WIFI_WEBSERVER_VERSION);
 
 #if WIFI_USING_ESP_AT
@@ -169,8 +169,10 @@ void setup()
   Serial.print(F("You're connected to the network, IP = "));
   Serial.println(WiFi.localIP());
 
+#if !USE_WIFI_PORTENTA_H7
   // Print WiFi MAC address
   printMacAddress();
+#endif  
 }
 
 void loop()

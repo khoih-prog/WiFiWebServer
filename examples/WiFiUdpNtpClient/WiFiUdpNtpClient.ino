@@ -58,10 +58,8 @@ void setup()
   Serial.begin(115200);
   while (!Serial);
   
-  Serial.print(F("\nStarting WiFiUdpNTPClient on "));
-  Serial.print(BOARD_NAME);
-  Serial.print(F(" with "));
-  Serial.println(SHIELD_TYPE); 
+  Serial.print(F("\nStarting WiFiUdpNTPClient on ")); Serial.print(BOARD_NAME);
+  Serial.print(F(" with ")); Serial.println(SHIELD_TYPE); 
   Serial.println(WIFI_WEBSERVER_VERSION);
 
 #if WIFI_USING_ESP_AT
@@ -185,7 +183,7 @@ void loop()
 }
 
 // send an NTP request to the time server at the given address
-unsigned long sendNTPpacket(IPAddress& address) 
+void sendNTPpacket(IPAddress& address) 
 {
   // set all bytes in the buffer to 0
   memset(packetBuffer, 0, NTP_PACKET_SIZE);

@@ -31,8 +31,7 @@ int status = WL_IDLE_STATUS;     // the Wifi radio's status
 
 // Update these with values suitable for your network.
 //const char* mqttServer = "broker.example";        // Broker address
-//const char* mqttServer = "broker.emqx.io";        // Broker address
-const char* mqttServer = "broker.shiftr.io";        // Broker address
+const char* mqttServer = "broker.emqx.io";        // Broker address
 
 const char *ID        = "MQTTClient_SSL-Client";  // Name of our device, must be unique
 const char *TOPIC     = "MQTT_Pub";               // Topic to subcribe to
@@ -102,10 +101,8 @@ void setup()
   Serial.begin(115200);
   while (!Serial);
 
-  Serial.print(F("\nStarting MQTTClient_Basic on "));
-  Serial.print(BOARD_NAME);
-  Serial.print(F(" with "));
-  Serial.println(SHIELD_TYPE); 
+  Serial.print(F("\nStarting MQTTClient_Basic on ")); Serial.print(BOARD_NAME);
+  Serial.print(F(" with ")); Serial.println(SHIELD_TYPE); 
   Serial.println(WIFI_WEBSERVER_VERSION);
 
 #if WIFI_USING_ESP_AT
