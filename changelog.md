@@ -12,6 +12,7 @@
 ## Table of Contents
 
 * [Changelog](#changelog)
+  * [Releases v1.4.1](#releases-v141)
   * [Major Releases v1.4.0](#major-releases-v140)
   * [Releases v1.3.1](#releases-v131)
   * [Releases v1.3.0](#releases-v130)
@@ -31,6 +32,11 @@
 ---
 
 ## Changelog
+
+### Releases v1.4.1
+
+1. Change option for PIO `lib_compat_mode` from default `soft` to `strict` to minimize compile error in crosss-platform
+2. Update `Packages' Patches` for many boards
 
 ### Major Releases v1.4.0
 
