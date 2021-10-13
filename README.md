@@ -192,7 +192,7 @@ This [**WiFiWebServer library**](https://github.com/khoih-prog/WiFiWebServer) cu
  6. [`Arduino SAM DUE core v1.6.12+`](https://github.com/arduino/ArduinoCore-sam) for SAM DUE ARM Cortex-M3 boards.
  7. [`Arduino SAMD core 1.8.11+`](https://github.com/arduino/ArduinoCore-samd) for SAMD ARM Cortex-M0+ boards. [![GitHub release](https://img.shields.io/github/release/arduino/ArduinoCore-samd.svg)](https://github.com/arduino/ArduinoCore-samd/releases/latest)
  8. [`Adafruit SAMD core 1.7.5+`](https://github.com/adafruit/ArduinoCore-samd) for SAMD ARM Cortex-M0+ and M4 boards (Nano 33 IoT, etc.). [![GitHub release](https://img.shields.io/github/release/adafruit/ArduinoCore-samd.svg)](https://github.com/adafruit/ArduinoCore-samd/releases/latest)
- 9. [`Seeeduino SAMD core 1.8.1+`](https://github.com/Seeed-Studio/ArduinoCore-samd) for SAMD21/SAMD51 boards (XIAO M0, Wio Terminal, etc.). [![Latest release](https://img.shields.io/github/release/Seeed-Studio/ArduinoCore-samd.svg)](https://github.com/Seeed-Studio/ArduinoCore-samd/releases/latest/)
+ 9. [`Seeeduino SAMD core 1.8.2+`](https://github.com/Seeed-Studio/ArduinoCore-samd) for SAMD21/SAMD51 boards (XIAO M0, Wio Terminal, etc.). [![Latest release](https://img.shields.io/github/release/Seeed-Studio/ArduinoCore-samd.svg)](https://github.com/Seeed-Studio/ArduinoCore-samd/releases/latest/)
  
 10. [`Adafruit nRF52 v1.1.0+`](https://github.com/adafruit/Adafruit_nRF52_Arduino) for nRF52 boards such as Adafruit NRF52840_FEATHER, NRF52832_FEATHER, NRF52840_FEATHER_SENSE, NRF52840_ITSYBITSY, NRF52840_CIRCUITPLAY, NRF52840_CLUE, NRF52840_METRO, NRF52840_PCA10056, PARTICLE_XENON, **NINA_B302_ublox**, etc. [![GitHub release](https://img.shields.io/github/release/adafruit/Adafruit_nRF52_Arduino.svg)](https://github.com/adafruit/Adafruit_nRF52_Arduino/releases/latest)
  
@@ -204,7 +204,7 @@ This [**WiFiWebServer library**](https://github.com/khoih-prog/WiFiWebServer) cu
 
 14. [`Functional-VLPP library v1.0.2+`](https://github.com/khoih-prog/functional-vlpp) to use server's lambda function. To install. check [![arduino-library-badge](https://www.ardu-badge.com/badge/Functional-Vlpp.svg?)](https://www.ardu-badge.com/Functional-Vlpp)
 15. [`WiFiNINA_Generic library v1.8.13+`](https://github.com/khoih-prog/WiFiNINA_Generic) if using WiFiNINA. To install. check [![arduino-library-badge](https://www.ardu-badge.com/badge/WiFiNINA_Generic.svg?)](https://www.ardu-badge.com/WiFiNINA_Generic).
-16. [`ESP_AT_Lib library v1.4.0+`](https://github.com/khoih-prog/ESP_AT_Lib) if using ESP8288/ESP32-AT shields. To install, check [![arduino-library-badge](https://www.ardu-badge.com/badge/ESP_AT_Lib.svg?)](https://www.ardu-badge.com/ESP_AT_Lib).
+16. [`ESP_AT_Lib library v1.4.1+`](https://github.com/khoih-prog/ESP_AT_Lib) if using ESP8288/ESP32-AT shields. To install, check [![arduino-library-badge](https://www.ardu-badge.com/badge/ESP_AT_Lib.svg?)](https://www.ardu-badge.com/ESP_AT_Lib).
 17. [`Modified WiFi101 Library v0.16.1+`](https://github.com/khoih-prog/WiFi101) to use SAMD MKR1000, etc. boards with WiFi101.
 18. [`WiFiEspAT library v1.3.1+`](https://github.com/jandrassy/WiFiEspAT) if using ESP8288/ESP32-AT shields. [![GitHub release](https://img.shields.io/github/release/jandrassy/WiFiEspAT.svg)](https://github.com/jandrassy/WiFiEspAT/releases/latest)
 
@@ -227,7 +227,7 @@ You can also use this link [![arduino-library-badge](https://www.ardu-badge.com/
 
 1. Install [VS Code](https://code.visualstudio.com/)
 2. Install [PlatformIO](https://platformio.org/platformio-ide)
-3. Install [**WiFiWebServer** library](https://platformio.org/lib/show/7152/WiFiWebServer) or [**WiFiWebServer** library](https://platformio.org/lib/show/11453/WiFiWebServer) by using [Library Manager](https://platformio.org/lib/show/7152/WiFiWebServer/installation) or [Library Manager](https://platformio.org/lib/show/11453/WiFiWebServer/installation). Search for **WiFiWebServer** in [Platform.io Author's Libraries](https://platformio.org/lib/search?query=author:%22Khoi%20Hoang%22)
+3. Install [**WiFiWebServer** library](https://platformio.org/lib/show/7152/WiFiWebServer) by using [Library Manager](https://platformio.org/lib/show/7152/WiFiWebServer/installation). Search for **WiFiWebServer** in [Platform.io Author's Libraries](https://platformio.org/lib/search?query=author:%22Khoi%20Hoang%22)
 4. Use included [platformio.ini](platformio/platformio.ini) file from examples to ensure that all dependent libraries will installed automatically. Please visit documentation for the other options and examples at [Project Configuration File](https://docs.platformio.org/page/projectconf.html)
 
 ---
@@ -446,12 +446,12 @@ With core after v1.5.0, this step is not necessary anymore thanks to the PR [Add
 
 #### 9. For Portenta_H7 boards using Arduino IDE in Linux
 
-  **To be able to upload firmware to Portenta_H7 using Arduino IDE in Linux (Ubuntu, etc.)**, you have to copy the file [portenta_post_install.sh](Packages_Patches/arduino/hardware/mbed_portenta/2.4.1/portenta_post_install.sh) into mbed_portenta directory (~/.arduino15/packages/arduino/hardware/mbed_portenta/2.4.1/portenta_post_install.sh). 
+  **To be able to upload firmware to Portenta_H7 using Arduino IDE in Linux (Ubuntu, etc.)**, you have to copy the file [portenta_post_install.sh](Packages_Patches/arduino/hardware/mbed_portenta/2.5.2/portenta_post_install.sh) into mbed_portenta directory (~/.arduino15/packages/arduino/hardware/mbed_portenta/2.5.2/portenta_post_install.sh). 
   
   Then run the following command using `sudo`
   
 ```
-$ cd ~/.arduino15/packages/arduino/hardware/mbed_portenta/2.4.1
+$ cd ~/.arduino15/packages/arduino/hardware/mbed_portenta/2.5.2
 $ chmod 755 portenta_post_install.sh
 $ sudo ./portenta_post_install.sh
 ```
@@ -464,9 +464,9 @@ This will create the file `/etc/udev/rules.d/49-portenta_h7.rules` as follows:
 SUBSYSTEMS=="usb", ATTRS{idVendor}=="2341", ATTRS{idProduct}=="035b", GROUP="plugdev", MODE="0666"
 ```
 
-Supposing the ArduinoCore-mbed core version is 2.4.1. Now only one file must be copied into the directory:
+Supposing the ArduinoCore-mbed core version is 2.5.2. Now only one file must be copied into the directory:
 
-- `~/.arduino15/packages/arduino/hardware/mbed_portenta/2.4.1/portenta_post_install.sh`
+- `~/.arduino15/packages/arduino/hardware/mbed_portenta/2.5.2/portenta_post_install.sh`
 
 Whenever a new version is installed, remember to copy this files into the new version directory. For example, new version is x.yy.zz
 
@@ -1331,7 +1331,7 @@ The following are debug terminal output and screen shot when running example [**
 
 ```
 Starting AdvancedServer on SAMD_NANO_33_IOT
-WiFiWebServer v1.4.1
+WiFiWebServer v1.4.2
 [NN] ===============================
 [NN] 
 Used/default SPI pinout: 
@@ -1511,7 +1511,7 @@ The terminal output of **SAMD_NANO_33_IOT with WiFiNINA using WiFiNINA_Generic L
 
 ```
 Starting SimpleWebSocket on SAMD_NANO_33_IOT with WiFiNINA using WiFiNINA_Generic Library
-WiFiWebServer v1.4.1
+WiFiWebServer v1.4.2
 Connecting to SSID: HueNet1
 You're connected to the network, IP = 192.168.2.98
 SSID: HueNet1, Signal strength (RSSI):-24 dBm
@@ -1545,7 +1545,7 @@ The terminal output of **SAMD_NANO_33_IOT with WiFiNINA using WiFiNINA_Generic L
 
 ```
 Starting SimpleHTTPExample on SAMD_NANO_33_IOT with WiFiNINA using WiFiNINA_Generic Library
-WiFiWebServer v1.4.1
+WiFiWebServer v1.4.2
 Connecting to SSID: HueNet1
 You're connected to the network, IP = 192.168.2.98
 SSID: HueNet1, Signal strength (RSSI):-21 dBm
@@ -1605,7 +1605,7 @@ The terminal output of **SAMD_NANO_33_IOT with WiFiNINA using WiFiNINA_Generic L
 
 ```
 Starting DweetPost on SAMD_NANO_33_IOT with WiFiNINA using WiFiNINA_Generic Library
-WiFiWebServer v1.4.1
+WiFiWebServer v1.4.2
 Connecting to SSID: HueNet1
 You're connected to the network, IP = 192.168.2.98
 SSID: HueNet1, Signal strength (RSSI):-22 dBm
@@ -1628,7 +1628,7 @@ The terminal output of **SAMD_NANO_33_IOT with WiFiNINA using WiFiNINA_Generic L
 
 ```
 Starting DweetGet on SAMD_NANO_33_IOT with WiFiNINA using WiFiNINA_Generic Library
-WiFiWebServer v1.4.1
+WiFiWebServer v1.4.2
 Connecting to SSID: HueNet1
 You're connected to the network, IP = 192.168.2.98
 SSID: HueNet1, Signal strength (RSSI):-25 dBm
@@ -1658,7 +1658,7 @@ The terminal output of **SAMD_NANO_33_IOT with WiFiNINA using WiFiNINA_Generic L
 
 ```
 Starting MQTTClient_Auth on SAMD_NANO_33_IOT with WiFiNINA using WiFiNINA_Generic Library
-WiFiWebServer v1.4.1
+WiFiWebServer v1.4.2
 Please upgrade the firmware
 Connecting to WPA SSID: HueNet1
 Connected! IP address: 192.168.2.98
@@ -1679,7 +1679,7 @@ The terminal output of **SAMD_NANO_33_IOT with WiFiNINA using WiFiNINA_Generic L
 ```
 Start MQTT_ThingStream on SAMD_NANO_33_IOT
 Starting MQTTClient_Auth on SAMD_NANO_33_IOT with WiFiNINA using WiFiNINA_Generic Library
-WiFiWebServer v1.4.1
+WiFiWebServer v1.4.2
 Please upgrade the firmware
 Connecting to WPA SSID: HueNet1
 Connected! IP address: 192.168.2.98
@@ -1707,7 +1707,7 @@ The terminal output of **RASPBERRY_PI_PICO with Custom WiFi (ESP8266-AT) using C
 
 ```
 Starting WebClientRepeating on RASPBERRY_PI_PICO with Custom WiFi using Custom WiFi Library
-WiFiWebServer v1.4.1
+WiFiWebServer v1.4.2
 WiFi shield init done
 Connecting to SSID: HueNet1
 You're connected to the network, IP = 192.168.2.76
@@ -1780,7 +1780,7 @@ The following are debug terminal output and screen shot when running example [**
 
 ```
 Starting AdvancedServer on Nano RP2040 Connect with WiFiNINA using WiFiNINA_Generic Library
-WiFiWebServer v1.4.1
+WiFiWebServer v1.4.2
 Connecting to WPA SSID: HueNet1
 HTTP server started @ 192.168.2.130
 H[WIFI] handleClient: New Client
@@ -1911,7 +1911,7 @@ The terminal output of **ESP32_DEV** running [SimpleHTTPExample example](example
 
 
 Starting SimpleHTTPExample on ESP32_DEV with ESP WiFi using WiFi Library
-WiFiWebServer v1.4.1
+WiFiWebServer v1.4.2
 Connecting to SSID: HueNet1
 You're connected to the network, IP = 192.168.2.80
 SSID: HueNet1, Signal strength (RSSI):-23 dBm
@@ -1978,7 +1978,7 @@ The following are debug terminal output and screen shot when running example [**
 
 ```
 Starting AdvancedServer on PORTENTA_H7_M7 with Portenta_H7 WiFi
-WiFiWebServer v1.4.1
+WiFiWebServer v1.4.2
 Connecting to WPA SSID: HueNet1
 HTTP server started @ 192.168.2.130
 ```
@@ -1992,7 +1992,7 @@ The terminal output of **PORTENTA_H7_M7 with Portenta_H7 WiFi** running [MQTTCli
 
 ```
 Starting MQTTClient_Auth on PORTENTA_H7_M7 with Portenta_H7 WiFi
-WiFiWebServer v1.4.1
+WiFiWebServer v1.4.2
 Connecting to SSID: HueNet1
 Connected! IP address: 192.168.2.130
 Attempting MQTT connection to broker.emqx.io...connected
@@ -2012,7 +2012,7 @@ The terminal output of **PORTENTA_H7_M7 with Portenta_H7 WiFi** running [WebClie
 
 ```
 Starting WebClientRepeating on PORTENTA_H7_M7 with Portenta_H7 WiFi
-WiFiWebServer v1.4.1
+WiFiWebServer v1.4.2
 Connecting to SSID: HueNet1
 You're connected to the network, IP = 192.168.2.130
 SSID: HueNet1, Signal strength (RSSI):-33 dBm
