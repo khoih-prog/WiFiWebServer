@@ -17,6 +17,8 @@ FunctionRequestHandler  KEYWORD1
 StaticRequestHandler  KEYWORD1
 WiFi_RingBuffer  KEYWORD1
 
+WWString  KEYWORD1
+
 #######################
 # WiFiHttpClient
 #######################

@@ -13,7 +13,7 @@
   @file       Esp8266WebServer.h
   @author     Ivan Grokhotkov
 
-  Version: 1.4.2
+  Version: 1.5.0
 
   Version Modified By   Date      Comments
   ------- -----------  ---------- -----------
@@ -34,6 +34,7 @@
   1.4.0   K Hoang      07/09/2021 Add support to Portenta H7
   1.4.1   K Hoang      04/10/2021 Change option for PIO `lib_compat_mode` from default `soft` to `strict`. Update Packages Patches
   1.4.2   K Hoang      12/10/2021 Update `platform.ini` and `library.json`
+  1.5.0   K Hoang      19/12/2021 Reduce usage of Arduino String with std::string
  ***************************************************************************************************************************************/
 
 #include "base64.h"

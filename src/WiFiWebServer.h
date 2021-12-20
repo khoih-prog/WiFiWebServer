@@ -12,7 +12,7 @@
   @file       Esp8266WebServer.h
   @author     Ivan Grokhotkov
 
-  Version: 1.4.2
+  Version: 1.5.0
 
   Version Modified By   Date      Comments
   ------- -----------  ---------- -----------
@@ -33,19 +33,20 @@
   1.4.0   K Hoang      07/09/2021 Add support to Portenta H7
   1.4.1   K Hoang      04/10/2021 Change option for PIO `lib_compat_mode` from default `soft` to `strict`. Update Packages Patches
   1.4.2   K Hoang      12/10/2021 Update `platform.ini` and `library.json`
+  1.5.0   K Hoang      19/12/2021 Reduce usage of Arduino String with std::string
  ***************************************************************************************************************************************/
 
 #pragma once
 
-#define WIFI_WEBSERVER_VERSION          "WiFiWebServer v1.4.2"
+#define WIFI_WEBSERVER_VERSION          "WiFiWebServer v1.5.0"
 
 #define WIFI_WEBSERVER_VERSION_MAJOR    1
-#define WIFI_WEBSERVER_VERSION_MINOR    4
-#define WIFI_WEBSERVER_VERSION_PATCH    2
+#define WIFI_WEBSERVER_VERSION_MINOR    5
+#define WIFI_WEBSERVER_VERSION_PATCH    0
 
-#define WEBSOCKETS2_GENERIC_VERSION_INT      1004002
+#define WIFI_WEBSERVER_VERSION_INT      1005000
 
-#define USE_NEW_WEBSERVER_VERSION     true
+#define USE_NEW_WEBSERVER_VERSION       true
 
 #if ( defined(ARDUINO_PORTENTA_H7_M7) || defined(ARDUINO_PORTENTA_H7_M4) )
   #if defined(WIFI_USE_PORTENTA_H7)
@@ -220,6 +221,37 @@ enum HTTPAuthMethod
 #define CONTENT_LENGTH_UNKNOWN ((size_t) -1)
 #define CONTENT_LENGTH_NOT_SET ((size_t) -2)
 
+/////////////////////////////////////////////////////////////////////////
+
+#define RETURN_NEWLINE       "\r\n"
+
+#include <string>
+#include <Arduino.h>
+
+typedef std::string WWString;
+
+WWString fromString(const String& str)
+{
+  return str.c_str();
+}
+
+WWString fromString(const String&& str)
+{
+  return str.c_str();
+}
+
+String fromWWString(const WWString& str)
+{
+  return str.c_str();
+}
+
+String fromWWString(const WWString&& str)
+{
+  return str.c_str();
+}
+
+/////////////////////////////////////////////////////////////////////////
+
 class WiFiWebServer;
 
 typedef struct 
@@ -235,6 +267,10 @@ typedef struct
 } HTTPUpload;
 
 #include "utility/RequestHandler.h"
+
+#if (ESP32 || ESP8266)
+    #include "FS.h"
+#endif
 
 class WiFiWebServer
 {
@@ -290,17 +326,18 @@ class WiFiWebServer
     }
     #endif
     
-    String arg(String name);            // get request argument value by name
+    String arg(const String& name);     // get request argument value by name
     String arg(int i);                  // get request argument value by number
     String argName(int i);              // get request argument name by number
+    
     int args();                         // get arguments count
-    bool hasArg(String name);           // check if argument exists
+    bool hasArg(const String& name);    // check if argument exists
     void collectHeaders(const char* headerKeys[], const size_t headerKeysCount); // set the request headers to collect
-    String header(String name);         // get request header value by name
+    String header(const String& name);  // get request header value by name
     String header(int i);               // get request header value by number
     String headerName(int i);           // get request header name by number
     int headers();                      // get header count
-    bool hasHeader(String name);        // check if header exists
+    bool hasHeader(const String& name); // check if header exists
 
     String hostHeader();                // get request host header if available or empty String if not
 
@@ -328,6 +365,8 @@ class WiFiWebServer
     //////
 
     static String urlDecode(const String& text);
+    
+#if 0    
 
     template<typename T> size_t streamFile(T &file, const String& contentType) 
     {
@@ -340,8 +379,48 @@ class WiFiWebServer
       }
       
       send(200, contentType, "");
+      
       return _currentClient.write(file);
     }
+#endif
+
+
+    #if !(ESP32 || ESP8266)
+    template<typename T> size_t streamFile(T &file, const String& contentType) 
+    {
+      using namespace mime;
+      setContentLength(file.size());
+      
+      if (String(file.name()).endsWith(mimeTable[gz].endsWith) && contentType != mimeTable[gz].mimeType && contentType != mimeTable[none].mimeType) 
+      {
+        sendHeader("Content-Encoding", "gzip");
+      }
+      
+      send(200, contentType, "");
+      
+      return _currentClient.write(file);
+    }
+    #else
+    void serveStatic(const char* uri, fs::FS& fs, const char* path, const char* cache_header = NULL ); // serve static pages from file system
+
+    // Handle a GET request by sending a response header and stream file content to response body
+      template<typename T>
+      size_t streamFile(T &file, const String& contentType) {
+        return streamFile(file, contentType, HTTP_GET);
+      }
+
+      // Implement GET and HEAD requests for files.
+      // Stream body on HTTP_GET but not on HTTP_HEAD requests.
+      template<typename T>
+      size_t streamFile(T &file, const String& contentType, HTTPMethod requestMethod) {
+        size_t contentLength = 0;
+        _streamFileCore(file.size(), file.name(), contentType);
+        if (requestMethod == HTTP_GET) {
+            contentLength = _customClientWrite(file);
+        }
+        return contentLength;
+      }
+    #endif    
 
   protected:
     void _addRequestHandler(RequestHandler* handler);
@@ -355,8 +434,8 @@ class WiFiWebServer
     int  _parseArgumentsPrivate(const String& data, vl::Func<void(String&,String&,const String&,int,int,int,int)> handler);
     bool _parseForm(WiFiClient& client, const String& boundary, uint32_t len);
     #else
-    void _parseArguments(String data);
-    bool _parseForm(WiFiClient& client, String boundary, uint32_t len);
+    void _parseArguments(const String& data);
+    bool _parseForm(WiFiClient& client, const String& boundary, uint32_t len);
     #endif
     
     static String _responseCodeToString(int code);    
@@ -364,7 +443,29 @@ class WiFiWebServer
     void _uploadWriteByte(uint8_t b);
     uint8_t _uploadReadByte(WiFiClient& client);
     void _prepareHeader(String& response, int code, const char* content_type, size_t contentLength);
+    void _prepareHeader(WWString& response, int code, const char* content_type, size_t contentLength);
     bool _collectHeader(const char* headerName, const char* headerValue);
+    
+    #if (ESP32 || ESP8266)
+    void _streamFileCore(const size_t fileSize, const String & fileName, const String & contentType);
+
+    template<typename T>
+    size_t _customClientWrite(T &file) 
+    {
+      char buffer[256];
+      size_t contentLength = 0;
+      size_t bytesRead = 0;
+
+      // read up to sizeof(buffer) bytes
+      while ((bytesRead = file.readBytes(buffer, sizeof(buffer))) > 0)
+      {
+        _currentClient.write(buffer, bytesRead);
+        contentLength += bytesRead;
+      }
+
+      return contentLength;
+    }
+    #endif
     
     struct RequestArgument 
     {

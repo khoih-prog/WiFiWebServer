@@ -104,6 +104,37 @@ void handleNotFound()
   digitalWrite(led, 0);
 }
 
+#if (defined(WIFI_WEBSERVER_VERSION_INT) && (WIFI_WEBSERVER_VERSION_INT >= 1005000))
+
+WWString initHeader = "<svg xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\" width=\"310\" height=\"150\">\n" \
+                      "<rect width=\"310\" height=\"150\" fill=\"rgb(250, 230, 210)\" stroke-width=\"3\" stroke=\"rgb(0, 0, 0)\" />\n" \
+                      "<g stroke=\"blue\">\n";
+
+void drawGraph()
+{
+  WWString out;
+  
+  out.reserve(3000);
+  char temp[70];
+  
+  out += initHeader;
+  
+  int y = rand() % 130;
+
+  for (int x = 10; x < 300; x += 10)
+  {
+    int y2 = rand() % 130;
+    sprintf(temp, "<line x1=\"%d\" y1=\"%d\" x2=\"%d\" y2=\"%d\" stroke-width=\"2\" />\n", x, 140 - y, x + 10, 140 - y2);
+    out += temp;
+    y = y2;
+  }
+  out += "</g>\n</svg>\n";
+
+  server.send(200, "image/svg+xml", fromWWString(out));
+}
+
+#else
+
 void drawGraph()
 {
   String out;
@@ -127,7 +158,9 @@ void drawGraph()
   server.send(200, F("image/svg+xml"), out);
 }
 
-void setup(void)
+#endif
+
+void setup()
 {
   pinMode(led, OUTPUT);
   digitalWrite(led, 0);
@@ -220,7 +253,39 @@ void setup(void)
   Serial.println(WiFi.localIP());
 }
 
-void loop(void)
+void heartBeatPrint()
+{
+  static int num = 1;
+
+  Serial.print(F("H"));
+
+  if (num == 80)
+  {
+    Serial.println();
+    num = 1;
+  }
+  else if (num++ % 10 == 0)
+  {
+    Serial.print(F(" "));
+  }
+}
+
+void check_status()
+{
+  static unsigned long checkstatus_timeout = 0;
+
+#define STATUS_CHECK_INTERVAL     60000L
+
+  // Send status report every STATUS_REPORT_INTERVAL (60) seconds: we don't need to send updates frequently if there is no status change.
+  if ((millis() > checkstatus_timeout) || (checkstatus_timeout == 0))
+  {
+    heartBeatPrint();
+    checkstatus_timeout = millis() + STATUS_CHECK_INTERVAL;
+  }
+}
+
+void loop()
 {
   server.handleClient();
+  check_status();
 }

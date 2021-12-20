@@ -12,7 +12,7 @@
   @file       Esp8266WebServer.h
   @author     Ivan Grokhotkov
 
-  Version: 1.4.2
+  Version: 1.5.0
 
   Version Modified By   Date      Comments
   ------- -----------  ---------- -----------
@@ -33,6 +33,7 @@
   1.4.0   K Hoang      07/09/2021 Add support to Portenta H7
   1.4.1   K Hoang      04/10/2021 Change option for PIO `lib_compat_mode` from default `soft` to `strict`. Update Packages Patches
   1.4.2   K Hoang      12/10/2021 Update `platform.ini` and `library.json`
+  1.5.0   K Hoang      19/12/2021 Reduce usage of Arduino String with std::string
  ***************************************************************************************************************************************/
 
 #pragma once
@@ -46,6 +47,8 @@
 #include "utility/mimetable.h"
 
 const char * AUTHORIZATION_HEADER = "Authorization";
+
+// New to use WWString
 
 WiFiWebServer::WiFiWebServer(int port)
   : _server(port)
@@ -395,18 +398,24 @@ void WiFiWebServer::stop()
 
 void WiFiWebServer::sendHeader(const String& name, const String& value, bool first) 
 {
-  String headerLine = name;
+  //String headerLine = name;
+  WWString headerLine = fromString(name);
+
   headerLine += ": ";
-  headerLine += value;
-  headerLine += "\r\n";
+  //headerLine += value;
+  headerLine += fromString(value);
+  //headerLine += RETURN_NEWLINE;
+  headerLine += RETURN_NEWLINE;
 
   if (first) 
   {
-    _responseHeaders = headerLine + _responseHeaders;
+    //_responseHeaders = headerLine + _responseHeaders;
+    _responseHeaders = fromWWString(headerLine + fromString(_responseHeaders));
   }
   else 
   {
-    _responseHeaders += headerLine;
+    //_responseHeaders += headerLine;
+    _responseHeaders = fromWWString(fromString(_responseHeaders) + headerLine);
   }
 }
 
@@ -415,13 +424,59 @@ void WiFiWebServer::setContentLength(size_t contentLength)
   _contentLength = contentLength;
 }
 
+
 void WiFiWebServer::_prepareHeader(String& response, int code, const char* content_type, size_t contentLength) 
 {
+#if 1
+  WWString aResponse = fromString(response);
+  
+  aResponse = "HTTP/1." + fromString(String(_currentVersion)) + " ";
+  aResponse += code;
+  aResponse += " ";
+  aResponse += fromString(_responseCodeToString(code));
+  aResponse += RETURN_NEWLINE;
+
+ using namespace mime;
+ 
+  if (!content_type)
+      content_type = mimeTable[html].mimeType;
+
+  sendHeader("Content-Type", content_type, true);
+  
+  if (_contentLength == CONTENT_LENGTH_NOT_SET) 
+  {
+    sendHeader("Content-Length", String(contentLength));
+  } 
+  else if (_contentLength != CONTENT_LENGTH_UNKNOWN) 
+  {
+    sendHeader("Content-Length", String(_contentLength));
+  } 
+  else if (_contentLength == CONTENT_LENGTH_UNKNOWN && _currentVersion) 
+  { 
+    //HTTP/1.1 or above client
+    //let's do chunked
+    _chunked = true;
+    sendHeader("Accept-Ranges", "none");
+    sendHeader("Transfer-Encoding", "chunked");
+  }
+  
+  WS_LOGDEBUG(F("_prepareHeader sendHeader Conn close"));
+  
+  sendHeader("Connection", "close");
+
+  aResponse += fromString(_responseHeaders);
+  aResponse += RETURN_NEWLINE;
+  
+  response = fromWWString(aResponse);
+  
+  //MR & KH fix
+  _responseHeaders = *(new String());
+#else
   response = "HTTP/1." + String(_currentVersion) + " ";
   response += String(code);
   response += " ";
   response += _responseCodeToString(code);
-  response += "\r\n";
+  response += RETURN_NEWLINE;
 
   using namespace mime;
   
@@ -452,16 +507,61 @@ void WiFiWebServer::_prepareHeader(String& response, int code, const char* conte
   sendHeader("Connection", "close");
 
   response += _responseHeaders;
-  response += "\r\n";
+  response += RETURN_NEWLINE;
   
   // RM & KH fix
   //_responseHeaders = String();
   _responseHeaders = *(new String());
+#endif  
+}
+
+void WiFiWebServer::_prepareHeader(WWString& response, int code, const char* content_type, size_t contentLength) 
+{
+  response = "HTTP/1." + fromString(String(_currentVersion)) + " ";
+  response += code;
+  response += " ";
+  response += fromString(_responseCodeToString(code));
+  response += RETURN_NEWLINE;
+
+ using namespace mime;
+ 
+  if (!content_type)
+      content_type = mimeTable[html].mimeType;
+
+  sendHeader("Content-Type", content_type, true);
+  
+  if (_contentLength == CONTENT_LENGTH_NOT_SET) 
+  {
+    sendHeader("Content-Length", String(contentLength));
+  } 
+  else if (_contentLength != CONTENT_LENGTH_UNKNOWN) 
+  {
+    sendHeader("Content-Length", String(_contentLength));
+  } 
+  else if (_contentLength == CONTENT_LENGTH_UNKNOWN && _currentVersion) 
+  { 
+    //HTTP/1.1 or above client
+    //let's do chunked
+    _chunked = true;
+    sendHeader("Accept-Ranges", "none");
+    sendHeader("Transfer-Encoding", "chunked");
+  }
+  
+  WS_LOGDEBUG(F("_prepareHeader sendHeader Conn close"));
+  
+  sendHeader("Connection", "close");
+
+  response += fromString(_responseHeaders);
+  response += RETURN_NEWLINE;
+  
+  //MR & KH fix
+  _responseHeaders = *(new String()); 
 }
 
 void WiFiWebServer::send(int code, const char* content_type, const String& content) 
 {
-  String header;
+  //String header;
+  WWString header;
   
   // Can we asume the following?
   //if(code == 200 && content.length() == 0 && _contentLength == CONTENT_LENGTH_NOT_SET)
@@ -476,7 +576,7 @@ void WiFiWebServer::send(int code, const char* content_type, const String& conte
 
   if (content.length())
   {
-    WS_LOGDEBUG1(F("send1: write header = "), header);
+    WS_LOGDEBUG1(F("send1: write header = "), fromWWString(header));
     //sendContent(content);
     sendContent(content, content.length());
   }
@@ -484,7 +584,8 @@ void WiFiWebServer::send(int code, const char* content_type, const String& conte
 
 void WiFiWebServer::send(int code, char* content_type, const String& content, size_t contentLength)
 {
-  String header;
+  //String header;
+  WWString header;
 
   WS_LOGDEBUG1(F("send2: len = "), contentLength);
   WS_LOGDEBUG1(F("content = "), content);
@@ -495,7 +596,7 @@ void WiFiWebServer::send(int code, char* content_type, const String& content, si
   _prepareHeader(header, code, (const char* )type, contentLength);
 
   WS_LOGDEBUG1(F("send2: hdrlen = "), header.length());
-  WS_LOGDEBUG1(F("header = "), header);
+  WS_LOGDEBUG1(F("header = "), fromWWString(header));
 
   _currentClient.write((const uint8_t *) header.c_str(), header.length());
   
@@ -517,7 +618,7 @@ void WiFiWebServer::send(int code, const String& content_type, const String& con
 
 void WiFiWebServer::sendContent(const String& content) 
 {
-  const char * footer = "\r\n";
+  const char * footer = RETURN_NEWLINE;
   size_t len = content.length();
   
   if (_chunked) 
@@ -542,7 +643,7 @@ void WiFiWebServer::sendContent(const String& content)
 
 void WiFiWebServer::sendContent(const String& content, size_t size)
 {
-  const char * footer = "\r\n";
+  const char * footer = RETURN_NEWLINE;
   
   if (_chunked) 
   {
@@ -597,7 +698,9 @@ void WiFiWebServer::send_P(int code, PGM_P content_type, PGM_P content)
 
 void WiFiWebServer::send_P(int code, PGM_P content_type, PGM_P content, size_t contentLength) 
 {
-  String header;
+  //String header;
+  WWString header;
+  
   char type[64];
   
   memccpy_P((void*)type, (PGM_VOID_P)content_type, 0, sizeof(type));
@@ -606,7 +709,7 @@ void WiFiWebServer::send_P(int code, PGM_P content_type, PGM_P content, size_t c
   WS_LOGDEBUG1(F("send_P: len = "), contentLength);
   WS_LOGDEBUG1(F("content = "), content);
   WS_LOGDEBUG1(F("send_P: hdrlen = "), header.length());
-  WS_LOGDEBUG1(F("header = "), header);
+  WS_LOGDEBUG1(F("header = "), fromWWString(header));
 
   _currentClient.write((const uint8_t *) header.c_str(), header.length());
   
@@ -623,7 +726,7 @@ void WiFiWebServer::sendContent_P(PGM_P content)
 
 void WiFiWebServer::sendContent_P(PGM_P content, size_t size) 
 {
-  const char * footer = "\r\n";
+  const char * footer = RETURN_NEWLINE;
   
   if (_chunked) 
   {
@@ -668,9 +771,33 @@ void WiFiWebServer::sendContent_P(PGM_P content, size_t size)
     _currentClient.write(footer, 2);
   }
 }
+
+#if (ESP32 || ESP8266)
+#include "FS.h"
+void WiFiWebServer::serveStatic(const char* uri, FS& fs, const char* path, const char* cache_header) 
+{
+  _addRequestHandler(new StaticFileRequestHandler(fs, path, uri, cache_header));
+}
+
+void WiFiWebServer::_streamFileCore(const size_t fileSize, const String &fileName, const String &contentType)
+{
+  using namespace mime;
+  
+  setContentLength(fileSize);
+  
+  if (fileName.endsWith(String(FPSTR(mimeTable[gz].endsWith))) &&
+      contentType != String(FPSTR(mimeTable[gz].mimeType)) &&
+      contentType != String(FPSTR(mimeTable[none].mimeType))) 
+  {
+    sendHeader(F("Content-Encoding"), F("gzip"));
+  }
+  
+  send(200, contentType, emptyString);
+}
+#endif
 //////
 
-String WiFiWebServer::arg(String name) 
+String WiFiWebServer::arg(const String& name) 
 {
   for (int i = 0; i < _currentArgCount; ++i) 
   {
@@ -702,7 +829,7 @@ int WiFiWebServer::args()
   return _currentArgCount;
 }
 
-bool WiFiWebServer::hasArg(String  name) 
+bool WiFiWebServer::hasArg(const String& name) 
 {
   for (int i = 0; i < _currentArgCount; ++i) 
   {
@@ -714,7 +841,7 @@ bool WiFiWebServer::hasArg(String  name)
 }
 
 
-String WiFiWebServer::header(String name) 
+String WiFiWebServer::header(const String& name) 
 {
   for (int i = 0; i < _headerKeysCount; ++i) 
   {
@@ -762,7 +889,7 @@ int WiFiWebServer::headers()
   return _headerKeysCount;
 }
 
-bool WiFiWebServer::hasHeader(String name) 
+bool WiFiWebServer::hasHeader(const String& name) 
 {
   for (int i = 0; i < _headerKeysCount; ++i) 
   {

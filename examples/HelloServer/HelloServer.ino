@@ -74,7 +74,7 @@ void handleNotFound()
   digitalWrite(led, 0);
 }
 
-void setup(void)
+void setup()
 {
   // Open serial communications and wait for port to open:
   Serial.begin(115200);
@@ -153,7 +153,7 @@ void setup(void)
   Serial.println(WiFi.localIP());
 }
 
-void loop(void)
+void loop()
 {
   server.handleClient();
 }

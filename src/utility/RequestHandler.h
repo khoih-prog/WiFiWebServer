@@ -12,7 +12,7 @@
   @file       Esp8266WebServer.h
   @author     Ivan Grokhotkov
 
-  Version: 1.4.2
+  Version: 1.5.0
 
   Version Modified By   Date      Comments
   ------- -----------  ---------- -----------
@@ -33,6 +33,7 @@
   1.4.0   K Hoang      07/09/2021 Add support to Portenta H7
   1.4.1   K Hoang      04/10/2021 Change option for PIO `lib_compat_mode` from default `soft` to `strict`. Update Packages Patches
   1.4.2   K Hoang      12/10/2021 Update `platform.ini` and `library.json`
+  1.5.0   K Hoang      19/12/2021 Reduce usage of Arduino String with std::string
  ***************************************************************************************************************************************/
 
 #pragma once
@@ -48,7 +49,7 @@ class RequestHandler
 
     virtual ~RequestHandler() { }
 
-    virtual bool canHandle(HTTPMethod method, String uri)
+    virtual bool canHandle(const HTTPMethod& method, const String& uri)
     {
       WFW_UNUSED(method);
       WFW_UNUSED(uri);
@@ -56,14 +57,14 @@ class RequestHandler
       return false;
     }
 
-    virtual bool canUpload(String uri)
+    virtual bool canUpload(const String& uri)
     {
       WFW_UNUSED(uri);
       
       return false;
     }
 
-    virtual bool handle(WiFiWebServer& server, HTTPMethod requestMethod, String requestUri)
+    virtual bool handle(WiFiWebServer& server, const HTTPMethod& requestMethod, const String& requestUri)
     {
       WFW_UNUSED(server);
       WFW_UNUSED(requestMethod);
@@ -72,7 +73,7 @@ class RequestHandler
       return false;
     }
 
-    virtual void upload(WiFiWebServer& server, String requestUri, HTTPUpload& upload) 
+    virtual void upload(WiFiWebServer& server, const String& requestUri, const HTTPUpload& upload) 
     {
       WFW_UNUSED(server);
       WFW_UNUSED(requestUri);
