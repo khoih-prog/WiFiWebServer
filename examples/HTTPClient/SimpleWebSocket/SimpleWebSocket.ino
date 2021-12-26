@@ -116,7 +116,9 @@ void setup()
 
 void loop()
 {
-  Serial.println("starting WebSocket client");
+  static String data = " => Hello from SimpleWebSocket on " + String(BOARD_NAME) + ", millis = ";
+ 
+  Serial.println("Starting WebSocket client");
   
   wsClient.begin();
 
@@ -128,8 +130,10 @@ void loop()
     // send a hello #
     wsClient.beginMessage(TYPE_TEXT);
     wsClient.print(count);
-    String data = " => Hello from SimpleWebSocket on " + String(BOARD_NAME) + ", millis = " + String(millis());
+ 
     wsClient.print(data);
+    wsClient.print(millis());
+    
     wsClient.endMessage();
 
     // increment count for next message

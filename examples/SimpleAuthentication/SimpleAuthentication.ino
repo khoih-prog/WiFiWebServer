@@ -87,11 +87,14 @@ void handleLogin()
   server.send(200, F("text/html"), content);
 }
 
+#define ORIGINAL_STR_LEN        384
+
 //root page can be accessed only if authentication is ok
 void handleRoot()
 {
-  String header;
-
+  static String content;
+  static uint16_t previousStrLen = ORIGINAL_STR_LEN;
+  
   Serial.println(F("Enter handleRoot"));
 
   if (!is_authenticated())
@@ -103,8 +106,7 @@ void handleRoot()
     return;
   }
 
-  String content = F("<html><body><H2>Hello, you successfully connected to WiFiNINA on ");
-  
+  content = F("<html><body><H2>Hello, you successfully connected to WiFiNINA on "); 
   content += BOARD_NAME;
   content += F("!</H2><br>");
 
@@ -116,8 +118,20 @@ void handleRoot()
   }
 
   content += F("You can access this page until you <a href=\"/login?DISCONNECT=YES\">disconnect</a></body></html>");
-  
-  server.send(200, F("text/html"), content);
+
+  if (content.length() > previousStrLen)
+  {
+    WS_LOGERROR3(F("String Len > "), previousStrLen, F(", extend to"), content.length() + 48);
+
+    previousStrLen = content.length() + 48;
+    
+    content.reserve(previousStrLen);
+  }
+  else
+  {
+    WS_LOGDEBUG1(F("Len ="), content.length());
+    server.send(200, F("text/html"), content);
+  }
 }
 
 //no need authentication

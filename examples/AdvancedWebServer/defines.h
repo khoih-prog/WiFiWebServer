@@ -15,7 +15,7 @@
 #define DEBUG_WIFI_WEBSERVER_PORT   Serial
 
 // Debug Level from 0 to 4
-#define _WIFI_LOGLEVEL_             1
+#define _WIFI_LOGLEVEL_             2
 #define _WIFININA_LOGLEVEL_         3
 
 #if ( defined(ARDUINO_PORTENTA_H7_M7) || defined(ARDUINO_PORTENTA_H7_M4) )

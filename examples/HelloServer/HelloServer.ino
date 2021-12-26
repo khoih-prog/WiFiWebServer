@@ -20,7 +20,7 @@ const int led = 13;
 
 void handleRoot()
 {
-#define BUFFER_SIZE     400
+#define BUFFER_SIZE     512
   
   digitalWrite(led, 1);
   char temp[BUFFER_SIZE];

@@ -58,6 +58,8 @@ PubSubClient    client(mqttServer, 1883, callback, wifiClient);
 
 void reconnect()
 {
+  static String data = "Hello from MQTTClient_Auth on " + String(BOARD_NAME);
+      
   // Loop until we're reconnected
   while (!client.connected())
   {
@@ -70,8 +72,6 @@ void reconnect()
       Serial.println("...connected");
       
       // Once connected, publish an announcement...
-      String data = "Hello from MQTTClient_SSL on " + String(BOARD_NAME);
-
       client.publish(TOPIC, data.c_str());
 
       //Serial.println("Published connection message successfully!");
@@ -193,7 +193,9 @@ void loop()
       Serial.println("Message failed to send.");
     }
 
-    Serial.print("Message Send : " + String(TOPIC) + " => ");
+    Serial.print("Message Send : ");
+    Serial.print(TOPIC);
+    Serial.print(" => ");
     Serial.println(data);
   }
   

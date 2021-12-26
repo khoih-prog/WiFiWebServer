@@ -140,7 +140,9 @@ void loop()
             "\r\n");
           client.print(F("<!DOCTYPE HTML>\r\n"));
           client.print(F("<html>\r\n"));
-          client.print(F("<h1>Hello World!</h1>\r\n"));
+          client.print(F("<h1>Hello World from "));
+          client.print(BOARD_NAME);
+          client.print(F("!</h1>\r\n"));
           client.print(F("Requests received: "));
           client.print(++reqCount);
           client.print(F("<br>\r\n"));

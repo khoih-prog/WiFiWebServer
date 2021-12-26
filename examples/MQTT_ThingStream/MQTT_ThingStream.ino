@@ -96,6 +96,8 @@ void mqtt_receive_callback(char* topic, byte* payload, unsigned int length)
 
 void reconnect() 
 {
+  static String data = "Hello from MQTTClient_ThingStream on " + String(BOARD_NAME);
+  
   // Loop until we're reconnected
   while (!client.connected()) 
   {
@@ -115,8 +117,6 @@ void reconnect()
       Serial.println("...connected");
       
       // Once connected, publish an announcement...
-      String data = "Hello from MQTTClient_SSL on " + String(BOARD_NAME);
-
       client.publish(topic.c_str(), data.c_str());
 
       Serial.println("Published connection message successfully!");
@@ -241,7 +241,9 @@ void loop()
       Serial.println("Message failed to send.");
     }
 
-    Serial.print("MQTT Message Send : " + topic + " => ");
+    Serial.print("MQTT Message Send : ");
+    Serial.print(topic);
+    Serial.print(" => ");
     Serial.println(data);
   }
   
