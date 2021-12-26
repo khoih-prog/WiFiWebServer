@@ -12,6 +12,7 @@
 ## Table of Contents
 
 * [Changelog](#changelog)
+  * [Releases v1.5.1](#releases-v151)
   * [Major Releases v1.5.0](#major-releases-v150)
   * [Releases v1.4.2](#releases-v142)
   * [Releases v1.4.1](#releases-v141)
@@ -34,6 +35,10 @@
 ---
 
 ## Changelog
+
+### Releases v1.5.1
+
+1. Fix bug related to String in library and examples
 
 ### Major Releases v1.5.0
 

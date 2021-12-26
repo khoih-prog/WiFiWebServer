@@ -12,7 +12,7 @@
   @file       Esp8266WebServer.h
   @author     Ivan Grokhotkov
 
-  Version: 1.5.0
+  Version: 1.5.1
 
   Version Modified By   Date      Comments
   ------- -----------  ---------- -----------
@@ -34,17 +34,18 @@
   1.4.1   K Hoang      04/10/2021 Change option for PIO `lib_compat_mode` from default `soft` to `strict`. Update Packages Patches
   1.4.2   K Hoang      12/10/2021 Update `platform.ini` and `library.json`
   1.5.0   K Hoang      19/12/2021 Reduce usage of Arduino String with std::string
+  1.5.1   K Hoang      25/12/2021 Fix bug
  ***************************************************************************************************************************************/
 
 #pragma once
 
-#define WIFI_WEBSERVER_VERSION          "WiFiWebServer v1.5.0"
+#define WIFI_WEBSERVER_VERSION          "WiFiWebServer v1.5.1"
 
 #define WIFI_WEBSERVER_VERSION_MAJOR    1
 #define WIFI_WEBSERVER_VERSION_MINOR    5
-#define WIFI_WEBSERVER_VERSION_PATCH    0
+#define WIFI_WEBSERVER_VERSION_PATCH    1
 
-#define WIFI_WEBSERVER_VERSION_INT      1005000
+#define WIFI_WEBSERVER_VERSION_INT      1005001
 
 #define USE_NEW_WEBSERVER_VERSION       true
 
@@ -314,17 +315,17 @@ class WiFiWebServer
     }
     
     //KH
-    #if USE_NEW_WEBSERVER_VERSION
+#if USE_NEW_WEBSERVER_VERSION
     HTTPUpload& upload() 
     {
       return *_currentUpload;
     }
-    #else
+#else
     HTTPUpload& upload() 
     {
       return _currentUpload;
     }
-    #endif
+#endif
     
     String arg(const String& name);     // get request argument value by name
     String arg(int i);                  // get request argument value by number
@@ -366,8 +367,7 @@ class WiFiWebServer
 
     static String urlDecode(const String& text);
     
-#if 0    
-
+#if !(ESP32 || ESP8266)
     template<typename T> size_t streamFile(T &file, const String& contentType) 
     {
       using namespace mime;
@@ -382,25 +382,9 @@ class WiFiWebServer
       
       return _currentClient.write(file);
     }
-#endif
-
-
-    #if !(ESP32 || ESP8266)
-    template<typename T> size_t streamFile(T &file, const String& contentType) 
-    {
-      using namespace mime;
-      setContentLength(file.size());
-      
-      if (String(file.name()).endsWith(mimeTable[gz].endsWith) && contentType != mimeTable[gz].mimeType && contentType != mimeTable[none].mimeType) 
-      {
-        sendHeader("Content-Encoding", "gzip");
-      }
-      
-      send(200, contentType, "");
-      
-      return _currentClient.write(file);
-    }
-    #else
+    
+#else
+    
     void serveStatic(const char* uri, fs::FS& fs, const char* path, const char* cache_header = NULL ); // serve static pages from file system
 
     // Handle a GET request by sending a response header and stream file content to response body
@@ -420,7 +404,7 @@ class WiFiWebServer
         }
         return contentLength;
       }
-    #endif    
+#endif    
 
   protected:
     void _addRequestHandler(RequestHandler* handler);
@@ -446,7 +430,7 @@ class WiFiWebServer
     void _prepareHeader(WWString& response, int code, const char* content_type, size_t contentLength);
     bool _collectHeader(const char* headerName, const char* headerValue);
     
-    #if (ESP32 || ESP8266)
+#if (ESP32 || ESP8266)
     void _streamFileCore(const size_t fileSize, const String & fileName, const String & contentType);
 
     template<typename T>
@@ -465,7 +449,7 @@ class WiFiWebServer
 
       return contentLength;
     }
-    #endif
+#endif
     
     struct RequestArgument 
     {
@@ -492,14 +476,14 @@ class WiFiWebServer
     RequestArgument*  _currentArgs      = nullptr;
 
     //KH = nullptr
-    #if USE_NEW_WEBSERVER_VERSION
+#if USE_NEW_WEBSERVER_VERSION
     HTTPUpload*       _currentUpload    = nullptr;
     int               _postArgsLen;
     RequestArgument*  _postArgs         = nullptr;
     
-    #else
+#else
     HTTPUpload        _currentUpload;
-    #endif
+#endif
     
     int               _headerKeysCount;
     RequestArgument*  _currentHeaders   = nullptr;
