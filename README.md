@@ -2009,7 +2009,9 @@ The following are debug terminal output and screen shot when running example [**
 Starting AdvancedServer on PORTENTA_H7_M7 with Portenta_H7 WiFi
 WiFiWebServer v1.5.1
 Connecting to WPA SSID: HueNet1
-HTTP server started @ 192.168.2.130
+HTTP server started @ 192.168.2.138
+H[WIFI] String Len = 0, extend to 2048
+HHHHHHHHH HHHHHHH
 ```
 
 ---
