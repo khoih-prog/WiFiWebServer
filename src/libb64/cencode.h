@@ -1,5 +1,6 @@
-/**************************************************************************************************************************************
+/****************************************************************************************************************************
   cencoder.h - c source to a base64 decoding algorithm implementation
+
   For any WiFi shields, such as WiFiNINA W101, W102, W13x, or custom, such as ESP8266/ESP32-AT, Ethernet, etc
 
   WiFiWebServer is a library for the ESP32-based WiFi shields to run WebServer
@@ -12,7 +13,7 @@
   @file       Esp8266WebServer.h
   @author     Ivan Grokhotkov
 
-  Version: 1.5.2
+  Version: 1.5.3
 
   Version Modified By   Date      Comments
   ------- -----------  ---------- -----------
@@ -36,7 +37,8 @@
   1.5.0   K Hoang      19/12/2021 Reduce usage of Arduino String with std::string
   1.5.1   K Hoang      25/12/2021 Fix bug
   1.5.2   K Hoang      27/12/2021 Fix wrong http status header bug
- ***************************************************************************************************************************************/
+  1.5.3   K Hoang      27/12/2021 Fix authenticate issue caused by libb64
+ *****************************************************************************************************************************/
 
 #pragma once
 
@@ -45,22 +47,15 @@
 #ifndef BASE64_CENCODE_H
 #define BASE64_CENCODE_H
 
-#define BASE64_CHARS_PER_LINE 72
-
-#define base64_encode_expected_len_nonewlines(n) ((((4 * (n)) / 3) + 3) & ~3)
-#define base64_encode_expected_len(n) \
-       (base64_encode_expected_len_nonewlines(n) + ((n / ((BASE64_CHARS_PER_LINE * 3) / 4)) + 1))
-
+#define base64_encode_expected_len(n) ((((4 * n) / 3) + 3) & ~3)
 
 #ifdef __cplusplus
-  extern "C" {
+extern "C" {
 #endif
 
 typedef enum 
 {
-  step_A, 
-  step_B, 
-  step_C
+  step_A, step_B, step_C
 } base64_encodestep;
 
 typedef struct 
@@ -68,11 +63,9 @@ typedef struct
   base64_encodestep step;
   char result;
   int stepcount;
-  int stepsnewline;
 } base64_encodestate;
 
 void base64_init_encodestate(base64_encodestate* state_in);
-void base64_init_encodestate_nonewlines(base64_encodestate* state_in);
 
 char base64_encode_value(char value_in);
 
@@ -83,7 +76,7 @@ int base64_encode_blockend(char* code_out, base64_encodestate* state_in);
 int base64_encode_chars(const char* plaintext_in, int length_in, char* code_out);
 
 #ifdef __cplusplus
-  } // extern "C"
+} // extern "C"
 #endif
 
 #endif /* BASE64_CENCODE_H */

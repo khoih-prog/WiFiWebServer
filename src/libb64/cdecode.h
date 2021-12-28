@@ -1,5 +1,6 @@
-/**************************************************************************************************************************************
+/****************************************************************************************************************************
   cdecoder.h - c source to a base64 decoding algorithm implementation
+
   For any WiFi shields, such as WiFiNINA W101, W102, W13x, or custom, such as ESP8266/ESP32-AT, Ethernet, etc
 
   WiFiWebServer is a library for the ESP32-based WiFi shields to run WebServer
@@ -12,7 +13,7 @@
   @file       Esp8266WebServer.h
   @author     Ivan Grokhotkov
 
-  Version: 1.5.2
+  Version: 1.5.3
 
   Version Modified By   Date      Comments
   ------- -----------  ---------- -----------
@@ -36,7 +37,8 @@
   1.5.0   K Hoang      19/12/2021 Reduce usage of Arduino String with std::string
   1.5.1   K Hoang      25/12/2021 Fix bug
   1.5.2   K Hoang      27/12/2021 Fix wrong http status header bug
- ***************************************************************************************************************************************/
+  1.5.3   K Hoang      27/12/2021 Fix authenticate issue caused by libb64
+ *****************************************************************************************************************************/
 
 #pragma once
 
@@ -48,15 +50,12 @@
 #define base64_decode_expected_len(n) ((n * 3) / 4)
 
 #ifdef __cplusplus
-  extern "C" {
+extern "C" {
 #endif
 
 typedef enum 
 {
-  step_a, 
-  step_b, 
-  step_c, 
-  step_d
+  step_a, step_b, step_c, step_d
 } base64_decodestep;
 
 typedef struct 
@@ -74,7 +73,7 @@ int base64_decode_block(const char* code_in, const int length_in, char* plaintex
 int base64_decode_chars(const char* code_in, const int length_in, char* plaintext_out);
 
 #ifdef __cplusplus
-  } // extern "C"
+} // extern "C"
 #endif
 
 #endif /* BASE64_CDECODE_H */

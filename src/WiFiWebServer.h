@@ -12,7 +12,7 @@
   @file       Esp8266WebServer.h
   @author     Ivan Grokhotkov
 
-  Version: 1.5.2
+  Version: 1.5.3
 
   Version Modified By   Date      Comments
   ------- -----------  ---------- -----------
@@ -36,17 +36,18 @@
   1.5.0   K Hoang      19/12/2021 Reduce usage of Arduino String with std::string
   1.5.1   K Hoang      25/12/2021 Fix bug
   1.5.2   K Hoang      27/12/2021 Fix wrong http status header bug
+  1.5.3   K Hoang      27/12/2021 Fix authenticate issue caused by libb64
  ***************************************************************************************************************************************/
 
 #pragma once
 
-#define WIFI_WEBSERVER_VERSION          "WiFiWebServer v1.5.2"
+#define WIFI_WEBSERVER_VERSION          "WiFiWebServer v1.5.3"
 
 #define WIFI_WEBSERVER_VERSION_MAJOR    1
 #define WIFI_WEBSERVER_VERSION_MINOR    5
-#define WIFI_WEBSERVER_VERSION_PATCH    2
+#define WIFI_WEBSERVER_VERSION_PATCH    3
 
-#define WIFI_WEBSERVER_VERSION_INT      1005002
+#define WIFI_WEBSERVER_VERSION_INT      1005003
 
 #define USE_NEW_WEBSERVER_VERSION       true
 

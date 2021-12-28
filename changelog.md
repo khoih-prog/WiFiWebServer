@@ -12,6 +12,7 @@
 ## Table of Contents
 
 * [Changelog](#changelog)
+  * [Releases v1.5.3](#releases-v153)
   * [Releases v1.5.2](#releases-v152)
   * [Releases v1.5.1](#releases-v151)
   * [Major Releases v1.5.0](#major-releases-v150)
@@ -36,6 +37,10 @@
 ---
 
 ## Changelog
+
+### Releases v1.5.3
+
+1. Fix authenticate issue caused by libb64
 
 ### Releases v1.5.2
 
