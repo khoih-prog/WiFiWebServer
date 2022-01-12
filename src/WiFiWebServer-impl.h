@@ -274,10 +274,12 @@ void WiFiWebServer::handleClient()
   {
     yield();
   }
-  
+
+#if (USE_WIFI_NINA)  
   // KH, fix bug relating to New NINA FW 1.4.0. Have to close the connection
   _currentClient.stop();
   WS_LOGDEBUG(F("handleClient: Client disconnected"));
+#endif  
 }
  
 #else
@@ -382,9 +384,11 @@ void WiFiWebServer::handleClient()
   
 stopClient:
   
+#if (USE_WIFI_NINA)   
   // KH, fix bug relating to New NINA FW 1.4.0. Have to close the connection
   _currentClient.stop();
   WS_LOGDEBUG(F("handleClient: Client disconnected"));
+#endif  
 }
 
 #endif
