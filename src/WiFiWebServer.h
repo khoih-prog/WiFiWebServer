@@ -12,7 +12,7 @@
   @file       Esp8266WebServer.h
   @author     Ivan Grokhotkov
 
-  Version: 1.5.3
+  Version: 1.5.4
 
   Version Modified By   Date      Comments
   ------- -----------  ---------- -----------
@@ -37,17 +37,18 @@
   1.5.1   K Hoang      25/12/2021 Fix bug
   1.5.2   K Hoang      27/12/2021 Fix wrong http status header bug
   1.5.3   K Hoang      27/12/2021 Fix authenticate issue caused by libb64
+  1.5.4   K Hoang      12/01/2022 Fix libb64 fallthrough compile warning
  ***************************************************************************************************************************************/
 
 #pragma once
 
-#define WIFI_WEBSERVER_VERSION          "WiFiWebServer v1.5.3"
+#define WIFI_WEBSERVER_VERSION          "WiFiWebServer v1.5.4"
 
 #define WIFI_WEBSERVER_VERSION_MAJOR    1
 #define WIFI_WEBSERVER_VERSION_MINOR    5
-#define WIFI_WEBSERVER_VERSION_PATCH    3
+#define WIFI_WEBSERVER_VERSION_PATCH    4
 
-#define WIFI_WEBSERVER_VERSION_INT      1005003
+#define WIFI_WEBSERVER_VERSION_INT      1005004
 
 #define USE_NEW_WEBSERVER_VERSION       true
 

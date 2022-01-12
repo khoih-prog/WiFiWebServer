@@ -13,7 +13,7 @@
   @file       Esp8266WebServer.h
   @author     Ivan Grokhotkov
 
-  Version: 1.5.3
+  Version: 1.5.4
 
   Version Modified By   Date      Comments
   ------- -----------  ---------- -----------
@@ -38,6 +38,7 @@
   1.5.1   K Hoang      25/12/2021 Fix bug
   1.5.2   K Hoang      27/12/2021 Fix wrong http status header bug
   1.5.3   K Hoang      27/12/2021 Fix authenticate issue caused by libb64
+  1.5.4   K Hoang      12/01/2022 Fix libb64 fallthrough compile warning
  *****************************************************************************************************************************/
 
 #pragma once

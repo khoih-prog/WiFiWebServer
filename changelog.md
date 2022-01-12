@@ -12,6 +12,7 @@
 ## Table of Contents
 
 * [Changelog](#changelog)
+  * [Releases v1.5.4](#releases-v154)
   * [Releases v1.5.3](#releases-v153)
   * [Releases v1.5.2](#releases-v152)
   * [Releases v1.5.1](#releases-v151)
@@ -37,6 +38,12 @@
 ---
 
 ## Changelog
+
+### Releases v1.5.4
+
+1. Fix libb64 `fallthrough` compile warning
+2. Fix bug not supporting ESP32/ESP8266 boards.
+3. Fix bug for WiFi other than WiFiNINA
 
 ### Releases v1.5.3
 
