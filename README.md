@@ -98,8 +98,8 @@
   * [11. AdvancedWebServer on PORTENTA_H7_M7 with Portenta_H7 WiFi](#11-advancedwebserver-on-portenta_h7_m7-with-portenta_h7-wifi)
   * [12. MQTTClient_Auth on ESP32_DEV](#12-mqttclient_auth-on-portenta_h7_m7-with-portenta_h7-wifi)
   * [13. WebClientRepeating on ESP32_DEV](#13-webclientrepeating-on-portenta_h7_m7-with-portenta_h7-wifi)
-  * [14. AdvancedWebServer on ESP32C3_DEV with ESP WiFi](#14-AdvancedWebServer-on-ESP32C3_DEV-with-ESP WiFi)
-  * [15. AdvancedWebServer on ESP32S3_DEV with ESP WiFi](#15-AdvancedWebServer-on-ESP32S3_DEV-with-ESP WiFi)
+  * [14. AdvancedWebServer on ESP32C3_DEV with ESP WiFi](#14-AdvancedWebServer-on-ESP32C3_DEV-with-ESP-WiFi)
+  * [15. AdvancedWebServer on ESP32S3_DEV with ESP WiFi](#15-AdvancedWebServer-on-ESP32S3_DEV-with-ESP-WiFi)
 * [Debug](#debug)
 * [Troubleshooting](#troubleshooting)
 * [Issues](#issues)
@@ -236,7 +236,7 @@ You can also use this link [![arduino-library-badge](https://www.ardu-badge.com/
 
 1. Install [VS Code](https://code.visualstudio.com/)
 2. Install [PlatformIO](https://platformio.org/platformio-ide)
-3. Install [**WiFiWebServer** library](https://platformio.org/lib/show/7152/WiFiWebServer) by using [Library Manager](https://platformio.org/lib/show/7152/WiFiWebServer/installation). Search for **WiFiWebServer** in [Platform.io Author's Libraries](https://platformio.org/lib/search?query=author:%22Khoi%20Hoang%22)
+3. Install [**WiFiWebServer** library](https://registry.platformio.org/libraries/khoih-prog/WiFiWebServer) by using [Library Manager](https://registry.platformio.org/libraries/khoih-prog/WiFiWebServer/installation). Search for **WiFiWebServer** in [Platform.io Author's Libraries](https://platformio.org/lib/search?query=author:%22Khoi%20Hoang%22)
 4. Use included [platformio.ini](platformio/platformio.ini) file from examples to ensure that all dependent libraries will installed automatically. Please visit documentation for the other options and examples at [Project Configuration File](https://docs.platformio.org/page/projectconf.html)
 
 ---
