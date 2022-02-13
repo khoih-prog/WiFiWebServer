@@ -16,7 +16,16 @@ int reqCount = 0;                // number of requests received
 
 WiFiWebServer server(80);
 
-const int led = 13;
+#if defined(LED_BUILTIN)
+  const int led =  LED_BUILTIN;
+#else
+  #if (ESP32)
+    // Using pin 13 will crash ESP32_C3
+    const int led =  2;
+  #else
+    const int led =  13;
+  #endif
+#endif
 
 const String postForms =
   F("<html>\

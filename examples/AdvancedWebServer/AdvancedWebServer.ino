@@ -44,7 +44,16 @@ int reqCount = 0;                // number of requests received
 
 WiFiWebServer server(80);
 
-const int led = 13;
+#if defined(LED_BUILTIN)
+  const int led =  LED_BUILTIN;
+#else
+  #if (ESP32)
+    // Using pin 13 will crash ESP32_C3
+    const int led =  2;
+  #else
+    const int led =  13;
+  #endif
+#endif
 
 void handleRoot()
 {
@@ -160,6 +169,8 @@ void setup()
   Serial.begin(115200);
   while (!Serial);
 
+  delay(200);
+
   Serial.print(F("\nStarting AdvancedWebServer on ")); Serial.print(BOARD_NAME);
   Serial.print(F(" with ")); Serial.println(SHIELD_TYPE); 
   Serial.println(WIFI_WEBSERVER_VERSION);
@@ -199,6 +210,9 @@ void setup()
 
 #if (ESP32 || ESP8266)
     WiFi.mode(WIFI_STA);
+
+    Serial.print(F("Connecting to WPA SSID: "));
+    Serial.println(ssid);
 
     if (WiFi.status() != WL_CONNECTED)
     {

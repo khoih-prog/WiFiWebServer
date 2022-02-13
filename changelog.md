@@ -12,6 +12,7 @@
 ## Table of Contents
 
 * [Changelog](#changelog)
+  * [Releases v1.6.0](#releases-v160)
   * [Releases v1.5.4](#releases-v154)
   * [Releases v1.5.3](#releases-v153)
   * [Releases v1.5.2](#releases-v152)
@@ -38,6 +39,11 @@
 ---
 
 ## Changelog
+
+### Releases v1.6.0
+
+1. Add support to new ESP32-S3 and ESP32_C3
+2. Update `Packages' Patches`
 
 ### Releases v1.5.4
 
