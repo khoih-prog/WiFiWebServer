@@ -12,6 +12,7 @@
 ## Table of Contents
 
 * [Changelog](#changelog)
+  * [Releases v1.6.1](#releases-v161)
   * [Releases v1.6.0](#releases-v160)
   * [Releases v1.5.4](#releases-v154)
   * [Releases v1.5.3](#releases-v153)
@@ -39,6 +40,10 @@
 ---
 
 ## Changelog
+
+### Releases v1.6.1
+
+1. Fix issue in v1.6.0
 
 ### Releases v1.6.0
 

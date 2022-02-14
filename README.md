@@ -1413,7 +1413,7 @@ The following are debug terminal output and screen shot when running example [**
 
 ```
 Starting AdvancedServer on SAMD_NANO_33_IOT
-WiFiWebServer v1.6.0
+WiFiWebServer v1.6.1
 [NN] ===============================
 [NN] 
 Used/default SPI pinout: 
@@ -1567,7 +1567,7 @@ The terminal output of **SAMD_NANO_33_IOT with WiFiNINA using WiFiNINA_Generic L
 
 ```
 Starting SimpleWebSocket on SAMD_NANO_33_IOT with WiFiNINA using WiFiNINA_Generic Library
-WiFiWebServer v1.6.0
+WiFiWebServer v1.6.1
 Connecting to SSID: HueNet1
 You're connected to the network, IP = 192.168.2.98
 SSID: HueNet1, Signal strength (RSSI):-24 dBm
@@ -1601,7 +1601,7 @@ The terminal output of **SAMD_NANO_33_IOT with WiFiNINA using WiFiNINA_Generic L
 
 ```
 Starting SimpleHTTPExample on SAMD_NANO_33_IOT with WiFiNINA using WiFiNINA_Generic Library
-WiFiWebServer v1.6.0
+WiFiWebServer v1.6.1
 Connecting to SSID: HueNet1
 You're connected to the network, IP = 192.168.2.98
 SSID: HueNet1, Signal strength (RSSI):-21 dBm
@@ -1661,7 +1661,7 @@ The terminal output of **SAMD_NANO_33_IOT with WiFiNINA using WiFiNINA_Generic L
 
 ```
 Starting DweetPost on SAMD_NANO_33_IOT with WiFiNINA using WiFiNINA_Generic Library
-WiFiWebServer v1.6.0
+WiFiWebServer v1.6.1
 Connecting to SSID: HueNet1
 You're connected to the network, IP = 192.168.2.98
 SSID: HueNet1, Signal strength (RSSI):-22 dBm
@@ -1684,7 +1684,7 @@ The terminal output of **SAMD_NANO_33_IOT with WiFiNINA using WiFiNINA_Generic L
 
 ```
 Starting DweetGet on SAMD_NANO_33_IOT with WiFiNINA using WiFiNINA_Generic Library
-WiFiWebServer v1.6.0
+WiFiWebServer v1.6.1
 Connecting to SSID: HueNet1
 You're connected to the network, IP = 192.168.2.98
 SSID: HueNet1, Signal strength (RSSI):-25 dBm
@@ -1714,7 +1714,7 @@ The terminal output of **SAMD_NANO_33_IOT with WiFiNINA using WiFiNINA_Generic L
 
 ```
 Starting MQTTClient_Auth on SAMD_NANO_33_IOT with WiFiNINA using WiFiNINA_Generic Library
-WiFiWebServer v1.6.0
+WiFiWebServer v1.6.1
 Please upgrade the firmware
 Connecting to WPA SSID: HueNet1
 Connected! IP address: 192.168.2.98
@@ -1735,7 +1735,7 @@ The terminal output of **SAMD_NANO_33_IOT with WiFiNINA using WiFiNINA_Generic L
 ```
 Start MQTT_ThingStream on SAMD_NANO_33_IOT
 Starting MQTTClient_Auth on SAMD_NANO_33_IOT with WiFiNINA using WiFiNINA_Generic Library
-WiFiWebServer v1.6.0
+WiFiWebServer v1.6.1
 Please upgrade the firmware
 Connecting to WPA SSID: HueNet1
 Connected! IP address: 192.168.2.98
@@ -1763,7 +1763,7 @@ The terminal output of **RASPBERRY_PI_PICO with Custom WiFi (ESP8266-AT) using C
 
 ```
 Starting WebClientRepeating on RASPBERRY_PI_PICO with Custom WiFi using Custom WiFi Library
-WiFiWebServer v1.6.0
+WiFiWebServer v1.6.1
 WiFi shield init done
 Connecting to SSID: HueNet1
 You're connected to the network, IP = 192.168.2.76
@@ -1836,7 +1836,7 @@ The following are debug terminal output and screen shot when running example [**
 
 ```
 Starting AdvancedServer on Nano RP2040 Connect with WiFiNINA using WiFiNINA_Generic Library
-WiFiWebServer v1.6.0
+WiFiWebServer v1.6.1
 Connecting to WPA SSID: HueNet1
 HTTP server started @ 192.168.2.130
 H[WIFI] handleClient: New Client
@@ -1965,7 +1965,7 @@ The terminal output of **ESP32_DEV** running [SimpleHTTPExample example](example
 
 ```
 Starting SimpleHTTPExample on ESP32_DEV with ESP WiFi using WiFi Library
-WiFiWebServer v1.6.0
+WiFiWebServer v1.6.1
 Connecting to SSID: HueNet1
 You're connected to the network, IP = 192.168.2.80
 SSID: HueNet1, Signal strength (RSSI):-23 dBm
@@ -2032,7 +2032,7 @@ The following are debug terminal output and screen shot when running example [**
 
 ```
 Starting AdvancedServer on PORTENTA_H7_M7 with Portenta_H7 WiFi
-WiFiWebServer v1.6.0
+WiFiWebServer v1.6.1
 Connecting to WPA SSID: HueNet1
 HTTP server started @ 192.168.2.138
 H[WIFI] String Len = 0, extend to 2048
@@ -2048,7 +2048,7 @@ The terminal output of **PORTENTA_H7_M7 with Portenta_H7 WiFi** running [MQTTCli
 
 ```
 Starting MQTTClient_Auth on PORTENTA_H7_M7 with Portenta_H7 WiFi
-WiFiWebServer v1.6.0
+WiFiWebServer v1.6.1
 Connecting to SSID: HueNet1
 Connected! IP address: 192.168.2.130
 Attempting MQTT connection to broker.emqx.io...connected
@@ -2068,7 +2068,7 @@ The terminal output of **PORTENTA_H7_M7 with Portenta_H7 WiFi** running [WebClie
 
 ```
 Starting WebClientRepeating on PORTENTA_H7_M7 with Portenta_H7 WiFi
-WiFiWebServer v1.6.0
+WiFiWebServer v1.6.1
 Connecting to SSID: HueNet1
 You're connected to the network, IP = 192.168.2.130
 SSID: HueNet1, Signal strength (RSSI):-33 dBm
@@ -2142,7 +2142,7 @@ The following are debug terminal output and screen shot when running example [**
 
 ```
 Starting AdvancedWebServer on ESP32C3_DEV with ESP WiFi using WiFi Library
-WiFiWebServer v1.6.0
+WiFiWebServer v1.6.1
 Connecting to WPA SSID: HueNet1
 HTTP server started @ 192.168.2.86
 HH
@@ -2161,7 +2161,7 @@ The following are debug terminal output and screen shot when running example [**
 
 ```
 Starting AdvancedWebServer on ESP32S3_DEV with ESP WiFi using WiFi Library
-WiFiWebServer v1.6.0
+WiFiWebServer v1.6.1
 Connecting to WPA SSID: HueNet1
 HTTP server started @ 192.168.2.86
 HH

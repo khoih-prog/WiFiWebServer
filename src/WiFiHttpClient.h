@@ -12,7 +12,7 @@
   @file       Esp8266WebServer.h
   @author     Ivan Grokhotkov
 
-  Version: 1.6.0
+  Version: 1.6.1
 
   Version Modified By   Date      Comments
   ------- -----------  ---------- -----------
@@ -39,6 +39,7 @@
   1.5.3   K Hoang      27/12/2021 Fix authenticate issue caused by libb64
   1.5.4   K Hoang      12/01/2022 Fix libb64 fallthrough compile warning
   1.6.0   K Hoang      13/02/2022 Add support to new ESP32-S3 and ESP32_C3
+  1.6.1   K Hoang      13/02/2022 Fix v1.6.0 issue
  *****************************************************************************************************************************/
 
 // Library to simplify HTTP fetching on Arduino
