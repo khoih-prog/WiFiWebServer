@@ -12,7 +12,7 @@
   @file       Esp8266WebServer.h
   @author     Ivan Grokhotkov
 
-  Version: 1.5.4
+  Version: 1.6.0
 
   Version Modified By   Date      Comments
   ------- -----------  ---------- -----------
@@ -38,12 +38,16 @@
   1.5.2   K Hoang      27/12/2021 Fix wrong http status header bug
   1.5.3   K Hoang      27/12/2021 Fix authenticate issue caused by libb64
   1.5.4   K Hoang      12/01/2022 Fix libb64 fallthrough compile warning
+  1.6.0   K Hoang      13/02/2022 Add support to new ESP32-S3 and ESP32_C3
  ***************************************************************************************************************************************/
  
 // (c) Copyright Arduino. 2016
 // Released under Apache License, version 2.0
 
 #pragma once
+
+#ifndef WiFi_WebSocketClient_H
+#define WiFi_WebSocketClient_H
 
 #include <Arduino.h>
 
@@ -140,3 +144,4 @@ class WiFiWebSocketClient : public WiFiHttpClient
     uint8_t   iRxMaskKey[4];
 };
 
+#endif    // WiFi_WebSocketClient_H

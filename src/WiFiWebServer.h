@@ -12,7 +12,7 @@
   @file       Esp8266WebServer.h
   @author     Ivan Grokhotkov
 
-  Version: 1.5.4
+  Version: 1.6.0
 
   Version Modified By   Date      Comments
   ------- -----------  ---------- -----------
@@ -38,17 +38,23 @@
   1.5.2   K Hoang      27/12/2021 Fix wrong http status header bug
   1.5.3   K Hoang      27/12/2021 Fix authenticate issue caused by libb64
   1.5.4   K Hoang      12/01/2022 Fix libb64 fallthrough compile warning
+  1.6.0   K Hoang      13/02/2022 Add support to new ESP32-S3 and ESP32_C3
  ***************************************************************************************************************************************/
 
 #pragma once
 
-#define WIFI_WEBSERVER_VERSION          "WiFiWebServer v1.5.4"
+#ifndef WiFiWebServer_H
+#define WiFiWebServer_H
 
-#define WIFI_WEBSERVER_VERSION_MAJOR    1
-#define WIFI_WEBSERVER_VERSION_MINOR    5
-#define WIFI_WEBSERVER_VERSION_PATCH    4
+#ifndef WIFI_WEBSERVER_VERSION
+  #define WIFI_WEBSERVER_VERSION          "WiFiWebServer v1.6.0"
 
-#define WIFI_WEBSERVER_VERSION_INT      1005004
+  #define WIFI_WEBSERVER_VERSION_MAJOR    1
+  #define WIFI_WEBSERVER_VERSION_MINOR    6
+  #define WIFI_WEBSERVER_VERSION_PATCH    0
+
+  #define WIFI_WEBSERVER_VERSION_INT      1006000
+#endif
 
 #define USE_NEW_WEBSERVER_VERSION       true
 
@@ -330,20 +336,20 @@ class WiFiWebServer
     }
 #endif
     
-    String arg(const String& name);     // get request argument value by name
-    String arg(int i);                  // get request argument value by number
-    String argName(int i);              // get request argument name by number
+    String arg(const String& name);         // get request argument value by name
+    String arg(int i);                      // get request argument value by number
+    String argName(int i);                  // get request argument name by number
     
-    int args();                         // get arguments count
-    bool hasArg(const String& name);    // check if argument exists
-    void collectHeaders(const char* headerKeys[], const size_t headerKeysCount); // set the request headers to collect
-    String header(const String& name);  // get request header value by name
-    String header(int i);               // get request header value by number
-    String headerName(int i);           // get request header name by number
-    int headers();                      // get header count
-    bool hasHeader(const String& name); // check if header exists
+    int     args();                         // get arguments count
+    bool    hasArg(const String& name);     // check if argument exists
+    void    collectHeaders(const char* headerKeys[], const size_t headerKeysCount); // set the request headers to collect
+    String  header(const String& name);     // get request header value by name
+    String  header(int i);                  // get request header value by number
+    String  headerName(int i);              // get request header name by number
+    int     headers();                      // get header count
+    bool    hasHeader(const String& name);  // check if header exists
 
-    String hostHeader();                // get request host header if available or empty String if not
+    String hostHeader();                    // get request host header if available or empty String if not
 
     // send response to the client
     // code - HTTP response code, can be 200 or 404
@@ -392,20 +398,26 @@ class WiFiWebServer
 
     // Handle a GET request by sending a response header and stream file content to response body
       template<typename T>
-      size_t streamFile(T &file, const String& contentType) {
+      size_t streamFile(T &file, const String& contentType) 
+      {
         return streamFile(file, contentType, HTTP_GET);
       }
 
       // Implement GET and HEAD requests for files.
       // Stream body on HTTP_GET but not on HTTP_HEAD requests.
       template<typename T>
-      size_t streamFile(T &file, const String& contentType, HTTPMethod requestMethod) {
+      size_t streamFile(T &file, const String& contentType, HTTPMethod requestMethod) 
+      {
         size_t contentLength = 0;
+        
         _streamFileCore(file.size(), file.name(), contentType);
-        if (requestMethod == HTTP_GET) {
+        
+        if (requestMethod == HTTP_GET) 
+        {
             contentLength = _customClientWrite(file);
         }
-        return contentLength;
+        return contentLength
+        ;
       }
 #endif    
 
@@ -426,12 +438,12 @@ class WiFiWebServer
     #endif
     
     static String _responseCodeToString(int code);    
-    bool _parseFormUploadAborted();
-    void _uploadWriteByte(uint8_t b);
-    uint8_t _uploadReadByte(WiFiClient& client);
-    void _prepareHeader(String& response, int code, const char* content_type, size_t contentLength);
-    void _prepareHeader(WWString& response, int code, const char* content_type, size_t contentLength);
-    bool _collectHeader(const char* headerName, const char* headerValue);
+    bool          _parseFormUploadAborted();
+    void          _uploadWriteByte(uint8_t b);
+    uint8_t       _uploadReadByte(WiFiClient& client);
+    void          _prepareHeader(String& response, int code, const char* content_type, size_t contentLength);
+    void          _prepareHeader(WWString& response, int code, const char* content_type, size_t contentLength);
+    bool          _collectHeader(const char* headerName, const char* headerValue);
     
 #if (ESP32 || ESP8266)
     void _streamFileCore(const size_t fileSize, const String & fileName, const String & contentType);
@@ -500,3 +512,5 @@ class WiFiWebServer
 #include "WiFiWebServer-impl.h"
 #include "Parsing-impl.h"
 
+
+#endif    // WiFiWebServer_H

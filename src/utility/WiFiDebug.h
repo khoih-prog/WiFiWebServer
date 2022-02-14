@@ -12,7 +12,7 @@
   @file       Esp8266WebServer.h
   @author     Ivan Grokhotkov
 
-  Version: 1.5.4
+  Version: 1.6.0
 
   Version Modified By   Date      Comments
   ------- -----------  ---------- -----------
@@ -38,9 +38,21 @@
   1.5.2   K Hoang      27/12/2021 Fix wrong http status header bug
   1.5.3   K Hoang      27/12/2021 Fix authenticate issue caused by libb64
   1.5.4   K Hoang      12/01/2022 Fix libb64 fallthrough compile warning
+  1.6.0   K Hoang      13/02/2022 Add support to new ESP32-S3 and ESP32_C3
  ***************************************************************************************************************************************/
 
 #pragma once
+
+#ifndef WiFiDebug_H
+#define WiFiDebug_H
+
+#if defined(ARDUINO)
+  #if ARDUINO >= 100
+    #include <Arduino.h>
+  #else
+    #include <WProgram.h>
+  #endif
+#endif
 
 #include <stdio.h>
 
@@ -104,3 +116,4 @@ const char WWS_LINE[]  = "========================================\n";
 #define WS_LOGDEBUG2(x,y,z)    if(_WIFI_LOGLEVEL_>3) { WWS_PRINT_MARK; WWS_PRINT(x); WWS_PRINT_SP; WWS_PRINT(y); WWS_PRINT_SP; WWS_PRINTLN(z); }
 #define WS_LOGDEBUG3(x,y,z,w)  if(_WIFI_LOGLEVEL_>3) { WWS_PRINT_MARK; WWS_PRINT(x); WWS_PRINT_SP; WWS_PRINT(y); WWS_PRINT_SP; WWS_PRINT(z); WWS_PRINT_SP; WWS_PRINTLN(w); }
 
+#endif    // WiFiDebug_H

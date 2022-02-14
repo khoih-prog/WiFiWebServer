@@ -12,7 +12,7 @@
   @file       Esp8266WebServer.h
   @author     Ivan Grokhotkov
 
-  Version: 1.5.4
+  Version: 1.6.0
 
   Version Modified By   Date      Comments
   ------- -----------  ---------- -----------
@@ -38,9 +38,13 @@
   1.5.2   K Hoang      27/12/2021 Fix wrong http status header bug
   1.5.3   K Hoang      27/12/2021 Fix authenticate issue caused by libb64
   1.5.4   K Hoang      12/01/2022 Fix libb64 fallthrough compile warning
+  1.6.0   K Hoang      13/02/2022 Add support to new ESP32-S3 and ESP32_C3
  ***************************************************************************************************************************************/
 
 #pragma once
+
+#ifndef RingBuffer_H
+#define RingBuffer_H
 
 class WiFi_RingBuffer
 {
@@ -65,3 +69,4 @@ class WiFi_RingBuffer
     char* ringBufP;
 };
 
+#endif    // RingBuffer_H
