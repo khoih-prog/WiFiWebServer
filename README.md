@@ -6,7 +6,8 @@
 [![contributions welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat)](#Contributing)
 [![GitHub issues](https://img.shields.io/github/issues/khoih-prog/WiFiWebServer.svg)](http://github.com/khoih-prog/WiFiWebServer/issues)
 
-<a href="https://www.buymeacoffee.com/khoihprog6" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" alt="Buy Me A Coffee" style="height: 60px !important;width: 217px !important;" ></a>
+<a href="https://www.buymeacoffee.com/khoihprog6" title="Donate to my libraries using BuyMeACoffee"><img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" alt="Donate to my libraries using BuyMeACoffee" style="height: 50px !important;width: 181px !important;" ></a>
+<a href="https://www.buymeacoffee.com/khoihprog6" title="Donate to my libraries using BuyMeACoffee"><img src="https://img.shields.io/badge/buy%20me%20a%20coffee-donate-orange.svg?logo=buy-me-a-coffee&logoColor=FFDD00" style="height: 20px !important;width: 200px !important;" ></a>
 
 ---
 ---
@@ -177,12 +178,14 @@ This [**WiFiWebServer library**](https://github.com/khoih-prog/WiFiWebServer) cu
 
 11. **Portenta_H7**
 
+12. **megaAVR boards (UNO_WIFI_REV2, NANO_EVERY)** using [Arduino megaAVR core](https://github.com/arduino/ArduinoCore-megaavr)
+
 ---
 
 #### Currently supported WiFi shields/modules
 
 1. WiFiNINA using [`WiFiNINA_Generic library`](https://github.com/khoih-prog/WiFiNINA_Generic)
-2. WiFi101 using [`WiFi101 library`](https://github.com/arduino-libraries/WiFi101)
+2. WiFi101 using [`WiFi101 library`](https://github.com/arduino-libraries/WiFi101) or [`Modified WiFi101 Library v0.16.1+`](https://github.com/khoih-prog/WiFi101)
 3. u-blox W101, W102 using [`WiFiNINA_Generic library`](https://github.com/khoih-prog/WiFiNINA_Generic)
 4. ESP8266-AT command using [`WiFiEspAT library`](https://github.com/jandrassy/WiFiEspAT)
 5. ESP8266/ESP32-AT command using [`ESP_AT_Lib library`](https://github.com/khoih-prog/ESP_AT_Lib)
@@ -196,7 +199,7 @@ This [**WiFiWebServer library**](https://github.com/khoih-prog/WiFiWebServer) cu
  1. [`Arduino IDE 1.8.19+` for Arduino](https://github.com/arduino/Arduino). [![GitHub release](https://img.shields.io/github/release/arduino/Arduino.svg)](https://github.com/arduino/Arduino/releases/latest)
  2. [`ESP32 Core 2.0.2+`](https://github.com/espressif/arduino-esp32) for ESP32-based boards. [![Latest release](https://img.shields.io/github/release/espressif/arduino-esp32.svg)](https://github.com/espressif/arduino-esp32/releases/latest/)
  3. [`ESP8266 Core 3.0.2+`](https://github.com/esp8266/Arduino) for ESP8266-based boards. [![Latest release](https://img.shields.io/github/release/esp8266/Arduino.svg)](https://github.com/esp8266/Arduino/releases/latest/).
- 4. [`Arduino AVR core 1.8.3+`](https://github.com/arduino/ArduinoCore-avr) for Arduino (Use Arduino Board Manager) for AVR boards. [![GitHub release](https://img.shields.io/github/release/arduino/ArduinoCore-avr.svg)](https://github.com/arduino/ArduinoCore-avr/releases/latest)
+ 4. [`Arduino AVR core 1.8.5+`](https://github.com/arduino/ArduinoCore-avr) for Arduino (Use Arduino Board Manager) for AVR boards. [![GitHub release](https://img.shields.io/github/release/arduino/ArduinoCore-avr.svg)](https://github.com/arduino/ArduinoCore-avr/releases/latest)
  5. [`Teensy core v1.56+`](https://www.pjrc.com/teensy/td_download.html) for Teensy (4.1, 4.0, 3.6, 3.5, 3,2, 3.1, 3.0) boards.
  6. [`Arduino SAM DUE core v1.6.12+`](https://github.com/arduino/ArduinoCore-sam) for SAM DUE ARM Cortex-M3 boards.
  7. [`Arduino SAMD core 1.8.12+`](https://github.com/arduino/ArduinoCore-samd) for SAMD ARM Cortex-M0+ boards. [![GitHub release](https://img.shields.io/github/release/arduino/ArduinoCore-samd.svg)](https://github.com/arduino/ArduinoCore-samd/releases/latest)
@@ -211,11 +214,13 @@ This [**WiFiWebServer library**](https://github.com/khoih-prog/WiFiWebServer) cu
 
 13. [`ArduinoCore-mbed mbed_rp2040, mbed_nano, mbed_portenta core 2.7.2+`](https://github.com/arduino/ArduinoCore-mbed) for Arduino (Use Arduino Board Manager) **Portenta_H7, RP2040-based boards, such as Nano_RP2040_Connect, RASPBERRY_PI_PICO**. [![GitHub release](https://img.shields.io/github/release/arduino/ArduinoCore-mbed.svg)](https://github.com/arduino/ArduinoCore-mbed/releases/latest)
 
-14. [`Functional-Vlpp library v1.0.2+`](https://github.com/khoih-prog/functional-vlpp) to use server's lambda function. To install. check [![arduino-library-badge](https://www.ardu-badge.com/badge/Functional-Vlpp.svg?)](https://www.ardu-badge.com/Functional-Vlpp)
-15. [`WiFiNINA_Generic library v1.8.14-3+`](https://github.com/khoih-prog/WiFiNINA_Generic) if using WiFiNINA. To install. check [![arduino-library-badge](https://www.ardu-badge.com/badge/WiFiNINA_Generic.svg?)](https://www.ardu-badge.com/WiFiNINA_Generic).
-16. [`ESP_AT_Lib library v1.4.1+`](https://github.com/khoih-prog/ESP_AT_Lib) if using ESP8288/ESP32-AT shields. To install, check [![arduino-library-badge](https://www.ardu-badge.com/badge/ESP_AT_Lib.svg?)](https://www.ardu-badge.com/ESP_AT_Lib).
-17. [`Modified WiFi101 Library v0.16.1+`](https://github.com/khoih-prog/WiFi101) to use SAMD MKR1000, etc. boards with WiFi101.
-18. [`WiFiEspAT library v1.3.2+`](https://github.com/jandrassy/WiFiEspAT) if using ESP8288/ESP32-AT shields. [![GitHub release](https://img.shields.io/github/release/jandrassy/WiFiEspAT.svg)](https://github.com/jandrassy/WiFiEspAT/releases/latest)
+14. [`Arduino megaAVR core 1.8.7+`](https://github.com/arduino/ArduinoCore-megaavr/releases) for Arduino megaAVR boards such as **UNO_WIFI_REV2, NANO_EVERY**
+
+15. [`Functional-Vlpp library v1.0.2+`](https://github.com/khoih-prog/functional-vlpp) to use server's lambda function. To install. check [![arduino-library-badge](https://www.ardu-badge.com/badge/Functional-Vlpp.svg?)](https://www.ardu-badge.com/Functional-Vlpp)
+16. [`WiFiNINA_Generic library v1.8.14-3+`](https://github.com/khoih-prog/WiFiNINA_Generic) if using WiFiNINA. To install. check [![arduino-library-badge](https://www.ardu-badge.com/badge/WiFiNINA_Generic.svg?)](https://www.ardu-badge.com/WiFiNINA_Generic).
+17. [`ESP_AT_Lib library v1.4.1+`](https://github.com/khoih-prog/ESP_AT_Lib) if using ESP8288/ESP32-AT shields. To install, check [![arduino-library-badge](https://www.ardu-badge.com/badge/ESP_AT_Lib.svg?)](https://www.ardu-badge.com/ESP_AT_Lib).
+18. [`Modified WiFi101 Library v0.16.1+`](https://github.com/khoih-prog/WiFi101) to use SAMD MKR1000, etc. boards with WiFi101.
+19. [`WiFiEspAT library v1.3.2+`](https://github.com/jandrassy/WiFiEspAT) if using ESP8288/ESP32-AT shields. [![GitHub release](https://img.shields.io/github/release/jandrassy/WiFiEspAT.svg)](https://github.com/jandrassy/WiFiEspAT/releases/latest)
 
 ---
 
@@ -769,634 +774,14 @@ Example:
 #### 1. File [AdvancedWebServer.ino](examples/AdvancedWebServer/AdvancedWebServer.ino)
 
 
-```cpp
-#include "defines.h"
+https://github.com/khoih-prog/WiFiWebServer/blob/6ffb7741516073c50f45edbd5a46c5cd514b9fda/examples/AdvancedWebServer/AdvancedWebServer.ino#L40-L297
 
-int status = WL_IDLE_STATUS;     // the Wifi radio's status
-int reqCount = 0;                // number of requests received
 
-WiFiWebServer server(80);
-
-#if defined(LED_BUILTIN)
-  const int led =  LED_BUILTIN;
-#else
-  #if (ESP32)
-    // Using pin 13 will crash ESP32_C3
-    const int led =  2;
-  #else
-    const int led =  13;
-  #endif
-#endif
-
-void handleRoot()
-{
-#define BUFFER_SIZE     512
-  
-  digitalWrite(led, 1);
-  char temp[BUFFER_SIZE];
-  int sec = millis() / 1000;
-  int min = sec / 60;
-  int hr = min / 60;
-  int day = hr / 24;
-
-  hr = hr % 24;
-
-  snprintf(temp, BUFFER_SIZE - 1,
-           "<html>\
-<head>\
-<meta http-equiv='refresh' content='5'/>\
-<title>%s</title>\
-<style>\
-body { background-color: #cccccc; font-family: Arial, Helvetica, Sans-Serif; Color: #000088; }\
-</style>\
-</head>\
-<body>\
-<h1>Hello from %s</h1>\
-<h3>running WiFiWebServer</h3>\
-<h3>on %s</h3>\
-<p>Uptime: %d d %02d:%02d:%02d</p>\
-<img src=\"/test.svg\" />\
-</body>\
-</html>", BOARD_NAME, BOARD_NAME, SHIELD_TYPE, day, hr, min % 60, sec % 60);
-
-  server.send(200, F("text/html"), temp);
-  digitalWrite(led, 0);
-}
-
-void handleNotFound()
-{
-  digitalWrite(led, 1);
-  
-  String message = F("File Not Found\n\n");
-  
-  message += F("URI: ");
-  message += server.uri();
-  message += F("\nMethod: ");
-  message += (server.method() == HTTP_GET) ? F("GET") : F("POST");
-  message += F("\nArguments: ");
-  message += server.args();
-  message += F("\n");
-  
-  for (uint8_t i = 0; i < server.args(); i++)
-  {
-    message += " " + server.argName(i) + ": " + server.arg(i) + "\n";
-  }
-  
-  server.send(404, F("text/plain"), message);
-  
-  digitalWrite(led, 0);
-}
-
-#define ORIGINAL_STR_LEN        2048
-
-void drawGraph()
-{
-  static String out;
-  static uint16_t previousStrLen = ORIGINAL_STR_LEN;
-
-  if (out.length() == 0)
-  {
-    WS_LOGWARN1(F("String Len = 0, extend to"), ORIGINAL_STR_LEN);
-    out.reserve(ORIGINAL_STR_LEN);
-  }
-
-  out = F( "<svg xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\" width=\"310\" height=\"150\">\n" \
-           "<rect width=\"310\" height=\"150\" fill=\"rgb(250, 230, 210)\" stroke-width=\"3\" stroke=\"rgb(0, 0, 0)\" />\n" \
-           "<g stroke=\"blue\">\n");
-
-  char temp[70];
-  
-  int y = rand() % 130;
-
-  for (int x = 10; x < 300; x += 10)
-  {
-    int y2 = rand() % 130;
-    sprintf(temp, "<line x1=\"%d\" y1=\"%d\" x2=\"%d\" y2=\"%d\" stroke-width=\"2\" />\n", x, 140 - y, x + 10, 140 - y2);
-    out += temp;
-    y = y2;
-  }
-  
-  out += F("</g>\n</svg>\n");
-
-  WS_LOGDEBUG1(F("String Len = "), out.length());
-
-  if (out.length() > previousStrLen)
-  {
-    WS_LOGERROR3(F("String Len > "), previousStrLen, F(", extend to"), out.length() + 48);
-
-    previousStrLen = out.length() + 48;
-    
-    out.reserve(previousStrLen);
-  }
-  else
-  {
-    server.send(200, "image/svg+xml", out);
-  }
-}
-
-void setup()
-{
-  pinMode(led, OUTPUT);
-  digitalWrite(led, 0);
-
-  Serial.begin(115200);
-  while (!Serial);
-
-  delay(200);
-
-  Serial.print(F("\nStarting AdvancedWebServer on ")); Serial.print(BOARD_NAME);
-  Serial.print(F(" with ")); Serial.println(SHIELD_TYPE); 
-  Serial.println(WIFI_WEBSERVER_VERSION);
-
-#if WIFI_USING_ESP_AT
-
-  // initialize serial for ESP module
-  EspSerial.begin(115200);
-  // initialize ESP module
-  WiFi.init(&EspSerial);
-
-  Serial.println(F("WiFi shield init done"));
-  
-#endif  
-
-#if ! (ESP32 || ESP8266)
-  // check for the presence of the shield
-#if USE_WIFI_NINA
-  if (WiFi.status() == WL_NO_MODULE)
-#else
-  if (WiFi.status() == WL_NO_SHIELD)
-#endif
-  {
-    Serial.println(F("WiFi shield not present"));
-    // don't continue
-    while (true);
-  }
-#endif
-
-#if USE_WIFI_NINA
-  String fv = WiFi.firmwareVersion();
-  if (fv < WIFI_FIRMWARE_LATEST_VERSION)
-  {
-    Serial.println(F("Please upgrade the firmware"));
-  }
-#endif
-
-#if (ESP32 || ESP8266)
-    WiFi.mode(WIFI_STA);
-
-    if (WiFi.status() != WL_CONNECTED)
-    {
-      if (strlen(pass) >= 8)
-      {
-        WiFi.begin(ssid, pass);
-      } 
-      else
-      {
-        WiFi.begin(ssid);
-      }
-    }
-    
-    while (WiFi.status() != WL_CONNECTED)
-    {
-      delay(500);
-    }
-
-#else
-
-  // attempt to connect to WiFi network
-  while ( status != WL_CONNECTED)
-  {
-    //delay(500);
-    Serial.print(F("Connecting to WPA SSID: "));
-    Serial.println(ssid);
-    // Connect to WPA/WPA2 network
-    status = WiFi.begin(ssid, pass);
-  }
-#endif
-
-  server.on(F("/"), handleRoot);
-  server.on(F("/test.svg"), drawGraph);
-  server.on(F("/inline"), []()
-  {
-    server.send(200, F("text/plain"), F("This works as well"));
-  });
-
-  server.onNotFound(handleNotFound);
-  
-  server.begin();
-  
-  Serial.print(F("HTTP server started @ "));
-  Serial.println(WiFi.localIP());
-}
-
-void heartBeatPrint()
-{
-  static int num = 1;
-
-  Serial.print(F("H"));
-
-  if (num == 80)
-  {
-    Serial.println();
-    num = 1;
-  }
-  else if (num++ % 10 == 0)
-  {
-    Serial.print(F(" "));
-  }
-}
-
-void check_status()
-{
-  static unsigned long checkstatus_timeout = 0;
-
-#define STATUS_CHECK_INTERVAL     60000L
-
-  // Send status report every STATUS_REPORT_INTERVAL (60) seconds: we don't need to send updates frequently if there is no status change.
-  if ((millis() > checkstatus_timeout) || (checkstatus_timeout == 0))
-  {
-    heartBeatPrint();
-    checkstatus_timeout = millis() + STATUS_CHECK_INTERVAL;
-  }
-}
-
-void loop()
-{
-  server.handleClient();
-  check_status();
-}
-```
 
 #### 2. File [defines.h](examples/AdvancedWebServer/defines.h)
 
-```cpp
-#ifndef defines_h
-#define defines_h
+https://github.com/khoih-prog/WiFiWebServer/blob/6ffb7741516073c50f45edbd5a46c5cd514b9fda/examples/AdvancedWebServer/defines.h#L12-L386
 
-#define DEBUG_WIFI_WEBSERVER_PORT   Serial
-
-// Debug Level from 0 to 4
-#define _WIFI_LOGLEVEL_             2
-#define _WIFININA_LOGLEVEL_         3
-
-#if ( defined(ARDUINO_PORTENTA_H7_M7) || defined(ARDUINO_PORTENTA_H7_M4) )
-
-  #if defined(BOARD_NAME)
-    #undef BOARD_NAME
-  #endif
-
-  #if defined(CORE_CM7)
-    #warning Using Portenta H7 M7 core
-    #define BOARD_NAME            "PORTENTA_H7_M7"
-  #else
-    #warning Using Portenta H7 M4 core
-    #define BOARD_NAME            "PORTENTA_H7_M4"
-  #endif
-
-  #define USE_WIFI_PORTENTA_H7  true
-
-  #define USE_WIFI_NINA         false
-
-  // To use the default WiFi library here 
-  #define USE_WIFI_CUSTOM       false
-  
-#elif (ESP32)
-
-  #define USE_WIFI_NINA         false
-
-  // To use the default WiFi library here 
-  #define USE_WIFI_CUSTOM       false
-
-#elif (ESP8266)
-
-  #define USE_WIFI_NINA         false
-
-  // To use the default WiFi library here 
-  #define USE_WIFI_CUSTOM       true
-
-#elif ( defined(ARDUINO_SAMD_MKR1000)  || defined(ARDUINO_SAMD_MKRWIFI1010) )
-
-  #define USE_WIFI_NINA         false
-  #define USE_WIFI101           true
-  #define USE_WIFI_CUSTOM       false
-
-#elif ( defined(ARDUINO_NANO_RP2040_CONNECT) || defined(ARDUINO_SAMD_NANO_33_IOT) )
-
-  #define USE_WIFI_NINA         true
-  #define USE_WIFI101           false
-  #define USE_WIFI_CUSTOM       false
-
-#else  
-
-  #define USE_WIFI_NINA         false
-  #define USE_WIFI101           false
-  
-  // If not USE_WIFI_NINA, you can USE_WIFI_CUSTOM, then include the custom WiFi library here 
-  #define USE_WIFI_CUSTOM       true
-
-#endif
-
-#if (!USE_WIFI_NINA && USE_WIFI_CUSTOM)
-  #if (ESP8266)
-    #include "ESP8266WiFi.h"
-  #else
-    //#include "WiFi_XYZ.h"
-    #include "WiFiEspAT.h"
-    #define WIFI_USING_ESP_AT     true
-  #endif
-#endif
-
-#if WIFI_USING_ESP_AT
-  #define EspSerial       Serial1
-  #error WIFI_USING_ESP_AT is not supported for AdvancedWebServer
-#endif
-
-#if USE_WIFI_PORTENTA_H7
-  #warning Using Portenta H7 WiFi
-  #define SHIELD_TYPE           "Portenta_H7 WiFi"
-#elif USE_WIFI_NINA
-  #warning Using WiFiNINA using WiFiNINA_Generic Library
-  #define SHIELD_TYPE           "WiFiNINA using WiFiNINA_Generic Library"
-#elif USE_WIFI101
-  #warning Using WiFi101 using WiFi101 Library
-  #define SHIELD_TYPE           "WiFi101 using WiFi101 Library"
-#elif (ESP32 || ESP8266)
-  #warning Using ESP WiFi with WiFi Library
-  #define SHIELD_TYPE           "ESP WiFi using WiFi Library"  
-#elif USE_WIFI_CUSTOM
-  #warning Using Custom WiFi using Custom WiFi Library
-  #define SHIELD_TYPE           "Custom WiFi using Custom WiFi Library"
-#else
-  #define SHIELD_TYPE           "Unknown WiFi shield/Library" 
-#endif
-
-#if ( defined(NRF52840_FEATHER) || defined(NRF52832_FEATHER) || defined(NRF52_SERIES) || defined(ARDUINO_NRF52_ADAFRUIT) || \
-        defined(NRF52840_FEATHER_SENSE) || defined(NRF52840_ITSYBITSY) || defined(NRF52840_CIRCUITPLAY) || defined(NRF52840_CLUE) || \
-        defined(NRF52840_METRO) || defined(NRF52840_PCA10056) || defined(PARTICLE_XENON) || defined(NINA_B302_ublox) || defined(NINA_B112_ublox) )
-  #if defined(WIFI_USE_NRF528XX)
-    #undef WIFI_USE_NRF528XX
-  #endif
-  #define WIFI_USE_NRF528XX          true
-#endif
-
-#if    ( defined(ARDUINO_SAMD_ZERO) || defined(ARDUINO_SAMD_MKR1000) || defined(ARDUINO_SAMD_MKRWIFI1010) \
-      || defined(ARDUINO_SAMD_NANO_33_IOT) || defined(ARDUINO_SAMD_MKRFox1200) || defined(ARDUINO_SAMD_MKRWAN1300) || defined(ARDUINO_SAMD_MKRWAN1310) \
-      || defined(ARDUINO_SAMD_MKRGSM1400) || defined(ARDUINO_SAMD_MKRNB1500) || defined(ARDUINO_SAMD_MKRVIDOR4000) || defined(__SAMD21G18A__) \
-      || defined(ARDUINO_SAMD_CIRCUITPLAYGROUND_EXPRESS) || defined(__SAMD21E18A__) || defined(__SAMD51__) || defined(__SAMD51J20A__) || defined(__SAMD51J19A__) \
-      || defined(__SAMD51G19A__) || defined(__SAMD51P19A__) || defined(__SAMD21G18A__) )
-  #if defined(WIFI_USE_SAMD)
-    #undef WIFI_USE_SAMD
-  #endif
-  #define WIFI_USE_SAMD      true
-#endif
-
-#if ( defined(ARDUINO_SAM_DUE) || defined(__SAM3X8E__) )
-  #if defined(WIFI_USE_SAM_DUE)
-    #undef WIFI_USE_SAM_DUE
-  #endif
-  #define WIFI_USE_SAM_DUE      true
-  #warning Use SAM_DUE architecture
-#endif
-
-#if ( defined(STM32F0) || defined(STM32F1) || defined(STM32F2) || defined(STM32F3)  ||defined(STM32F4) || defined(STM32F7) || \
-       defined(STM32L0) || defined(STM32L1) || defined(STM32L4) || defined(STM32H7)  ||defined(STM32G0) || defined(STM32G4) || \
-       defined(STM32WB) || defined(STM32MP1) ) && ! ( defined(ARDUINO_PORTENTA_H7_M7) || defined(ARDUINO_PORTENTA_H7_M4) )
-  #if defined(WIFI_USE_STM32)
-    #undef WIFI_USE_STM32
-  #endif
-  #define WIFI_USE_STM32      true
-#endif
-
-#ifdef CORE_TEENSY
-  #if defined(__IMXRT1062__)
-    // For Teensy 4.1/4.0
-    #define BOARD_TYPE      "TEENSY 4.1/4.0"
-  #elif defined(__MK66FX1M0__)
-    #define BOARD_TYPE "Teensy 3.6"
-  #elif defined(__MK64FX512__)
-    #define BOARD_TYPE "Teensy 3.5"
-  #elif defined(__MKL26Z64__)
-    #define BOARD_TYPE "Teensy LC"
-  #elif defined(__MK20DX256__)
-    #define BOARD_TYPE "Teensy 3.2" // and Teensy 3.1 (obsolete)
-  #elif defined(__MK20DX128__)
-    #define BOARD_TYPE "Teensy 3.0"
-  #elif defined(__AVR_AT90USB1286__)
-    #error Teensy 2.0++ not supported yet
-  #elif defined(__AVR_ATmega32U4__)
-    #error Teensy 2.0 not supported yet
-  #else
-    // For Other Boards
-    #define BOARD_TYPE      "Unknown Teensy Board"
-  #endif
-
-#elif defined(WIFI_USE_NRF528XX)
-  #if defined(NRF52840_FEATHER)
-    #define BOARD_TYPE      "NRF52840_FEATHER_EXPRESS"
-  #elif defined(NRF52832_FEATHER)
-    #define BOARD_TYPE      "NRF52832_FEATHER"
-  #elif defined(NRF52840_FEATHER_SENSE)
-    #define BOARD_TYPE      "NRF52840_FEATHER_SENSE"
-  #elif defined(NRF52840_ITSYBITSY)
-    #define BOARD_TYPE      "NRF52840_ITSYBITSY_EXPRESS"
-  #elif defined(NRF52840_CIRCUITPLAY)
-    #define BOARD_TYPE      "NRF52840_CIRCUIT_PLAYGROUND"
-  #elif defined(NRF52840_CLUE)
-    #define BOARD_TYPE      "NRF52840_CLUE"
-  #elif defined(NRF52840_METRO)
-    #define BOARD_TYPE      "NRF52840_METRO_EXPRESS"
-  #elif defined(NRF52840_PCA10056)
-    #define BOARD_TYPE      "NORDIC_NRF52840DK"
-  #elif defined(NINA_B302_ublox)
-    #define BOARD_TYPE      "NINA_B302_ublox"
-  #elif defined(NINA_B112_ublox)
-    #define BOARD_TYPE      "NINA_B112_ublox"
-  #elif defined(PARTICLE_XENON)
-    #define BOARD_TYPE      "PARTICLE_XENON"
-  #elif defined(MDBT50Q_RX)
-    #define BOARD_TYPE      "RAYTAC_MDBT50Q_RX"
-  #elif defined(ARDUINO_NRF52_ADAFRUIT)
-    #define BOARD_TYPE      "ARDUINO_NRF52_ADAFRUIT"
-  #else
-    #define BOARD_TYPE      "nRF52 Unknown"
-  #endif
-
-#elif defined(WIFI_USE_SAMD)
-  #if defined(ARDUINO_SAMD_ZERO)
-    #define BOARD_TYPE      "SAMD Zero"
-  #elif defined(ARDUINO_SAMD_MKR1000)
-    #define BOARD_TYPE      "SAMD MKR1000"
-  #elif defined(ARDUINO_SAMD_MKRWIFI1010)
-    #define BOARD_TYPE      "SAMD MKRWIFI1010"
-  #elif defined(ARDUINO_SAMD_NANO_33_IOT)
-    #define BOARD_TYPE      "SAMD NANO_33_IOT"
-  #elif defined(ARDUINO_SAMD_MKRFox1200)
-    #define BOARD_TYPE      "SAMD MKRFox1200"
-  #elif ( defined(ARDUINO_SAMD_MKRWAN1300) || defined(ARDUINO_SAMD_MKRWAN1310) )
-    #define BOARD_TYPE      "SAMD MKRWAN13X0"
-  #elif defined(ARDUINO_SAMD_MKRGSM1400)
-    #define BOARD_TYPE      "SAMD MKRGSM1400"
-  #elif defined(ARDUINO_SAMD_MKRNB1500)
-    #define BOARD_TYPE      "SAMD MKRNB1500"
-  #elif defined(ARDUINO_SAMD_MKRVIDOR4000)
-    #define BOARD_TYPE      "SAMD MKRVIDOR4000"
-  #elif defined(ARDUINO_SAMD_CIRCUITPLAYGROUND_EXPRESS)
-    #define BOARD_TYPE      "SAMD ARDUINO_SAMD_CIRCUITPLAYGROUND_EXPRESS"
-  #elif defined(ADAFRUIT_FEATHER_M0_EXPRESS)
-    #define BOARD_TYPE      "SAMD21 ADAFRUIT_FEATHER_M0_EXPRESS"
-  #elif defined(ADAFRUIT_METRO_M0_EXPRESS)
-    #define BOARD_TYPE      "SAMD21 ADAFRUIT_METRO_M0_EXPRESS"
-  #elif defined(ADAFRUIT_CIRCUITPLAYGROUND_M0)
-    #define BOARD_TYPE      "SAMD21 ADAFRUIT_CIRCUITPLAYGROUND_M0"
-  #elif defined(ADAFRUIT_GEMMA_M0)
-    #define BOARD_TYPE      "SAMD21 ADAFRUIT_GEMMA_M0"
-  #elif defined(ADAFRUIT_TRINKET_M0)
-    #define BOARD_TYPE      "SAMD21 ADAFRUIT_TRINKET_M0"
-  #elif defined(ADAFRUIT_ITSYBITSY_M0)
-    #define BOARD_TYPE      "SAMD21 ADAFRUIT_ITSYBITSY_M0"
-  #elif defined(ARDUINO_SAMD_HALLOWING_M0)
-    #define BOARD_TYPE      "SAMD21 ARDUINO_SAMD_HALLOWING_M0"
-  #elif defined(ADAFRUIT_METRO_M4_EXPRESS)
-    #define BOARD_TYPE      "SAMD51 ADAFRUIT_METRO_M4_EXPRESS"
-  #elif defined(ADAFRUIT_GRAND_CENTRAL_M4)
-    #define BOARD_TYPE      "SAMD51 ADAFRUIT_GRAND_CENTRAL_M4"
-  #elif defined(ADAFRUIT_FEATHER_M4_EXPRESS)
-    #define BOARD_TYPE      "SAMD51 ADAFRUIT_FEATHER_M4_EXPRESS"
-  #elif defined(ADAFRUIT_ITSYBITSY_M4_EXPRESS)
-    #define BOARD_TYPE      "SAMD51 ADAFRUIT_ITSYBITSY_M4_EXPRESS"
-  #elif defined(ADAFRUIT_TRELLIS_M4_EXPRESS)
-    #define BOARD_TYPE      "SAMD51 ADAFRUIT_TRELLIS_M4_EXPRESS"
-  #elif defined(ADAFRUIT_PYPORTAL)
-    #define BOARD_TYPE      "SAMD51 ADAFRUIT_PYPORTAL"
-  #elif defined(ADAFRUIT_PYPORTAL_M4_TITANO)
-    #define BOARD_TYPE      "SAMD51 ADAFRUIT_PYPORTAL_M4_TITANO"
-  #elif defined(ADAFRUIT_PYBADGE_M4_EXPRESS)
-    #define BOARD_TYPE      "SAMD51 ADAFRUIT_PYBADGE_M4_EXPRESS"
-  #elif defined(ADAFRUIT_METRO_M4_AIRLIFT_LITE)
-    #define BOARD_TYPE      "SAMD51 ADAFRUIT_METRO_M4_AIRLIFT_LITE"
-  #elif defined(ADAFRUIT_PYGAMER_M4_EXPRESS)
-    #define BOARD_TYPE      "SAMD51 ADAFRUIT_PYGAMER_M4_EXPRESS"
-  #elif defined(ADAFRUIT_PYGAMER_ADVANCE_M4_EXPRESS)
-    #define BOARD_TYPE      "SAMD51 ADAFRUIT_PYGAMER_ADVANCE_M4_EXPRESS"
-  #elif defined(ADAFRUIT_PYBADGE_AIRLIFT_M4)
-    #define BOARD_TYPE      "SAMD51 ADAFRUIT_PYBADGE_AIRLIFT_M4"
-  #elif defined(ADAFRUIT_MONSTER_M4SK_EXPRESS)
-    #define BOARD_TYPE      "SAMD51 ADAFRUIT_MONSTER_M4SK_EXPRESS"
-  #elif defined(ADAFRUIT_HALLOWING_M4_EXPRESS)
-    #define BOARD_TYPE      "SAMD51 ADAFRUIT_HALLOWING_M4_EXPRESS"
-  #elif defined(SEEED_WIO_TERMINAL)
-    #define BOARD_TYPE      "SAMD SEEED_WIO_TERMINAL"
-  #elif defined(SEEED_FEMTO_M0)
-    #define BOARD_TYPE      "SAMD SEEED_FEMTO_M0"
-  #elif defined(SEEED_XIAO_M0)
-    #define BOARD_TYPE      "SAMD SEEED_XIAO_M0"
-  #elif defined(Wio_Lite_MG126)
-    #define BOARD_TYPE      "SAMD SEEED Wio_Lite_MG126"
-  #elif defined(WIO_GPS_BOARD)
-    #define BOARD_TYPE      "SAMD SEEED WIO_GPS_BOARD"
-  #elif defined(SEEEDUINO_ZERO)
-    #define BOARD_TYPE      "SAMD SEEEDUINO_ZERO"
-  #elif defined(SEEEDUINO_LORAWAN)
-    #define BOARD_TYPE      "SAMD SEEEDUINO_LORAWAN"
-  #elif defined(SEEED_GROVE_UI_WIRELESS)
-    #define BOARD_TYPE      "SAMD SEEED_GROVE_UI_WIRELESS"
-  #elif defined(__SAMD21E18A__)
-    #define BOARD_TYPE      "SAMD21E18A"
-  #elif defined(__SAMD21G18A__)
-    #define BOARD_TYPE      "SAMD21G18A"
-  #elif defined(__SAMD51G19A__)
-    #define BOARD_TYPE      "SAMD51G19A"
-  #elif defined(__SAMD51J19A__)
-    #define BOARD_TYPE      "SAMD51J19A"
-  #elif defined(__SAMD51P19A__)
-    #define BOARD_TYPE      "__SAMD51P19A__"
-  #elif defined(__SAMD51J20A__)
-    #define BOARD_TYPE      "SAMD51J20A"
-  #elif defined(__SAM3X8E__)
-    #define BOARD_TYPE      "SAM3X8E"
-  #elif defined(__CPU_ARC__)
-    #define BOARD_TYPE      "CPU_ARC"
-  #elif defined(__SAMD51__)
-    #define BOARD_TYPE      "SAMD51"
-  #else
-    #define BOARD_TYPE      "SAMD Unknown"
-  #endif
-
-#elif defined(WIFI_USE_STM32)
-  #if defined(STM32F0)
-    #warning STM32F0 board selected
-    #define BOARD_TYPE  "STM32F0"
-  #elif defined(STM32F1)
-    #warning STM32F1 board selected
-    #define BOARD_TYPE  "STM32F1"
-  #elif defined(STM32F2)
-    #warning STM32F2 board selected
-    #define BOARD_TYPE  "STM32F2"
-  #elif defined(STM32F3)
-    #warning STM32F3 board selected
-    #define BOARD_TYPE  "STM32F3"
-  #elif defined(STM32F4)
-    #warning STM32F4 board selected
-    #define BOARD_TYPE  "STM32F4"
-  #elif defined(STM32F7)
-    #warning STM32F7 board selected
-    #define BOARD_TYPE  "STM32F7"
-  #elif defined(STM32L0)
-    #warning STM32L0 board selected
-    #define BOARD_TYPE  "STM32L0"
-  #elif defined(STM32L1)
-    #warning STM32L1 board selected
-    #define BOARD_TYPE  "STM32L1"
-  #elif defined(STM32L4)
-    #warning STM32L4 board selected
-    #define BOARD_TYPE  "STM32L4"
-  #elif defined(STM32H7)
-    #warning STM32H7 board selected
-    #define BOARD_TYPE  "STM32H7"
-  #elif defined(STM32G0)
-    #warning STM32G0 board selected
-    #define BOARD_TYPE  "STM32G0"
-  #elif defined(STM32G4)
-    #warning STM32G4 board selected
-    #define BOARD_TYPE  "STM32G4"
-  #elif defined(STM32WB)
-    #warning STM32WB board selected
-    #define BOARD_TYPE  "STM32WB"
-  #elif defined(STM32MP1)
-    #warning STM32MP1 board selected
-    #define BOARD_TYPE  "STM32MP1"
-  #else
-    #warning STM32 unknown board selected
-    #define BOARD_TYPE  "STM32 Unknown"
-  #endif
-
-#elif defined(ESP32)
-  #warning ESP32 board selected
-  #define BOARD_TYPE  "ESP32"
-#elif defined(ESP8266)
-  #warning ESP8266 board selected
-  #define BOARD_TYPE  "ESP8266"
-#else
-  #define BOARD_TYPE      "AVR Mega"
-#endif
-
-#ifndef BOARD_NAME
-  #if defined(ARDUINO_BOARD)
-    #define BOARD_NAME    ARDUINO_BOARD
-  #elif defined(BOARD_TYPE)
-    #define BOARD_NAME    BOARD_TYPE
-  #else
-    #define BOARD_NAME    "Unknown Board"
-  #endif  
-#endif
-
-#include <WiFiWebServer.h>
-
-char ssid[] = "YOUR_SSID";        // your network SSID (name)
-char pass[] = "12345678";        // your network password
-
-#endif    //defines_h
-```
 
 ---
 ---
@@ -1413,7 +798,7 @@ The following are debug terminal output and screen shot when running example [**
 
 ```
 Starting AdvancedServer on SAMD_NANO_33_IOT
-WiFiWebServer v1.6.1
+WiFiWebServer v1.6.2
 [NN] ===============================
 [NN] 
 Used/default SPI pinout: 
@@ -1567,7 +952,7 @@ The terminal output of **SAMD_NANO_33_IOT with WiFiNINA using WiFiNINA_Generic L
 
 ```
 Starting SimpleWebSocket on SAMD_NANO_33_IOT with WiFiNINA using WiFiNINA_Generic Library
-WiFiWebServer v1.6.1
+WiFiWebServer v1.6.2
 Connecting to SSID: HueNet1
 You're connected to the network, IP = 192.168.2.98
 SSID: HueNet1, Signal strength (RSSI):-24 dBm
@@ -1601,7 +986,7 @@ The terminal output of **SAMD_NANO_33_IOT with WiFiNINA using WiFiNINA_Generic L
 
 ```
 Starting SimpleHTTPExample on SAMD_NANO_33_IOT with WiFiNINA using WiFiNINA_Generic Library
-WiFiWebServer v1.6.1
+WiFiWebServer v1.6.2
 Connecting to SSID: HueNet1
 You're connected to the network, IP = 192.168.2.98
 SSID: HueNet1, Signal strength (RSSI):-21 dBm
@@ -1661,7 +1046,7 @@ The terminal output of **SAMD_NANO_33_IOT with WiFiNINA using WiFiNINA_Generic L
 
 ```
 Starting DweetPost on SAMD_NANO_33_IOT with WiFiNINA using WiFiNINA_Generic Library
-WiFiWebServer v1.6.1
+WiFiWebServer v1.6.2
 Connecting to SSID: HueNet1
 You're connected to the network, IP = 192.168.2.98
 SSID: HueNet1, Signal strength (RSSI):-22 dBm
@@ -1684,7 +1069,7 @@ The terminal output of **SAMD_NANO_33_IOT with WiFiNINA using WiFiNINA_Generic L
 
 ```
 Starting DweetGet on SAMD_NANO_33_IOT with WiFiNINA using WiFiNINA_Generic Library
-WiFiWebServer v1.6.1
+WiFiWebServer v1.6.2
 Connecting to SSID: HueNet1
 You're connected to the network, IP = 192.168.2.98
 SSID: HueNet1, Signal strength (RSSI):-25 dBm
@@ -1714,7 +1099,7 @@ The terminal output of **SAMD_NANO_33_IOT with WiFiNINA using WiFiNINA_Generic L
 
 ```
 Starting MQTTClient_Auth on SAMD_NANO_33_IOT with WiFiNINA using WiFiNINA_Generic Library
-WiFiWebServer v1.6.1
+WiFiWebServer v1.6.2
 Please upgrade the firmware
 Connecting to WPA SSID: HueNet1
 Connected! IP address: 192.168.2.98
@@ -1735,7 +1120,7 @@ The terminal output of **SAMD_NANO_33_IOT with WiFiNINA using WiFiNINA_Generic L
 ```
 Start MQTT_ThingStream on SAMD_NANO_33_IOT
 Starting MQTTClient_Auth on SAMD_NANO_33_IOT with WiFiNINA using WiFiNINA_Generic Library
-WiFiWebServer v1.6.1
+WiFiWebServer v1.6.2
 Please upgrade the firmware
 Connecting to WPA SSID: HueNet1
 Connected! IP address: 192.168.2.98
@@ -1763,7 +1148,7 @@ The terminal output of **RASPBERRY_PI_PICO with Custom WiFi (ESP8266-AT) using C
 
 ```
 Starting WebClientRepeating on RASPBERRY_PI_PICO with Custom WiFi using Custom WiFi Library
-WiFiWebServer v1.6.1
+WiFiWebServer v1.6.2
 WiFi shield init done
 Connecting to SSID: HueNet1
 You're connected to the network, IP = 192.168.2.76
@@ -1836,7 +1221,7 @@ The following are debug terminal output and screen shot when running example [**
 
 ```
 Starting AdvancedServer on Nano RP2040 Connect with WiFiNINA using WiFiNINA_Generic Library
-WiFiWebServer v1.6.1
+WiFiWebServer v1.6.2
 Connecting to WPA SSID: HueNet1
 HTTP server started @ 192.168.2.130
 H[WIFI] handleClient: New Client
@@ -1965,7 +1350,7 @@ The terminal output of **ESP32_DEV** running [SimpleHTTPExample example](example
 
 ```
 Starting SimpleHTTPExample on ESP32_DEV with ESP WiFi using WiFi Library
-WiFiWebServer v1.6.1
+WiFiWebServer v1.6.2
 Connecting to SSID: HueNet1
 You're connected to the network, IP = 192.168.2.80
 SSID: HueNet1, Signal strength (RSSI):-23 dBm
@@ -2032,7 +1417,7 @@ The following are debug terminal output and screen shot when running example [**
 
 ```
 Starting AdvancedServer on PORTENTA_H7_M7 with Portenta_H7 WiFi
-WiFiWebServer v1.6.1
+WiFiWebServer v1.6.2
 Connecting to WPA SSID: HueNet1
 HTTP server started @ 192.168.2.138
 H[WIFI] String Len = 0, extend to 2048
@@ -2048,7 +1433,7 @@ The terminal output of **PORTENTA_H7_M7 with Portenta_H7 WiFi** running [MQTTCli
 
 ```
 Starting MQTTClient_Auth on PORTENTA_H7_M7 with Portenta_H7 WiFi
-WiFiWebServer v1.6.1
+WiFiWebServer v1.6.2
 Connecting to SSID: HueNet1
 Connected! IP address: 192.168.2.130
 Attempting MQTT connection to broker.emqx.io...connected
@@ -2068,7 +1453,7 @@ The terminal output of **PORTENTA_H7_M7 with Portenta_H7 WiFi** running [WebClie
 
 ```
 Starting WebClientRepeating on PORTENTA_H7_M7 with Portenta_H7 WiFi
-WiFiWebServer v1.6.1
+WiFiWebServer v1.6.2
 Connecting to SSID: HueNet1
 You're connected to the network, IP = 192.168.2.130
 SSID: HueNet1, Signal strength (RSSI):-33 dBm
@@ -2142,7 +1527,7 @@ The following are debug terminal output and screen shot when running example [**
 
 ```
 Starting AdvancedWebServer on ESP32C3_DEV with ESP WiFi using WiFi Library
-WiFiWebServer v1.6.1
+WiFiWebServer v1.6.2
 Connecting to WPA SSID: HueNet1
 HTTP server started @ 192.168.2.86
 HH
@@ -2161,7 +1546,7 @@ The following are debug terminal output and screen shot when running example [**
 
 ```
 Starting AdvancedWebServer on ESP32S3_DEV with ESP WiFi using WiFi Library
-WiFiWebServer v1.6.1
+WiFiWebServer v1.6.2
 Connecting to WPA SSID: HueNet1
 HTTP server started @ 192.168.2.86
 HH
@@ -2202,6 +1587,8 @@ Submit issues to: [WiFiWebServer issues](https://github.com/khoih-prog/WiFiWebSe
 1. Bug Searching and Killing
 2. Add SSL/TLS Client and Server support
 3. Support more types of boards using WiFiNINA and other WiFi shields.
+4. Add support to megaAVR boards using [MegaCoreX core](https://github.com/MCUdude/MegaCoreX)
+
 
 ### DONE
 
@@ -2222,6 +1609,8 @@ Submit issues to: [WiFiWebServer issues](https://github.com/khoih-prog/WiFiWebSe
 15. Reduce usage of Arduino String with std::string
 16. Optimize library code and examples by using **reference-passing instead of value-passing**.
 17. Add support to new **ESP32-S3** and **ESP32_C3**
+18. Add support to megaAVR boards (UNO_WIFI_REV2, NANO_EVERY) using [Arduino megaAVR core](https://github.com/arduino/ArduinoCore-megaavr)
+
 
 ---
 ---
