@@ -21,7 +21,7 @@
 
 #include "defines.h"
 
-// echo.websocket.org is not workinh anymore.Please use your local WS server
+// echo.websocket.org is not working anymore.Please use your local WS server
 char serverAddress[] = "192.168.2.30";  // server address
 int port = 8080;
 

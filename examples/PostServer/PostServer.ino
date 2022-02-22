@@ -28,7 +28,7 @@ WiFiWebServer server(80);
 #endif
 
 const String postForms =
-  F("<html>\
+  ("<html>\
 <head>\
 <title>WiFiNINA_WebServer POST handling</title>\
 <style>\

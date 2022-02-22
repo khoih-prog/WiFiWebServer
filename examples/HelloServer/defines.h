@@ -65,7 +65,13 @@
   #define USE_WIFI101           false
   #define USE_WIFI_CUSTOM       false
 
-#else  
+#elif defined(ARDUINO_AVR_UNO_WIFI_REV2)
+ 
+  #define USE_WIFI_NINA         false
+  #define USE_WIFI101           true
+  #define USE_WIFI_CUSTOM       false
+  
+#else 
 
   #define USE_WIFI_NINA         false
   #define USE_WIFI101           false
@@ -87,7 +93,6 @@
 
 #if WIFI_USING_ESP_AT
   #define EspSerial       Serial1
-  #error WIFI_USING_ESP_AT is not supported for AdvancedWebServer
 #endif
 
 #if USE_WIFI_PORTENTA_H7
@@ -371,7 +376,9 @@
 
 #include <WiFiWebServer.h>
 
-char ssid[] = "YOUR_SSID";        // your network SSID (name)
-char pass[] = "12345678";        // your network password
+char ssid[] = "HueNet1";        // your network SSID (name)
+char pass[] = "jenniqqs";        // your network password
+//char ssid[] = "YOUR_SSID";        // your network SSID (name)
+//char pass[] = "12345678";        // your network password
 
 #endif    //defines_h

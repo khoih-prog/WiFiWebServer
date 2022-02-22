@@ -65,6 +65,12 @@
   #define USE_WIFI101           false
   #define USE_WIFI_CUSTOM       false
 
+#elif defined(ARDUINO_AVR_UNO_WIFI_REV2)
+ 
+  #define USE_WIFI_NINA         false
+  #define USE_WIFI101           true
+  #define USE_WIFI_CUSTOM       false
+  
 #else  
 
   #define USE_WIFI_NINA         false
@@ -87,7 +93,6 @@
 
 #if WIFI_USING_ESP_AT
   #define EspSerial       Serial1
-  #error WIFI_USING_ESP_AT is not supported for AdvancedWebServer
 #endif
 
 #if USE_WIFI_PORTENTA_H7

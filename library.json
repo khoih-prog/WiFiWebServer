@@ -1,7 +1,7 @@
 {
   "name": "WiFiWebServer",
-  "version": "1.6.1",
-  "keywords": "wifi, wi-fi, WebServer, WiFiNINA, WiFi101, ESP32, Portenta-H7, Teensy, SAM DUE, SAMD, STM32, nRF52, rpi-pico, rp2040, HTTP-Client, WebSocket-Client, server, client, websocket, AVR, Mega",
+  "version": "1.6.2",
+  "keywords": "wifi, wi-fi, WebServer, WiFiNINA, WiFi101, ESP32, Portenta-H7, SAM-DUE, SAMD, STM32, nRF52, rpi-pico, rp2040, HTTP-Client, WebSocket-Client, server, client, websocket, AVR, mega-avr",
   "description": "Simple WiFiWebServer, HTTP Client and WebSocket Client library for AVR Mega, Portenta_H7, Teensy, SAM DUE, SAMD21, SAMD51, STM32F/L/H/G/WB/MP1, nRF52, RP2040-based (Nano-RP2040-Connect, RASPBERRY_PI_PICO, ESP32/ESP8266, etc.) boards using WiFi, such as WiFiNINA, WiFi101, U-Blox W101, W102, ESP8266/ESP32-AT modules/shields, with functions similar to those of ESP8266/ESP32 WebServer libraries.",
   "authors":
   {

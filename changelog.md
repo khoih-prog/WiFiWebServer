@@ -12,6 +12,7 @@
 ## Table of Contents
 
 * [Changelog](#changelog)
+  * [Releases v1.6.2](#releases-v162)
   * [Releases v1.6.1](#releases-v161)
   * [Releases v1.6.0](#releases-v160)
   * [Releases v1.5.4](#releases-v154)
@@ -40,6 +41,11 @@
 ---
 
 ## Changelog
+
+### Releases v1.6.2
+
+1. Add support to megaAVR boards (UNO_WIFI_REV2, NANO_EVERY) using [Arduino megaAVR core](https://github.com/arduino/ArduinoCore-megaavr)
+2. Update `Packages' Patches`
 
 ### Releases v1.6.1
 
