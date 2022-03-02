@@ -12,7 +12,7 @@
   @file       Esp8266WebServer.h
   @author     Ivan Grokhotkov
 
-  Version: 1.6.2
+  Version: 1.6.3
 
   Version Modified By   Date      Comments
   ------- -----------  ---------- -----------
@@ -21,6 +21,7 @@
   1.6.0   K Hoang      13/02/2022 Add support to new ESP32-S3 and ESP32_C3
   1.6.1   K Hoang      13/02/2022 Fix v1.6.0 issue
   1.6.2   K Hoang      22/02/2022 Add support to megaAVR using Arduino megaAVR core
+  1.6.3   K Hoang      02/03/2022 Fix decoding error bug
  ***************************************************************************************************************************************/
 
 #pragma once
@@ -29,13 +30,13 @@
 #define WiFiWebServer_H
 
 #ifndef WIFI_WEBSERVER_VERSION
-  #define WIFI_WEBSERVER_VERSION          "WiFiWebServer v1.6.2"
+  #define WIFI_WEBSERVER_VERSION          "WiFiWebServer v1.6.3"
 
   #define WIFI_WEBSERVER_VERSION_MAJOR    1
   #define WIFI_WEBSERVER_VERSION_MINOR    6
-  #define WIFI_WEBSERVER_VERSION_PATCH    2
+  #define WIFI_WEBSERVER_VERSION_PATCH    3
 
-  #define WIFI_WEBSERVER_VERSION_INT      1006002
+  #define WIFI_WEBSERVER_VERSION_INT      1006003
 #endif
 
 #define USE_NEW_WEBSERVER_VERSION       true
