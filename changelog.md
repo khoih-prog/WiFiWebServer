@@ -12,6 +12,7 @@
 ## Table of Contents
 
 * [Changelog](#changelog)
+  * [Releases v1.7.0](#releases-v170)
   * [Releases v1.6.3](#releases-v163)
   * [Releases v1.6.2](#releases-v162)
   * [Releases v1.6.1](#releases-v161)
@@ -42,6 +43,13 @@
 ---
 
 ## Changelog
+
+### Releases v1.7.0
+
+1. Fix issue with Portenta_H7 core v2.7.2+. Check [[Portenta_H7] WiFi WebServer extremely slow from core v2.7.2 - v3.0.1 #441](https://github.com/arduino/ArduinoCore-mbed/issues/441)
+2. Rewrite to avoid `multiple-definitions` linker error for multiple-file project
+3. Add example [multiFileProject](examples/multiFileProject) to demo how to avoid `multiple-definitions` linker error for multiple-file project
+4. Update `Packages' Patches`
 
 ### Releases v1.6.3
 

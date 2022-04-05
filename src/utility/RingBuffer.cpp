@@ -1,4 +1,4 @@
-/**************************************************************************************************************************************
+/****************************************************************************************************************************
   RingBuffer.cpp - Dead simple web-server.
   For any WiFi shields, such as WiFiNINA W101, W102, W13x, or custom, such as ESP8266/ESP32-AT, Ethernet, etc
 
@@ -12,7 +12,7 @@
   @file       Esp8266WebServer.h
   @author     Ivan Grokhotkov
 
-  Version: 1.6.3
+  Version: 1.7.0
 
   Version Modified By   Date      Comments
   ------- -----------  ---------- -----------
@@ -22,7 +22,8 @@
   1.6.1   K Hoang      13/02/2022 Fix v1.6.0 issue
   1.6.2   K Hoang      22/02/2022 Add support to megaAVR using Arduino megaAVR core
   1.6.3   K Hoang      02/03/2022 Fix decoding error bug
- ***************************************************************************************************************************************/
+  1.7.0   K Hoang      05/04/2022 Fix issue with Portenta_H7 core v2.7.2+
+ *****************************************************************************************************************************/
 
 #include "RingBuffer.h"
 

@@ -1,4 +1,4 @@
-/**************************************************************************************************************************************
+/*********************************************************************************************************************************
   WiFiWebServer-impl.h - Dead simple web-server.
   For any WiFi shields, such as WiFiNINA W101, W102, W13x, or custom, such as ESP8266/ESP32-AT, Ethernet, etc
 
@@ -12,7 +12,7 @@
   @file       Esp8266WebServer.h
   @author     Ivan Grokhotkov
 
-  Version: 1.6.3
+  Version: 1.7.0
 
   Version Modified By   Date      Comments
   ------- -----------  ---------- -----------
@@ -22,7 +22,8 @@
   1.6.1   K Hoang      13/02/2022 Fix v1.6.0 issue
   1.6.2   K Hoang      22/02/2022 Add support to megaAVR using Arduino megaAVR core
   1.6.3   K Hoang      02/03/2022 Fix decoding error bug
- ***************************************************************************************************************************************/
+  1.7.0   K Hoang      05/04/2022 Fix issue with Portenta_H7 core v2.7.2+
+ **********************************************************************************************************************************/
 
 #pragma once
 
@@ -32,7 +33,7 @@
 #include <Arduino.h>
 #include <libb64/cencode.h>
 
-#include "WiFiWebServer.h"
+#include "WiFiWebServer.hpp"
 #include "utility/RequestHandlersImpl.h"
 #include "utility/WiFiDebug.h"
 #include "utility/mimetable.h"
@@ -40,6 +41,37 @@
 const char * AUTHORIZATION_HEADER = "Authorization";
 
 // New to use WWString
+
+/////////////////////////////////////////////////////////////////////////
+
+WWString fromString(const String& str)
+{
+  return str.c_str();
+}
+
+/////////////////////////////////////////////////////////////////////////
+
+WWString fromString(const String&& str)
+{
+  return str.c_str();
+}
+
+/////////////////////////////////////////////////////////////////////////
+
+String fromWWString(const WWString& str)
+{
+  return str.c_str();
+}
+
+/////////////////////////////////////////////////////////////////////////
+
+String fromWWString(const WWString&& str)
+{
+  return str.c_str();
+}
+
+/////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////
 
 WiFiWebServer::WiFiWebServer(int port)
   : _server(port)
@@ -62,6 +94,8 @@ WiFiWebServer::WiFiWebServer(int port)
 {
 }
 
+/////////////////////////////////////////////////////////////////////////
+
 WiFiWebServer::~WiFiWebServer() 
 {
   if (_currentHeaders)
@@ -80,6 +114,8 @@ WiFiWebServer::~WiFiWebServer()
   close();
 }
 
+/////////////////////////////////////////////////////////////////////////
+
 void WiFiWebServer::begin() 
 {
   _currentStatus = HC_NONE;
@@ -88,6 +124,8 @@ void WiFiWebServer::begin()
   if (!_headerKeysCount)
     collectHeaders(0, 0);
 }
+
+/////////////////////////////////////////////////////////////////////////
 
 bool WiFiWebServer::authenticate(const char * username, const char * password) 
 {
@@ -137,31 +175,43 @@ bool WiFiWebServer::authenticate(const char * username, const char * password)
   return false;
 }
 
+/////////////////////////////////////////////////////////////////////////
+
 void WiFiWebServer::requestAuthentication() 
 {
   sendHeader("WWW-Authenticate", "Basic realm=\"Login Required\"");
   send(401);
 }
 
+/////////////////////////////////////////////////////////////////////////
+
 void WiFiWebServer::on(const String &uri, WiFiWebServer::THandlerFunction handler) 
 {
   on(uri, HTTP_ANY, handler);
 }
+
+/////////////////////////////////////////////////////////////////////////
 
 void WiFiWebServer::on(const String &uri, HTTPMethod method, WiFiWebServer::THandlerFunction fn) 
 {
   on(uri, method, fn, _fileUploadHandler);
 }
 
+/////////////////////////////////////////////////////////////////////////
+
 void WiFiWebServer::on(const String &uri, HTTPMethod method, WiFiWebServer::THandlerFunction fn, WiFiWebServer::THandlerFunction ufn) 
 {
   _addRequestHandler(new FunctionRequestHandler(fn, ufn, uri, method));
 }
 
+/////////////////////////////////////////////////////////////////////////
+
 void WiFiWebServer::addHandler(RequestHandler* handler) 
 {
   _addRequestHandler(handler);
 }
+
+/////////////////////////////////////////////////////////////////////////
 
 void WiFiWebServer::_addRequestHandler(RequestHandler* handler) 
 {
@@ -176,6 +226,8 @@ void WiFiWebServer::_addRequestHandler(RequestHandler* handler)
     _lastHandler = handler;
   }
 }
+
+/////////////////////////////////////////////////////////////////////////
 
 //KH
 #if USE_NEW_WEBSERVER_VERSION
@@ -262,14 +314,18 @@ void WiFiWebServer::handleClient()
     yield();
   }
 
-#if (USE_WIFI_NINA)  
+#if (USE_WIFI_NINA || WIFI_USE_PORTENTA_H7)
   // KH, fix bug relating to New NINA FW 1.4.0. Have to close the connection
   _currentClient.stop();
   WS_LOGDEBUG(F("handleClient: Client disconnected"));
 #endif  
 }
+
+/////////////////////////////////////////////////////////////////////////
  
 #else
+
+/////////////////////////////////////////////////////////////////////////
 
 // KH, rewritten for Portenta H7 from v1.4.0
 void WiFiWebServer::handleClient() 
@@ -371,16 +427,16 @@ void WiFiWebServer::handleClient()
   
 stopClient:
   
-#if (USE_WIFI_NINA)   
-  // KH, fix bug relating to New NINA FW 1.4.0. Have to close the connection
+#if (USE_WIFI_NINA || WIFI_USE_PORTENTA_H7)  
+	// To be used with New NINA FW 1.4.0 and Portenta_H7 WiFi. Have to close the connection
   _currentClient.stop();
   WS_LOGDEBUG(F("handleClient: Client disconnected"));
-#else
-  return;  
 #endif  
 }
 
 #endif
+
+/////////////////////////////////////////////////////////////////////////
 
 void WiFiWebServer::close() 
 {
@@ -388,10 +444,14 @@ void WiFiWebServer::close()
   //_server.close();
 }
 
+/////////////////////////////////////////////////////////////////////////
+
 void WiFiWebServer::stop() 
 {
   close();
 }
+
+/////////////////////////////////////////////////////////////////////////
 
 void WiFiWebServer::sendHeader(const String& name, const String& value, bool first) 
 {
@@ -411,11 +471,14 @@ void WiFiWebServer::sendHeader(const String& name, const String& value, bool fir
   }
 }
 
+/////////////////////////////////////////////////////////////////////////
+
 void WiFiWebServer::setContentLength(size_t contentLength) 
 {
   _contentLength = contentLength;
 }
 
+/////////////////////////////////////////////////////////////////////////
 
 void WiFiWebServer::_prepareHeader(String& response, int code, const char* content_type, size_t contentLength) 
 {
@@ -463,6 +526,8 @@ void WiFiWebServer::_prepareHeader(String& response, int code, const char* conte
   _responseHeaders = String("");
 }
 
+/////////////////////////////////////////////////////////////////////////
+
 void WiFiWebServer::_prepareHeader(WWString& response, int code, const char* content_type, size_t contentLength) 
 {
   response = "HTTP/1." + fromString(String(_currentVersion)) + " ";
@@ -505,6 +570,8 @@ void WiFiWebServer::_prepareHeader(WWString& response, int code, const char* con
   _responseHeaders = String("");
 }
 
+/////////////////////////////////////////////////////////////////////////
+
 void WiFiWebServer::send(int code, const char* content_type, const String& content) 
 {
   WWString header;
@@ -526,6 +593,8 @@ void WiFiWebServer::send(int code, const char* content_type, const String& conte
     sendContent(content, content.length());
   }
 }
+
+/////////////////////////////////////////////////////////////////////////
 
 void WiFiWebServer::send(int code, char* content_type, const String& content, size_t contentLength)
 {
@@ -550,15 +619,21 @@ void WiFiWebServer::send(int code, char* content_type, const String& content, si
   }
 }
 
+/////////////////////////////////////////////////////////////////////////
+
 void WiFiWebServer::send(int code, char* content_type, const String& content) 
 {
   send(code, (const char*)content_type, content);
 }
 
+/////////////////////////////////////////////////////////////////////////
+
 void WiFiWebServer::send(int code, const String& content_type, const String& content) 
 {
   send(code, (const char*)content_type.c_str(), content);
 }
+
+/////////////////////////////////////////////////////////////////////////
 
 void WiFiWebServer::sendContent(const String& content) 
 {
@@ -585,6 +660,8 @@ void WiFiWebServer::sendContent(const String& content)
   }
 }
 
+/////////////////////////////////////////////////////////////////////////
+
 void WiFiWebServer::sendContent(const String& content, size_t size)
 {
   const char * footer = RETURN_NEWLINE;
@@ -610,6 +687,8 @@ void WiFiWebServer::sendContent(const String& content, size_t size)
     _currentClient.write(footer, 2);
   }
 }
+
+/////////////////////////////////////////////////////////////////////////
 
 // KH, Restore PROGMEM commands
 void WiFiWebServer::send_P(int code, PGM_P content_type, PGM_P content) 
@@ -640,6 +719,8 @@ void WiFiWebServer::send_P(int code, PGM_P content_type, PGM_P content)
   }
 }
 
+/////////////////////////////////////////////////////////////////////////
+
 void WiFiWebServer::send_P(int code, PGM_P content_type, PGM_P content, size_t contentLength) 
 {
   WWString header;
@@ -662,10 +743,14 @@ void WiFiWebServer::send_P(int code, PGM_P content_type, PGM_P content, size_t c
   }
 }
 
+/////////////////////////////////////////////////////////////////////////
+
 void WiFiWebServer::sendContent_P(PGM_P content) 
 {
   sendContent_P(content, strlen_P(content));
 }
+
+/////////////////////////////////////////////////////////////////////////
 
 void WiFiWebServer::sendContent_P(PGM_P content, size_t size) 
 {
@@ -715,14 +800,20 @@ void WiFiWebServer::sendContent_P(PGM_P content, size_t size)
   }
 }
 
+/////////////////////////////////////////////////////////////////////////
+
 #if (ESP32 || ESP8266)
 
 #include "FS.h"
+
+/////////////////////////////////////////////////////////////////////////
 
 void WiFiWebServer::serveStatic(const char* uri, FS& fs, const char* path, const char* cache_header) 
 {
   _addRequestHandler(new StaticFileRequestHandler(fs, path, uri, cache_header));
 }
+
+/////////////////////////////////////////////////////////////////////////
 
 void WiFiWebServer::_streamFileCore(const size_t fileSize, const String &fileName, const String &contentType)
 {
@@ -741,7 +832,7 @@ void WiFiWebServer::_streamFileCore(const size_t fileSize, const String &fileNam
 }
 #endif
 
-//////
+/////////////////////////////////////////////////////////////////////////
 
 String WiFiWebServer::arg(const String& name) 
 {
@@ -754,6 +845,8 @@ String WiFiWebServer::arg(const String& name)
   return String();
 }
 
+/////////////////////////////////////////////////////////////////////////
+
 String WiFiWebServer::arg(int i) 
 {
   if (i < _currentArgCount)
@@ -761,6 +854,8 @@ String WiFiWebServer::arg(int i)
     
   return String();
 }
+
+/////////////////////////////////////////////////////////////////////////
 
 String WiFiWebServer::argName(int i) 
 {
@@ -770,10 +865,14 @@ String WiFiWebServer::argName(int i)
   return String();
 }
 
+/////////////////////////////////////////////////////////////////////////
+
 int WiFiWebServer::args() 
 {
   return _currentArgCount;
 }
+
+/////////////////////////////////////////////////////////////////////////
 
 bool WiFiWebServer::hasArg(const String& name) 
 {
@@ -786,6 +885,7 @@ bool WiFiWebServer::hasArg(const String& name)
   return false;
 }
 
+/////////////////////////////////////////////////////////////////////////
 
 String WiFiWebServer::header(const String& name) 
 {
@@ -797,6 +897,8 @@ String WiFiWebServer::header(const String& name)
   
   return String();
 }
+
+/////////////////////////////////////////////////////////////////////////
 
 void WiFiWebServer::collectHeaders(const char* headerKeys[], const size_t headerKeysCount) 
 {
@@ -814,6 +916,8 @@ void WiFiWebServer::collectHeaders(const char* headerKeys[], const size_t header
   }
 }
 
+/////////////////////////////////////////////////////////////////////////
+
 String WiFiWebServer::header(int i) 
 {
   if (i < _headerKeysCount)
@@ -821,6 +925,8 @@ String WiFiWebServer::header(int i)
     
   return String();
 }
+
+/////////////////////////////////////////////////////////////////////////
 
 String WiFiWebServer::headerName(int i) 
 {
@@ -830,10 +936,14 @@ String WiFiWebServer::headerName(int i)
   return String();
 }
 
+/////////////////////////////////////////////////////////////////////////
+
 int WiFiWebServer::headers() 
 {
   return _headerKeysCount;
 }
+
+/////////////////////////////////////////////////////////////////////////
 
 bool WiFiWebServer::hasHeader(const String& name) 
 {
@@ -846,20 +956,28 @@ bool WiFiWebServer::hasHeader(const String& name)
   return false;
 }
 
+/////////////////////////////////////////////////////////////////////////
+
 String WiFiWebServer::hostHeader() 
 {
   return _hostHeader;
 }
+
+/////////////////////////////////////////////////////////////////////////
 
 void WiFiWebServer::onFileUpload(THandlerFunction fn) 
 {
   _fileUploadHandler = fn;
 }
 
+/////////////////////////////////////////////////////////////////////////
+
 void WiFiWebServer::onNotFound(THandlerFunction fn) 
 {
   _notFoundHandler = fn;
 }
+
+/////////////////////////////////////////////////////////////////////////
 
 void WiFiWebServer::_handleRequest()
 {
@@ -910,6 +1028,8 @@ void WiFiWebServer::_handleRequest()
     _finalizeResponse();
   }
 
+/////////////////////////////////////////////////////////////////////////
+
 #if WIFI_USE_PORTENTA_H7
   WS_LOGDEBUG(F("_handleRequest: Clear _currentUri"));
   //_currentUri = String();
@@ -919,6 +1039,8 @@ void WiFiWebServer::_handleRequest()
 #endif  
 }
 
+/////////////////////////////////////////////////////////////////////////
+
 void WiFiWebServer::_finalizeResponse() 
 {
   if (_chunked) 
@@ -926,6 +1048,8 @@ void WiFiWebServer::_finalizeResponse()
     sendContent(String());
   }
 }
+
+/////////////////////////////////////////////////////////////////////////
 
 String WiFiWebServer::_responseCodeToString(int code) 
 {
@@ -975,5 +1099,6 @@ String WiFiWebServer::_responseCodeToString(int code)
   }
 }
 
+/////////////////////////////////////////////////////////////////////////
 
 #endif    // WiFiWebServer_Impl_H
