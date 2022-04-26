@@ -12,6 +12,7 @@
 ## Table of Contents
 
 * [Changelog](#changelog)
+  * [Releases v1.8.0](#releases-v180)
   * [Releases v1.7.0](#releases-v170)
   * [Releases v1.6.3](#releases-v163)
   * [Releases v1.6.2](#releases-v162)
@@ -43,6 +44,12 @@
 ---
 
 ## Changelog
+
+### Releases v1.8.0
+
+1. Add [WiFiMulti_Generic](https://github.com/khoih-prog/WiFiMulti_Generic) library support
+2. Add many WiFiMulti-related examples in [WiFiMulti](https://github.com/khoih-prog/WiFiWebServer/tree/master/examples/WiFiMulti)
+3. Update `Packages' Patches`
 
 ### Releases v1.7.0
 

@@ -12,7 +12,7 @@
   @file       Esp8266WebServer.h
   @author     Ivan Grokhotkov
 
-  Version: 1.7.0
+  Version: 1.8.0
 
   Version Modified By   Date      Comments
   ------- -----------  ---------- -----------
@@ -23,6 +23,7 @@
   1.6.2   K Hoang      22/02/2022 Add support to megaAVR using Arduino megaAVR core
   1.6.3   K Hoang      02/03/2022 Fix decoding error bug
   1.7.0   K Hoang      05/04/2022 Fix issue with Portenta_H7 core v2.7.2+
+  1.8.0   K Hoang      26/04/2022 Add WiFiMulti library support and examples.
  **********************************************************************************************************************************/
 
 #pragma once
