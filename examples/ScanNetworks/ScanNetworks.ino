@@ -108,7 +108,7 @@ void printEncryptionType(int thisType)
 void setup()
 {
   Serial.begin(115200);
-  while (!Serial);
+  while (!Serial && millis() < 5000);
 
   Serial.print(F("\nStarting ScanNetworks on ")); Serial.print(BOARD_NAME);
   Serial.print(F(" with ")); Serial.println(SHIELD_TYPE); 

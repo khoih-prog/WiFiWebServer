@@ -19,7 +19,7 @@
 
 int status = WL_IDLE_STATUS;     // the Wifi radio's status
 
-char server[] = "arduino.cc";
+char server[] = "arduino.tips";
 
 unsigned long lastConnectionTime = 0;         // last time you connected to the server, in milliseconds
 const unsigned long postingInterval = 10000L; // delay between updates, in milliseconds
@@ -60,7 +60,7 @@ void httpRequest()
 
     // send the HTTP PUT request
     client.println(F("GET /asciilogo.txt HTTP/1.1"));
-    client.println(F("Host: arduino.cc"));
+    client.println(F("Host: arduino.tips"));
     client.println(F("Connection: close"));
     client.println();
 
@@ -77,7 +77,7 @@ void httpRequest()
 void setup()
 {
   Serial.begin(115200);
-  while (!Serial);
+  while (!Serial && millis() < 5000);
 
   Serial.print(F("\nStarting WebClientRepeating on "));
   Serial.print(BOARD_NAME);

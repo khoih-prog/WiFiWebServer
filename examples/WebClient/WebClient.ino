@@ -19,7 +19,7 @@
 
 int status = WL_IDLE_STATUS;     // the Wifi radio's status
 
-char server[] = "arduino.cc";
+char server[] = "arduino.tips";
 
 // Initialize the Web client object
 WiFiClient client;
@@ -44,7 +44,7 @@ void printWifiStatus()
 void setup()
 {
   Serial.begin(115200);
-  while (!Serial);
+  while (!Serial && millis() < 5000);
 
   Serial.print(F("\nStarting WebClient on "));  Serial.print(BOARD_NAME);
   Serial.print(F(" with ")); Serial.println(SHIELD_TYPE);
@@ -114,7 +114,7 @@ void setup()
     Serial.println(F("Connected to server"));
     // Make a HTTP request
     client.println(F("GET /asciilogo.txt HTTP/1.1"));
-    client.println(F("Host: arduino.cc"));
+    client.println(F("Host: arduino.tips"));
     client.println(F("Connection: close"));
     client.println();
   }

@@ -126,7 +126,7 @@ void setup()
   digitalWrite(led, 0);
 
   Serial.begin(115200);
-  while (!Serial);
+  while (!Serial && millis() < 5000);
 
   Serial.print(F("\nStarting PostServer on ")); Serial.print(BOARD_NAME);
   Serial.print(F(" with ")); Serial.println(SHIELD_TYPE); 

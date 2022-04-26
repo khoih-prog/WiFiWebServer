@@ -1,5 +1,5 @@
 /**************************************************************************************************************************************
-  AdvancedWebServer.ino - Simple Arduino web server sample for SAMD21 running WiFiNINA shield
+  AdvancedWebServer_WiFiMulti.ino - Simple Arduino web server sample for SAMD21 running WiFiNINA shield
   For any WiFi shields, such as WiFiNINA W101, W102, W13x, or custom, such as ESP8266/ESP32-AT, Ethernet, etc
   
   WiFiWebServer is a library for the ESP32-based WiFi shields to run WebServer
@@ -44,6 +44,8 @@ int reqCount = 0;                // number of requests received
 
 WiFiWebServer server(80);
 
+WiFiMulti_Generic wifiMulti;
+
 #if defined(LED_BUILTIN)
   const int led =  LED_BUILTIN;
 #else
@@ -79,7 +81,7 @@ body { background-color: #cccccc; font-family: Arial, Helvetica, Sans-Serif; Col
 </head>\
 <body>\
 <h1>Hello from %s</h1>\
-<h3>running WiFiWebServer</h3>\
+<h3>running WiFiWebServer WiFiMulti</h3>\
 <h3>on %s</h3>\
 <p>Uptime: %d d %02d:%02d:%02d</p>\
 <img src=\"/test.svg\" />\
@@ -161,6 +163,103 @@ void drawGraph()
   }
 }
 
+uint8_t connectMultiWiFi()
+{
+#if defined(ESP32)
+  // For ESP32, this better be 0 to shorten the connect time.
+  // For ESP32-S2/C3, must be > 500
+  #if ( USING_ESP32_S2 || USING_ESP32_C3 )
+    #define WIFI_MULTI_1ST_CONNECT_WAITING_MS           500L
+  #else
+    // For ESP32 core v1.0.6, must be >= 500
+    #define WIFI_MULTI_1ST_CONNECT_WAITING_MS           800L
+  #endif
+#elif (defined(ESP8266))
+  // For ESP8266, this better be 2200 to enable connect the 1st time
+  #define WIFI_MULTI_1ST_CONNECT_WAITING_MS             2200L
+#else
+  // For general board, this better be 1000 to enable connect the 1st time
+  #define WIFI_MULTI_1ST_CONNECT_WAITING_MS             1000L
+#endif
+
+#define WIFI_MULTI_CONNECT_WAITING_MS                   500L
+
+  Serial.println("WiFi lost. Trying to scan and reconnect");
+
+  WiFi.disconnect();
+
+  int i = 0;
+
+  uint8_t status = wifiMulti.run();
+
+  delay(WIFI_MULTI_1ST_CONNECT_WAITING_MS);
+
+  while ( ( i++ < 20 ) && ( status != WL_CONNECTED ) )
+  {
+    status = WiFi.status();
+
+    if ( status == WL_CONNECTED )
+      break;
+    else
+      delay(WIFI_MULTI_CONNECT_WAITING_MS);
+  }
+
+  if ( status == WL_CONNECTED )
+  {
+    WFM_LOGERROR1(F("WiFi connected after time: "), i);
+    WFM_LOGERROR3(F("SSID:"), WiFi.SSID(), F(",RSSI="), WiFi.RSSI());
+
+#if (defined(ESP32) || defined(ESP8266))
+    WFM_LOGERROR3(F("Channel:"), WiFi.channel(), F(",IP address:"), WiFi.localIP() );
+#else
+    WFM_LOGERROR1(F("IP address:"), WiFi.localIP() );
+#endif
+  }
+  else
+  {
+    WFM_LOGERROR(F("WiFi not connected"));
+
+    if (wifiMulti.run() != WL_CONNECTED)
+    {
+      Serial.println("WiFi not connected!");
+      delay(1000);
+    }
+  }
+
+  return status;
+}
+
+void check_WiFi()
+{
+#if ( defined(ARDUINO_PORTENTA_H7_M7) || defined(ARDUINO_PORTENTA_H7_M4) )
+  // Workaround for bug in https://github.com/arduino/ArduinoCore-mbed/issues/381
+  if ( (WiFi.status() != WL_CONNECTED) || (WiFi.RSSI() == 0) )
+#else
+  if ( (WiFi.status() != WL_CONNECTED) )
+#endif
+  {
+    Serial.println(F("\nWiFi lost. Call connectMultiWiFi in loop"));
+    connectMultiWiFi();
+  }
+}
+
+void printWifiStatus()
+{
+  // print the SSID of the network you're attached to:
+  // you're connected now, so print out the data
+  Serial.print(F("You're connected to the network, IP = "));
+  Serial.println(WiFi.localIP());
+
+  Serial.print(F("SSID: "));
+  Serial.print(WiFi.SSID());
+
+  // print the received signal strength:
+  int32_t rssi = WiFi.RSSI();
+  Serial.print(F(", Signal strength (RSSI):"));
+  Serial.print(rssi);
+  Serial.println(F(" dBm"));
+}
+
 void setup()
 {
   pinMode(led, OUTPUT);
@@ -171,8 +270,9 @@ void setup()
 
   delay(200);
 
-  Serial.print(F("\nStarting AdvancedWebServer on ")); Serial.print(BOARD_NAME);
+  Serial.print(F("\nStarting AdvancedWebServer_WiFiMulti on ")); Serial.print(BOARD_NAME);
   Serial.print(F(" with ")); Serial.println(SHIELD_TYPE); 
+  Serial.println(WIFIMULTI_GENERIC_VERSION);
   Serial.println(WIFI_WEBSERVER_VERSION);
 
 #if WIFI_USING_ESP_AT
@@ -208,41 +308,22 @@ void setup()
   }
 #endif
 
-#if (ESP32 || ESP8266)
-    WiFi.mode(WIFI_STA);
+  wifiMulti.addAP(your_ssid1, your_pass1);
+  wifiMulti.addAP(your_ssid2, your_pass2);
+  //wifiMulti.addAP("ssid_from_AP_1", "your_password_for_AP_1");
+  //wifiMulti.addAP("ssid_from_AP_2", "your_password_for_AP_2");
+  //wifiMulti.addAP("ssid_from_AP_3", "your_password_for_AP_3");
 
-    Serial.print(F("Connecting to WPA SSID: "));
-    Serial.println(ssid);
+  Serial.println("Connecting WiFi...");
 
-    if (WiFi.status() != WL_CONNECTED)
-    {
-      if (strlen(pass) >= 8)
-      {
-        WiFi.begin(ssid, pass);
-      } 
-      else
-      {
-        WiFi.begin(ssid);
-      }
-    }
-    
-    while (WiFi.status() != WL_CONNECTED)
-    {
-      delay(500);
-    }
-
-#else
-
-  // attempt to connect to WiFi network
-  while ( status != WL_CONNECTED)
+  if (wifiMulti.run() == WL_CONNECTED)
   {
-    //delay(500);
-    Serial.print(F("Connecting to WPA SSID: "));
-    Serial.println(ssid);
-    // Connect to WPA/WPA2 network
-    status = WiFi.begin(ssid, pass);
+    Serial.print("\nWiFi connected, IP address: ");
+    Serial.println(WiFi.localIP());
   }
-#endif
+
+  // you're connected now, so print out the data
+  printWifiStatus();
 
   server.on(F("/"), handleRoot);
   server.on(F("/test.svg"), drawGraph);
@@ -278,16 +359,34 @@ void heartBeatPrint()
 
 void check_status()
 {
-  static unsigned long checkstatus_timeout = 0;
+  static uint32_t checkstatus_timeout  = 0;
+  static uint32_t checkwifi_timeout    = 0;
 
-#define STATUS_CHECK_INTERVAL     60000L
+  static uint32_t current_millis;
 
-  // Send status report every STATUS_REPORT_INTERVAL (60) seconds: we don't need to send updates frequently if there is no status change.
-  if ((millis() > checkstatus_timeout) || (checkstatus_timeout == 0))
+#define WIFICHECK_INTERVAL    1000L
+#define HEARTBEAT_INTERVAL    10000L
+
+  current_millis = millis();
+
+  // Check WiFi every WIFICHECK_INTERVAL (1) seconds.
+  if ((current_millis > checkwifi_timeout) || (checkwifi_timeout == 0))
+  {
+    check_WiFi();
+    checkwifi_timeout = current_millis + WIFICHECK_INTERVAL;
+  }
+
+  // Print hearbeat every HEARTBEAT_INTERVAL (10) seconds.
+  if ((current_millis > checkstatus_timeout) || (checkstatus_timeout == 0))
   {
     heartBeatPrint();
-    checkstatus_timeout = millis() + STATUS_CHECK_INTERVAL;
+    checkstatus_timeout = current_millis + HEARTBEAT_INTERVAL;
   }
+
+#if defined(CONFIG_PLATFORM_8721D)
+  // Important delay() for RTL8720DN
+  delay(200);
+#endif
 }
 
 void loop()
