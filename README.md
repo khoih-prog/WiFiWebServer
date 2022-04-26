@@ -1808,7 +1808,7 @@ Submit issues to: [WiFiWebServer issues](https://github.com/khoih-prog/WiFiWebSe
 17. Add support to new **ESP32-S3** and **ESP32_C3**
 18. Add support to megaAVR boards (UNO_WIFI_REV2, NANO_EVERY) using [Arduino megaAVR core](https://github.com/arduino/ArduinoCore-megaavr)
 19. Rewrite library and add example [multiFileProject](examples/multiFileProject) to demo for multiple-file project to fix `multiple-definitions` linker error
-20 Add [WiFiMulti_Generic](https://github.com/khoih-prog/WiFiMulti_Generic) library support
+20. Add [WiFiMulti_Generic](https://github.com/khoih-prog/WiFiMulti_Generic) library support
 21. Add many WiFiMulti-related examples in [WiFiMulti](https://github.com/khoih-prog/WiFiWebServer/tree/master/examples/WiFiMulti)
 
 
