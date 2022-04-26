@@ -14,7 +14,7 @@
 
 // This example downloads the URL "http://arduino.cc/"
 // Name of the server we want to connect to
-const char kHostname[] = "arduino.cc";
+const char kHostname[] = "arduino.tips";
 
 // Path to download (this is the bit after the hostname in the URL
 // that you want to download
@@ -51,7 +51,7 @@ void printWifiStatus()
 void setup()
 {
   Serial.begin(115200);
-  while (!Serial);
+  while (!Serial && millis() < 5000);
 
   Serial.print(F("\nStarting SimpleHTTPExample on ")); Serial.print(BOARD_NAME);
   Serial.print(F(" with ")); Serial.println(SHIELD_TYPE); 
