@@ -49,7 +49,7 @@
 
 ### Releases v1.9.1
 
-1. Add WiFiMulti support to RASPBERRY_PI_PICO_W using CYW4343 WiFi
+1. Add WiFiMulti support to RASPBERRY_PI_PICO_W using CYW43439 WiFi
 
 ### Releases v1.9.0
 
