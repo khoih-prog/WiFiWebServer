@@ -15,7 +15,7 @@
 #define DEBUG_WIFI_WEBSERVER_PORT   Serial
 
 // Debug Level from 0 to 4
-#define _WIFI_LOGLEVEL_             2
+#define _WIFI_LOGLEVEL_             4
 #define _WIFININA_LOGLEVEL_         3
 
 #if ( defined(ARDUINO_PORTENTA_H7_M7) || defined(ARDUINO_PORTENTA_H7_M4) )
@@ -65,14 +65,20 @@
   #define USE_WIFI101           false
   #define USE_WIFI_CUSTOM       false
 
+#elif defined(ARDUINO_RASPBERRY_PI_PICO_W)
+ 
+  #define USE_WIFI_NINA         false
+  #define USE_WIFI101           false
+  #define USE_WIFI_CUSTOM       false
+  
 #elif ( defined(__AVR_ATmega4809__) || defined(ARDUINO_AVR_UNO_WIFI_REV2) || defined(ARDUINO_AVR_NANO_EVERY) || \
       defined(ARDUINO_AVR_ATmega4809) || defined(ARDUINO_AVR_ATmega4808) || defined(ARDUINO_AVR_ATmega3209) || \
       defined(ARDUINO_AVR_ATmega3208) || defined(ARDUINO_AVR_ATmega1609) || defined(ARDUINO_AVR_ATmega1608) || \
       defined(ARDUINO_AVR_ATmega809) || defined(ARDUINO_AVR_ATmega808) )
  
   #error Not supported. Lack of memory for megaAVR
-  
-#else
+    
+#else 
 
   #define USE_WIFI_NINA         false
   #define USE_WIFI101           false

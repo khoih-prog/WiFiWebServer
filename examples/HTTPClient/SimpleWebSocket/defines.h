@@ -15,7 +15,7 @@
 #define DEBUG_WIFI_WEBSERVER_PORT   Serial
 
 // Debug Level from 0 to 4
-#define _WIFI_LOGLEVEL_             3
+#define _WIFI_LOGLEVEL_             4
 #define _WIFININA_LOGLEVEL_         3
 
 #if ( defined(ARDUINO_PORTENTA_H7_M7) || defined(ARDUINO_PORTENTA_H7_M4) )
@@ -62,6 +62,12 @@
 #elif ( defined(ARDUINO_NANO_RP2040_CONNECT) || defined(ARDUINO_SAMD_NANO_33_IOT) )
 
   #define USE_WIFI_NINA         true
+  #define USE_WIFI101           false
+  #define USE_WIFI_CUSTOM       false
+
+#elif defined(ARDUINO_RASPBERRY_PI_PICO_W)
+ 
+  #define USE_WIFI_NINA         false
   #define USE_WIFI101           false
   #define USE_WIFI_CUSTOM       false
 

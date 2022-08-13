@@ -65,13 +65,19 @@
   #define USE_WIFI101           false
   #define USE_WIFI_CUSTOM       false
 
+#elif defined(ARDUINO_RASPBERRY_PI_PICO_W)
+ 
+  #define USE_WIFI_NINA         false
+  #define USE_WIFI101           false
+  #define USE_WIFI_CUSTOM       false
+
 #elif defined(ARDUINO_AVR_UNO_WIFI_REV2)
  
   #define USE_WIFI_NINA         false
   #define USE_WIFI101           true
   #define USE_WIFI_CUSTOM       false
   
-#else 
+#else
 
   #define USE_WIFI_NINA         false
   #define USE_WIFI101           false

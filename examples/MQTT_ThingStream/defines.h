@@ -65,12 +65,19 @@
   #define USE_WIFI101           false
   #define USE_WIFI_CUSTOM       false
 
-#elif defined(ARDUINO_AVR_UNO_WIFI_REV2)
+#elif defined(ARDUINO_RASPBERRY_PI_PICO_W)
  
   #define USE_WIFI_NINA         false
-  #define USE_WIFI101           true
+  #define USE_WIFI101           false
   #define USE_WIFI_CUSTOM       false
   
+#elif ( defined(__AVR_ATmega4809__) || defined(ARDUINO_AVR_UNO_WIFI_REV2) || defined(ARDUINO_AVR_NANO_EVERY) || \
+      defined(ARDUINO_AVR_ATmega4809) || defined(ARDUINO_AVR_ATmega4808) || defined(ARDUINO_AVR_ATmega3209) || \
+      defined(ARDUINO_AVR_ATmega3208) || defined(ARDUINO_AVR_ATmega1609) || defined(ARDUINO_AVR_ATmega1608) || \
+      defined(ARDUINO_AVR_ATmega809) || defined(ARDUINO_AVR_ATmega808) )
+ 
+  #error Not supported. Lack of memory for megaAVR
+    
 #else 
 
   #define USE_WIFI_NINA         false
@@ -93,6 +100,7 @@
 
 #if WIFI_USING_ESP_AT
   #define EspSerial       Serial1
+  #error WIFI_USING_ESP_AT is not supported for AdvancedWebServer
 #endif
 
 #if USE_WIFI_PORTENTA_H7
