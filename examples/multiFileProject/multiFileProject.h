@@ -12,7 +12,7 @@
 
 #pragma once
 
-#define _WIFI_LOGLEVEL_       1
+#include "defines.h"
 
 // Can be included as many times as necessary, without `Multiple Definitions` Linker Error
 #include <WiFiWebServer.hpp>      // https://github.com/khoih-prog/WiFiWebServer
