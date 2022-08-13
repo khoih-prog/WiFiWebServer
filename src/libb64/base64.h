@@ -13,7 +13,7 @@
   @file       Esp8266WebServer.h
   @author     Ivan Grokhotkov
 
-  Version: 1.9.0
+  Version: 1.9.1
 
   Version Modified By   Date      Comments
   ------- -----------  ---------- -----------
@@ -26,6 +26,7 @@
   1.7.0   K Hoang      05/04/2022 Fix issue with Portenta_H7 core v2.7.2+
   1.8.0   K Hoang      26/04/2022 Add WiFiMulti library support and examples
   1.9.0   K Hoang      12/08/2022 Add support to RASPBERRY_PI_PICO_W using CYW4343 WiFi
+  1.9.1   K Hoang      13/08/2022 Add WiFiMulti support to RASPBERRY_PI_PICO_W using CYW4343 WiFi
  *****************************************************************************************************************************/
  
 #pragma once

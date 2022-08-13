@@ -12,6 +12,7 @@
 ## Table of Contents
 
 * [Changelog](#changelog)
+  * [Releases v1.9.1](#releases-v191)
   * [Releases v1.9.0](#releases-v190)
   * [Releases v1.8.0](#releases-v180)
   * [Releases v1.7.0](#releases-v170)
@@ -45,6 +46,10 @@
 ---
 
 ## Changelog
+
+### Releases v1.9.1
+
+1. Add WiFiMulti support to RASPBERRY_PI_PICO_W using CYW4343 WiFi
 
 ### Releases v1.9.0
 
