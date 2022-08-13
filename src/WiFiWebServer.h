@@ -12,7 +12,7 @@
   @file       Esp8266WebServer.h
   @author     Ivan Grokhotkov
 
-  Version: 1.8.0
+  Version: 1.9.0
 
   Version Modified By   Date      Comments
   ------- -----------  ---------- -----------
@@ -23,7 +23,8 @@
   1.6.2   K Hoang      22/02/2022 Add support to megaAVR using Arduino megaAVR core
   1.6.3   K Hoang      02/03/2022 Fix decoding error bug
   1.7.0   K Hoang      05/04/2022 Fix issue with Portenta_H7 core v2.7.2+
-  1.8.0   K Hoang      26/04/2022 Add WiFiMulti library support and examples.
+  1.8.0   K Hoang      26/04/2022 Add WiFiMulti library support and examples
+  1.9.0   K Hoang      12/08/2022 Add support to RASPBERRY_PI_PICO_W using CYW4343 WiFi
  **********************************************************************************************************************************/
 
 #pragma once
@@ -32,13 +33,13 @@
 #define WiFiWebServer_H
 
 #ifndef WIFI_WEBSERVER_VERSION
-  #define WIFI_WEBSERVER_VERSION          "WiFiWebServer v1.8.0"
+  #define WIFI_WEBSERVER_VERSION          "WiFiWebServer v1.9.0"
 
   #define WIFI_WEBSERVER_VERSION_MAJOR    1
-  #define WIFI_WEBSERVER_VERSION_MINOR    8
+  #define WIFI_WEBSERVER_VERSION_MINOR    9
   #define WIFI_WEBSERVER_VERSION_PATCH    0
 
-  #define WIFI_WEBSERVER_VERSION_INT      1008000
+  #define WIFI_WEBSERVER_VERSION_INT      1009000
 #endif
 
 #include "WiFiWebServer.hpp"

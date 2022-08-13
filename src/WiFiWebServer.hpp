@@ -12,7 +12,7 @@
   @file       Esp8266WebServer.h
   @author     Ivan Grokhotkov
 
-  Version: 1.8.0
+  Version: 1.9.0
 
   Version Modified By   Date      Comments
   ------- -----------  ---------- -----------
@@ -23,7 +23,8 @@
   1.6.2   K Hoang      22/02/2022 Add support to megaAVR using Arduino megaAVR core
   1.6.3   K Hoang      02/03/2022 Fix decoding error bug
   1.7.0   K Hoang      05/04/2022 Fix issue with Portenta_H7 core v2.7.2+
-  1.8.0   K Hoang      26/04/2022 Add WiFiMulti library support and examples.
+  1.8.0   K Hoang      26/04/2022 Add WiFiMulti library support and examples
+  1.9.0   K Hoang      12/08/2022 Add support to RASPBERRY_PI_PICO_W using CYW4343 WiFi
  **********************************************************************************************************************************/
 
 #pragma once
@@ -49,11 +50,10 @@
   #if (_WIFI_LOGLEVEL_ > 2)
     #warning Use mbed-portenta architecture for PORTENTA_H7 from WiFiWebServer
   #endif
-#endif
 
 /////////////////////////////////////////////////////////////////////////
 
-#if    ( defined(ARDUINO_SAMD_ZERO) || defined(ARDUINO_SAMD_MKR1000) || defined(ARDUINO_SAMD_MKRWIFI1010) \
+#elif    ( defined(ARDUINO_SAMD_ZERO) || defined(ARDUINO_SAMD_MKR1000) || defined(ARDUINO_SAMD_MKRWIFI1010) \
       || defined(ARDUINO_SAMD_NANO_33_IOT) || defined(ARDUINO_SAMD_MKRFox1200) || defined(ARDUINO_SAMD_MKRWAN1300) || defined(ARDUINO_SAMD_MKRWAN1310) \
       || defined(ARDUINO_SAMD_MKRGSM1400) || defined(ARDUINO_SAMD_MKRNB1500) || defined(ARDUINO_SAMD_MKRVIDOR4000) || defined(__SAMD21G18A__) \
       || defined(ARDUINO_SAMD_CIRCUITPLAYGROUND_EXPRESS) || defined(__SAMD21E18A__) || defined(__SAMD51__) || defined(__SAMD51J20A__) || defined(__SAMD51J19A__) \
@@ -66,11 +66,10 @@
   #if (_WIFI_LOGLEVEL_ > 2)
     #warning Use SAMD architecture from WiFiWebServer
   #endif
-#endif
 
 /////////////////////////////////////////////////////////////////////////
 
-#if (defined(NRF52840_FEATHER) || defined(NRF52832_FEATHER) || defined(NRF52_SERIES) || defined(ARDUINO_NRF52_ADAFRUIT) || \
+#elif (defined(NRF52840_FEATHER) || defined(NRF52832_FEATHER) || defined(NRF52_SERIES) || defined(ARDUINO_NRF52_ADAFRUIT) || \
      defined(NRF52840_FEATHER_SENSE) || defined(NRF52840_ITSYBITSY) || defined(NRF52840_CIRCUITPLAY) || \
      defined(NRF52840_CLUE) || defined(NRF52840_METRO) || defined(NRF52840_PCA10056) || defined(PARTICLE_XENON) || \
      defined(MDBT50Q_RX) || defined(NINA_B302_ublox) || defined(NINA_B112_ublox) )
@@ -85,11 +84,9 @@
   
   #include <Adafruit_TinyUSB.h>
 
-#endif
-
 /////////////////////////////////////////////////////////////////////////
 
-#if ( defined(ARDUINO_SAM_DUE) || defined(__SAM3X8E__) )
+#elif ( defined(ARDUINO_SAM_DUE) || defined(__SAM3X8E__) )
   #if defined(WIFI_USE_SAM_DUE)
     #undef WIFI_USE_SAM_DUE
   #endif
@@ -98,11 +95,10 @@
   #if (_WIFI_LOGLEVEL_ > 2)
     #warning Use SAM_DUE architecture from WiFiWebServer
   #endif
-#endif
 
 /////////////////////////////////////////////////////////////////////////
 
-#if ( defined(STM32F0) || defined(STM32F1) || defined(STM32F2) || defined(STM32F3)  ||defined(STM32F4) || defined(STM32F7) || \
+#elif ( defined(STM32F0) || defined(STM32F1) || defined(STM32F2) || defined(STM32F3)  ||defined(STM32F4) || defined(STM32F7) || \
        defined(STM32L0) || defined(STM32L1) || defined(STM32L4) || defined(STM32H7)  ||defined(STM32G0) || defined(STM32G4) || \
        defined(STM32WB) || defined(STM32MP1) ) && !( defined(ARDUINO_PORTENTA_H7_M7) || defined(ARDUINO_PORTENTA_H7_M4) )
   #if (_WIFI_LOGLEVEL_ > 2)     
@@ -117,15 +113,18 @@
   #if (_WIFI_LOGLEVEL_ > 2)
     #warning Use STM32 architecture from WiFiWebServer
   #endif
-#endif
 
 /////////////////////////////////////////////////////////////////////////
 
-#if ( defined(ARDUINO_NANO_RP2040_CONNECT) || defined(ARDUINO_ARCH_RP2040) || defined(ARDUINO_RASPBERRY_PI_PICO) || \
-      defined(ARDUINO_ADAFRUIT_FEATHER_RP2040) || defined(ARDUINO_GENERIC_RP2040) )
+#elif ( defined(ARDUINO_NANO_RP2040_CONNECT) || defined(ARDUINO_ARCH_RP2040) || defined(ARDUINO_RASPBERRY_PI_PICO) || \
+      defined(ARDUINO_ADAFRUIT_FEATHER_RP2040) || defined(ARDUINO_GENERIC_RP2040) || defined(ARDUINO_RASPBERRY_PI_PICO_W) )
       
-  #if (_WIFI_LOGLEVEL_ > 2)    
-    #warning RP2040-based board selected
+  #if (_WIFI_LOGLEVEL_ > 2)
+    #if defined(ARDUINO_RASPBERRY_PI_PICO_W)
+      #warning RASPBERRY_PI_PICO_W board using CYW4343 WiFi selected
+    #else
+      #warning RP2040-based board selected
+    #endif
   #endif
 
   #if defined(WIFI_USE_RP2040)
@@ -136,11 +135,10 @@
   #if (_WIFI_LOGLEVEL_ > 2)
     #warning Use RP2040 architecture from WiFiWebServer
   #endif
-#endif
 
 /////////////////////////////////////////////////////////////////////////
 
-#if ( defined(ARDUINO_AVR_UNO_WIFI_REV2) || defined(ARDUINO_AVR_NANO_EVERY) )  
+#elif ( defined(ARDUINO_AVR_UNO_WIFI_REV2) || defined(ARDUINO_AVR_NANO_EVERY) )  
 
   #include "ArduinoSTL.h"
   
@@ -154,14 +152,18 @@
   #endif
   
 #elif ( defined(__AVR_ATmega4809__)     || defined(ARDUINO_AVR_ATmega4809) || defined(ARDUINO_AVR_ATmega4808) || \
-      defined(ARDUINO_AVR_ATmega3209) || defined(ARDUINO_AVR_ATmega3208) || defined(ARDUINO_AVR_ATmega1609) || \
-      defined(ARDUINO_AVR_ATmega1608) || defined(ARDUINO_AVR_ATmega809)  || defined(ARDUINO_AVR_ATmega808) )  
+        defined(ARDUINO_AVR_ATmega3209) || defined(ARDUINO_AVR_ATmega3208) || defined(ARDUINO_AVR_ATmega1609) || \
+        defined(ARDUINO_AVR_ATmega1608) || defined(ARDUINO_AVR_ATmega809)  || defined(ARDUINO_AVR_ATmega808) )  
   
   #if defined(WIFI_USE_MEGACOREX)
     #undef WIFI_USE_MEGACOREX
   #endif
   #define WIFI_USE_MEGACOREX      true
   #error megaAVR architecture and MegaCoreX from WiFiWebServer not supported yet
+
+#else  
+
+  #error Unknown or unsupported board
   
 #endif
 

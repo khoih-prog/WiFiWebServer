@@ -12,6 +12,7 @@
 ## Table of Contents
 
 * [Changelog](#changelog)
+  * [Releases v1.9.0](#releases-v190)
   * [Releases v1.8.0](#releases-v180)
   * [Releases v1.7.0](#releases-v170)
   * [Releases v1.6.3](#releases-v163)
@@ -44,6 +45,11 @@
 ---
 
 ## Changelog
+
+### Releases v1.9.0
+
+1. Add support to RASPBERRY_PI_PICO_W using CYW43439 WiFi
+2. Update `Packages' Patches`
 
 ### Releases v1.8.0
 
