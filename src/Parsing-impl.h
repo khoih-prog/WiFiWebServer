@@ -12,7 +12,7 @@
   @file       Esp8266WebServer.h
   @author     Ivan Grokhotkov
 
-  Version: 1.9.1
+  Version: 1.9.2
 
   Version Modified By   Date      Comments
   ------- -----------  ---------- -----------
@@ -26,6 +26,7 @@
   1.8.0   K Hoang      26/04/2022 Add WiFiMulti library support and examples
   1.9.0   K Hoang      12/08/2022 Add support to RASPBERRY_PI_PICO_W using CYW4343 WiFi
   1.9.1   K Hoang      13/08/2022 Add WiFiMulti support to RASPBERRY_PI_PICO_W using CYW4343 WiFi
+  1.9.2   K Hoang      16/08/2022 Workarounnd for RP2040W WiFi.status() bug
  **********************************************************************************************************************************/
 
 #pragma once

@@ -12,6 +12,7 @@
 ## Table of Contents
 
 * [Changelog](#changelog)
+  * [Releases v1.9.2](#releases-v192)
   * [Releases v1.9.1](#releases-v191)
   * [Releases v1.9.0](#releases-v190)
   * [Releases v1.8.0](#releases-v180)
@@ -46,6 +47,11 @@
 ---
 
 ## Changelog
+
+### Releases v1.9.2
+
+1. Workaround for RP2040W WiFi.status() bug
+2. Update WiFiMulti-related examples
 
 ### Releases v1.9.1
 

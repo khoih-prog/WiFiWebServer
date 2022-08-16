@@ -281,7 +281,7 @@ This [**WiFiWebServer library**](https://github.com/khoih-prog/WiFiWebServer) cu
 17. [`ESP_AT_Lib library v1.4.1+`](https://github.com/khoih-prog/ESP_AT_Lib) if using ESP8288/ESP32-AT shields. To install, check [![arduino-library-badge](https://www.ardu-badge.com/badge/ESP_AT_Lib.svg?)](https://www.ardu-badge.com/ESP_AT_Lib).
 18. [`Modified WiFi101 Library v0.16.1+`](https://github.com/khoih-prog/WiFi101) to use SAMD MKR1000, etc. boards with WiFi101.
 19. [`WiFiEspAT library v1.4.1+`](https://github.com/jandrassy/WiFiEspAT) if using ESP8288/ESP32-AT shields. [![GitHub release](https://img.shields.io/github/release/jandrassy/WiFiEspAT.svg)](https://github.com/jandrassy/WiFiEspAT/releases/latest)
-20. [`WiFiMulti_Generic library v1.2.0+`](https://github.com/khoih-prog/WiFiMulti_Generic) to use WiFiMulti function. To install, check [![arduino-library-badge](https://www.ardu-badge.com/badge/WiFiMulti_Generic.svg?)](https://www.ardu-badge.com/WiFiMulti_Generic). **New**
+20. [`WiFiMulti_Generic library v1.2.1+`](https://github.com/khoih-prog/WiFiMulti_Generic) to use WiFiMulti function. To install, check [![arduino-library-badge](https://www.ardu-badge.com/badge/WiFiMulti_Generic.svg?)](https://www.ardu-badge.com/WiFiMulti_Generic). **New**
 
 
 ---
@@ -914,7 +914,7 @@ The following are debug terminal output and screen shot when running example [**
 
 ```
 Starting AdvancedServer on SAMD_NANO_33_IOT
-WiFiWebServer v1.9.1
+WiFiWebServer v1.9.2
 [NN] ===============================
 [NN] 
 Used/default SPI pinout: 
@@ -1067,7 +1067,7 @@ The terminal output of **SAMD_NANO_33_IOT with WiFiNINA using WiFiNINA_Generic L
 
 ```
 Starting SimpleWebSocket on SAMD_NANO_33_IOT with WiFiNINA using WiFiNINA_Generic Library
-WiFiWebServer v1.9.1
+WiFiWebServer v1.9.2
 Connecting to SSID: HueNet1
 You're connected to the network, IP = 192.168.2.98
 SSID: HueNet1, Signal strength (RSSI):-24 dBm
@@ -1101,7 +1101,7 @@ The terminal output of **SAMD_NANO_33_IOT with WiFiNINA using WiFiNINA_Generic L
 
 ```
 Starting SimpleHTTPExample on SAMD_NANO_33_IOT with WiFiNINA using WiFiNINA_Generic Library
-WiFiWebServer v1.9.1
+WiFiWebServer v1.9.2
 Connecting to SSID: HueNet1
 You're connected to the network, IP = 192.168.2.98
 SSID: HueNet1, Signal strength (RSSI):-21 dBm
@@ -1160,7 +1160,7 @@ The terminal output of **SAMD_NANO_33_IOT with WiFiNINA using WiFiNINA_Generic L
 
 ```
 Starting DweetPost on SAMD_NANO_33_IOT with WiFiNINA using WiFiNINA_Generic Library
-WiFiWebServer v1.9.1
+WiFiWebServer v1.9.2
 Connecting to SSID: HueNet1
 You're connected to the network, IP = 192.168.2.98
 SSID: HueNet1, Signal strength (RSSI):-22 dBm
@@ -1183,7 +1183,7 @@ The terminal output of **SAMD_NANO_33_IOT with WiFiNINA using WiFiNINA_Generic L
 
 ```
 Starting DweetGet on SAMD_NANO_33_IOT with WiFiNINA using WiFiNINA_Generic Library
-WiFiWebServer v1.9.1
+WiFiWebServer v1.9.2
 Connecting to SSID: HueNet1
 You're connected to the network, IP = 192.168.2.98
 SSID: HueNet1, Signal strength (RSSI):-25 dBm
@@ -1212,7 +1212,7 @@ The terminal output of **SAMD_NANO_33_IOT with WiFiNINA using WiFiNINA_Generic L
 
 ```
 Starting MQTTClient_Auth on SAMD_NANO_33_IOT with WiFiNINA using WiFiNINA_Generic Library
-WiFiWebServer v1.9.1
+WiFiWebServer v1.9.2
 Please upgrade the firmware
 Connecting to WPA SSID: HueNet1
 Connected! IP address: 192.168.2.98
@@ -1233,7 +1233,7 @@ The terminal output of **SAMD_NANO_33_IOT with WiFiNINA using WiFiNINA_Generic L
 ```
 Start MQTT_ThingStream on SAMD_NANO_33_IOT
 Starting MQTTClient_Auth on SAMD_NANO_33_IOT with WiFiNINA using WiFiNINA_Generic Library
-WiFiWebServer v1.9.1
+WiFiWebServer v1.9.2
 Please upgrade the firmware
 Connecting to WPA SSID: HueNet1
 Connected! IP address: 192.168.2.98
@@ -1261,7 +1261,7 @@ The terminal output of **RASPBERRY_PI_PICO with Custom WiFi (ESP8266-AT) using C
 
 ```
 Starting WebClientRepeating on RASPBERRY_PI_PICO with Custom WiFi using Custom WiFi Library
-WiFiWebServer v1.9.1
+WiFiWebServer v1.9.2
 WiFi shield init done
 Connecting to SSID: HueNet1
 You're connected to the network, IP = 192.168.2.76
@@ -1333,7 +1333,7 @@ The following are debug terminal output and screen shot when running example [**
 
 ```
 Starting AdvancedServer on Nano RP2040 Connect with WiFiNINA using WiFiNINA_Generic Library
-WiFiWebServer v1.9.1
+WiFiWebServer v1.9.2
 Connecting to WPA SSID: HueNet1
 HTTP server started @ 192.168.2.130
 H[WIFI] handleClient: New Client
@@ -1459,7 +1459,7 @@ The terminal output of **ESP32_DEV** running [SimpleHTTPExample example](example
 
 ```
 Starting SimpleHTTPExample on ESP32_DEV with ESP WiFi using WiFi Library
-WiFiWebServer v1.9.1
+WiFiWebServer v1.9.2
 Connecting to SSID: HueNet1
 You're connected to the network, IP = 192.168.2.80
 SSID: HueNet1, Signal strength (RSSI):-23 dBm
@@ -1525,7 +1525,7 @@ The following are debug terminal output and screen shot when running example [**
 
 ```
 Starting AdvancedServer on PORTENTA_H7_M7 with Portenta_H7 WiFi
-WiFiWebServer v1.9.1
+WiFiWebServer v1.9.2
 Connecting to WPA SSID: HueNet1
 HTTP server started @ 192.168.2.138
 H[WIFI] String Len = 0, extend to 2048
@@ -1541,7 +1541,7 @@ The terminal output of **PORTENTA_H7_M7 with Portenta_H7 WiFi** running [MQTTCli
 
 ```
 Starting MQTTClient_Auth on PORTENTA_H7_M7 with Portenta_H7 WiFi
-WiFiWebServer v1.9.1
+WiFiWebServer v1.9.2
 Connecting to SSID: HueNet1
 Connected! IP address: 192.168.2.130
 Attempting MQTT connection to broker.emqx.io...connected
@@ -1561,7 +1561,7 @@ The terminal output of **PORTENTA_H7_M7 with Portenta_H7 WiFi** running [WebClie
 
 ```
 Starting WebClientRepeating on PORTENTA_H7_M7 with Portenta_H7 WiFi
-WiFiWebServer v1.9.1
+WiFiWebServer v1.9.2
 Connecting to SSID: HueNet1
 You're connected to the network, IP = 192.168.2.130
 SSID: HueNet1, Signal strength (RSSI):-33 dBm
@@ -1633,7 +1633,7 @@ The following are debug terminal output and screen shot when running example [**
 
 ```
 Starting AdvancedWebServer on ESP32C3_DEV with ESP WiFi using WiFi Library
-WiFiWebServer v1.9.1
+WiFiWebServer v1.9.2
 Connecting to WPA SSID: HueNet1
 HTTP server started @ 192.168.2.86
 HH
@@ -1652,7 +1652,7 @@ The following are debug terminal output and screen shot when running example [**
 
 ```
 Starting AdvancedWebServer on ESP32S3_DEV with ESP WiFi using WiFi Library
-WiFiWebServer v1.9.1
+WiFiWebServer v1.9.2
 Connecting to WPA SSID: HueNet1
 HTTP server started @ 192.168.2.86
 HH
@@ -1671,8 +1671,8 @@ The following are debug terminal output and screen shot when running example [**
 
 ```
 Starting AdvancedWebServer_WiFiMulti on Nano RP2040 Connect with WiFiNINA using WiFiNINA_Generic Library
-WiFiMulti_Generic v1.2.0
-WiFiWebServer v1.9.1
+WiFiMulti_Generic v1.2.1
+WiFiWebServer v1.9.2
 Connecting WiFi...
 WiFi connected, IP address: 192.168.2.113
 You're connected to the network, IP = 192.168.2.113
@@ -1689,8 +1689,8 @@ The following are debug terminal output and screen shot when running example [**
 
 ```
 Starting MQTTClient_Auth_WiFiMulti on Nano RP2040 Connect with WiFiNINA using WiFiNINA_Generic Library
-WiFiMulti_Generic v1.2.0
-WiFiWebServer v1.9.1
+WiFiMulti_Generic v1.2.1
+WiFiWebServer v1.9.2
 Connecting WiFi...
 WiFi connected, IP address: 192.168.2.113
 You're connected to the network, IP = 192.168.2.113
@@ -1719,8 +1719,8 @@ The following are debug terminal output and screen shot when running example [**
 
 ```
 Starting WiFiUdpNTPClient_WiFiMulti on Nano RP2040 Connect with WiFiNINA using WiFiNINA_Generic Library
-WiFiMulti_Generic v1.2.0
-WiFiWebServer v1.9.1
+WiFiMulti_Generic v1.2.1
+WiFiWebServer v1.9.2
 Connecting WiFi...
 WiFi connected, IP address: 192.168.2.113
 You're connected to the network, IP = 192.168.2.113
@@ -1729,25 +1729,15 @@ Starting connection to server...
 Listening on port 2390
 HHH
 Packet received
-Seconds since Jan 1 1900 = 3859994140
-Unix time = 1651005340
-The UTC time is 20:35:40
+Seconds since Jan 1 1900 = 3869665072
+Unix time = 1660676272
+The UTC time is 18:57:52
 HH
 Packet received
-Seconds since Jan 1 1900 = 3859994160
-Unix time = 1651005360
-The UTC time is 20:36:00
+Seconds since Jan 1 1900 = 3869665132
+Unix time = 1660676332
+The UTC time is 18:58:52
 HH
-Packet received
-Seconds since Jan 1 1900 = 3859994180
-Unix time = 1651005380
-The UTC time is 20:36:20
-HH
-Packet received
-Seconds since Jan 1 1900 = 3859994200
-Unix time = 1651005400
-The UTC time is 20:36:40
-H 
 ```
 
 ---
