@@ -46,6 +46,37 @@ WiFiWebServer server(80);
 
 WiFiMulti_Generic wifiMulti;
 
+#if ( defined(ARDUINO_RASPBERRY_PI_PICO_W) )
+
+// Klugde to temporarily fix RP2040W WiFi.status() bug ( https://github.com/earlephilhower/arduino-pico/issues/762 )
+// Use any public host or your local host, such as ADSL/Cable modem, router, server
+//const char* host = "arduino.tips";
+const char* host = "192.168.2.1";
+const uint16_t port = 80;
+
+bool WiFiConnected = false;
+
+bool isWiFiConnected()
+{
+  // Use WiFiClient class to create TCP connections
+  WiFiClient client;
+  
+  if (!client.connect(host, port)) 
+  {
+    WFM_LOGINFO1("Connection failed. Local IP = ", client.localIP());
+    WiFiConnected = false;
+    
+    return false;
+  }
+
+  WFM_LOGINFO1("Client connected, Local IP = ", client.localIP());
+  WiFiConnected = true;
+  
+  return true;
+}
+
+#endif
+
 #if defined(LED_BUILTIN)
   const int led =  LED_BUILTIN;
 #else
@@ -234,6 +265,8 @@ void check_WiFi()
 #if ( defined(ARDUINO_PORTENTA_H7_M7) || defined(ARDUINO_PORTENTA_H7_M4) )
   // Workaround for bug in https://github.com/arduino/ArduinoCore-mbed/issues/381
   if ( (WiFi.status() != WL_CONNECTED) || (WiFi.RSSI() == 0) )
+#elif ( defined(ARDUINO_RASPBERRY_PI_PICO_W) )
+  if (!isWiFiConnected())
 #else
   if ( (WiFi.status() != WL_CONNECTED) )
 #endif
@@ -344,7 +377,14 @@ void heartBeatPrint()
 {
   static int num = 1;
 
-  Serial.print(F("H"));
+#if defined(ARDUINO_RASPBERRY_PI_PICO_W)
+  if (WiFiConnected)
+#else  
+  if (WiFi.status() == WL_CONNECTED)
+#endif
+    Serial.print(F("H"));        // H means connected to WiFi
+  else
+    Serial.print(F("F"));        // F means not connected to WiFi
 
   if (num == 80)
   {
@@ -364,7 +404,12 @@ void check_status()
 
   static uint32_t current_millis;
 
-#define WIFICHECK_INTERVAL    1000L
+#if ( defined(ARDUINO_RASPBERRY_PI_PICO_W) )
+  #define WIFICHECK_INTERVAL    10000L
+#else
+  #define WIFICHECK_INTERVAL    1000L
+#endif
+
 #define HEARTBEAT_INTERVAL    10000L
 
   current_millis = millis();

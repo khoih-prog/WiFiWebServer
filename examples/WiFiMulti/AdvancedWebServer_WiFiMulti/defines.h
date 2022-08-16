@@ -68,8 +68,6 @@
 
 #elif defined(ARDUINO_RASPBERRY_PI_PICO_W)
 
-  //#error WiFiMulti not supported yet for RASPBERRY_PI_PICO_W
- 
   #define USE_WIFI_NINA         false
   #define USE_WIFI101           false
   #define USE_WIFI_CUSTOM       false
