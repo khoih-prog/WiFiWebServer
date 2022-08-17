@@ -12,7 +12,7 @@
   @file       Esp8266WebServer.h
   @author     Ivan Grokhotkov
 
-  Version: 1.9.2
+  Version: 1.9.3
 
   Version Modified By   Date      Comments
   ------- -----------  ---------- -----------
@@ -27,6 +27,7 @@
   1.9.0   K Hoang      12/08/2022 Add support to RASPBERRY_PI_PICO_W using CYW4343 WiFi
   1.9.1   K Hoang      13/08/2022 Add WiFiMulti support to RASPBERRY_PI_PICO_W using CYW4343 WiFi
   1.9.2   K Hoang      16/08/2022 Workarounnd for RP2040W WiFi.status() bug
+  1.9.3   K Hoang      16/08/2022 Better workaround for RP2040W WiFi.status() bug using ping() to local gateway
  **********************************************************************************************************************************/
 
 #pragma once
@@ -35,13 +36,13 @@
 #define WiFiWebServer_H
 
 #ifndef WIFI_WEBSERVER_VERSION
-  #define WIFI_WEBSERVER_VERSION          "WiFiWebServer v1.9.2"
+  #define WIFI_WEBSERVER_VERSION          "WiFiWebServer v1.9.3"
 
   #define WIFI_WEBSERVER_VERSION_MAJOR    1
   #define WIFI_WEBSERVER_VERSION_MINOR    9
-  #define WIFI_WEBSERVER_VERSION_PATCH    2
+  #define WIFI_WEBSERVER_VERSION_PATCH    3
 
-  #define WIFI_WEBSERVER_VERSION_INT      1009002
+  #define WIFI_WEBSERVER_VERSION_INT      1009003
 #endif
 
 #include "WiFiWebServer.hpp"

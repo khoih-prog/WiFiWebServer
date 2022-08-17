@@ -12,6 +12,7 @@
 ## Table of Contents
 
 * [Changelog](#changelog)
+  * [Releases v1.9.3](#releases-v193)
   * [Releases v1.9.2](#releases-v192)
   * [Releases v1.9.1](#releases-v191)
   * [Releases v1.9.0](#releases-v190)
@@ -47,6 +48,11 @@
 ---
 
 ## Changelog
+
+### Releases v1.9.3
+
+1. Better workaround for RP2040W `WiFi.status()` bug using `ping()` to local gateway
+2. Update WiFiMulti-related examples
 
 ### Releases v1.9.2
 
