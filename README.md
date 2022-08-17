@@ -117,6 +117,7 @@
   * [16. AdvancedWebServer_WiFiMulti on Nano RP2040 Connect with WiFiNINA](#16-AdvancedWebServer_WiFiMulti-on-Nano-RP2040-Connect-with-WiFiNINA)
   * [17. MQTTClient_Auth_WiFiMulti on Nano RP2040 Connect with WiFiNINA](#17-MQTTClient_Auth_WiFiMulti-on-Nano-RP2040-Connect-with-WiFiNINA)
   * [18. WiFiUdpNTPClient_WiFiMulti on Nano RP2040 Connect with WiFiNINA](#18-WiFiUdpNTPClient_WiFiMulti-on-Nano-RP2040-Connect-with-WiFiNINA)
+  * [19. AdvancedWebServer_WiFiMulti on RASPBERRY_PI_PICO_W](#19-AdvancedWebServer_WiFiMulti-on-RASPBERRY_PI_PICO_W)
 * [Debug](#debug)
 * [Troubleshooting](#troubleshooting)
 * [Issues](#issues)
@@ -1737,6 +1738,30 @@ Packet received
 Seconds since Jan 1 1900 = 3869665132
 Unix time = 1660676332
 The UTC time is 18:58:52
+HH
+```
+
+---
+
+#### 19. AdvancedWebServer_WiFiMulti on RASPBERRY_PI_PICO_W
+
+The following are debug terminal output and screen shot when running example [**AdvancedWebServer_WiFiMulti**](examples/WiFiMulti/AdvancedWebServer_WiFiMulti) on **RASPBERRY_PI_PICO_W with CYW43439 WiFi**
+
+<p align="center">
+    <img src="https://github.com/khoih-prog/WiFiWebServer/blob/master/pics/AdvancedWebServer_WiFiMulti_RP2040W.png">
+</p>
+
+
+```
+Starting AdvancedWebServer_WiFiMulti on RASPBERRY_PI_PICO_W with RP2040W CYW43439 WiFi
+WiFiMulti_Generic v1.2.2
+WiFiWebServer v1.9.3
+Connecting WiFi...
+
+WiFi connected, IP address: 192.168.2.180
+You're connected to the network, IP = 192.168.2.180
+SSID: HueNet1, Signal strength (RSSI):0 dBm
+HTTP server started @ 192.168.2.180
 HH
 ```
 
