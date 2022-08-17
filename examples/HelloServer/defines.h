@@ -71,12 +71,13 @@
   #define USE_WIFI101           false
   #define USE_WIFI_CUSTOM       false
   
-#elif defined(ARDUINO_AVR_UNO_WIFI_REV2)
+#elif ( defined(__AVR_ATmega4809__) || defined(ARDUINO_AVR_UNO_WIFI_REV2) || defined(ARDUINO_AVR_NANO_EVERY) || \
+      defined(ARDUINO_AVR_ATmega4809) || defined(ARDUINO_AVR_ATmega4808) || defined(ARDUINO_AVR_ATmega3209) || \
+      defined(ARDUINO_AVR_ATmega3208) || defined(ARDUINO_AVR_ATmega1609) || defined(ARDUINO_AVR_ATmega1608) || \
+      defined(ARDUINO_AVR_ATmega809) || defined(ARDUINO_AVR_ATmega808) )
  
-  #define USE_WIFI_NINA         false
-  #define USE_WIFI101           true
-  #define USE_WIFI_CUSTOM       false
-
+  #error Not supported. Lack of memory for megaAVR
+    
 #else 
 
   #define USE_WIFI_NINA         false
@@ -99,6 +100,7 @@
 
 #if WIFI_USING_ESP_AT
   #define EspSerial       Serial1
+  #error WIFI_USING_ESP_AT is not supported for AdvancedWebServer
 #endif
 
 #if USE_WIFI_PORTENTA_H7
@@ -112,7 +114,10 @@
   #define SHIELD_TYPE           "WiFi101 using WiFi101 Library"
 #elif (ESP32 || ESP8266)
   #warning Using ESP WiFi with WiFi Library
-  #define SHIELD_TYPE           "ESP WiFi using WiFi Library"  
+  #define SHIELD_TYPE           "ESP WiFi using WiFi Library"
+#elif defined(ARDUINO_RASPBERRY_PI_PICO_W)
+  #warning Using RP2040W CYW43439 WiFi
+  #define SHIELD_TYPE           "RP2040W CYW43439 WiFi" 
 #elif USE_WIFI_CUSTOM
   #warning Using Custom WiFi using Custom WiFi Library
   #define SHIELD_TYPE           "Custom WiFi using Custom WiFi Library"

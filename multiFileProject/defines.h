@@ -70,14 +70,14 @@
   #define USE_WIFI_NINA         false
   #define USE_WIFI101           false
   #define USE_WIFI_CUSTOM       false
-
+  
 #elif defined(ARDUINO_AVR_UNO_WIFI_REV2)
  
   #define USE_WIFI_NINA         false
   #define USE_WIFI101           true
   #define USE_WIFI_CUSTOM       false
-  
-#else
+
+#else 
 
   #define USE_WIFI_NINA         false
   #define USE_WIFI101           false
@@ -382,11 +382,5 @@
     #define BOARD_NAME    "Unknown Board"
   #endif  
 #endif
-
-#include <WiFiHttpClient.h>
-#include <WiFiWebServer.h>
-
-char ssid[] = "YOUR_SSID";        // your network SSID (name)
-char pass[] = "12345678";        // your network password
 
 #endif    //defines_h

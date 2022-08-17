@@ -27,30 +27,28 @@ WiFiMulti_Generic wifiMulti;
 #if ( defined(ARDUINO_RASPBERRY_PI_PICO_W) )
 
 // Klugde to temporarily fix RP2040W WiFi.status() bug ( https://github.com/earlephilhower/arduino-pico/issues/762 )
-// Use any public host or your local host, such as ADSL/Cable modem, router, server
-//const char* host = "arduino.tips";
-const char* host = "192.168.2.1";
-const uint16_t port = 80;
 
 bool WiFiConnected = false;
 
 bool isWiFiConnected()
 {
-  // Use WiFiClient class to create TCP connections
-  WiFiClient client;
-  
-  if (!client.connect(host, port)) 
+  // You can change longer or shorter depending on your network response
+  // Shorter => more responsive, but more ping traffic
+  static uint8_t theTTL = 10;
+
+  // Use ping() to test TCP connections
+  if (WiFi.ping(WiFi.gatewayIP(), theTTL) == theTTL)
   {
-    WFM_LOGINFO1("Connection failed. Local IP = ", client.localIP());
-    WiFiConnected = false;
-    
-    return false;
+    WFM_LOGINFO1("Client connected, Local IP = ", WiFi.localIP());
+    WiFiConnected = true;
+  
+    return true;
   }
 
-  WFM_LOGINFO1("Client connected, Local IP = ", client.localIP());
-  WiFiConnected = true;
-  
-  return true;
+  WFM_LOGINFO1("Connection failed. Local IP = ", WiFi.localIP());
+  WiFiConnected = false;
+
+  return false;
 }
 
 #endif

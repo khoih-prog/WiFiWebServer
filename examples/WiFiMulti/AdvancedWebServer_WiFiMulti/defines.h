@@ -154,7 +154,10 @@
   #define SHIELD_TYPE           "WiFi101 using WiFi101 Library"
 #elif (ESP32 || ESP8266)
   #warning Using ESP WiFi with WiFi Library
-  #define SHIELD_TYPE           "ESP WiFi using WiFi Library"  
+  #define SHIELD_TYPE           "ESP WiFi using WiFi Library"
+#elif defined(ARDUINO_RASPBERRY_PI_PICO_W)
+  #warning Using RP2040W CYW43439 WiFi
+  #define SHIELD_TYPE           "RP2040W CYW43439 WiFi"
 #elif USE_WIFI_CUSTOM
   #warning Using Custom WiFi using Custom WiFi Library
   #define SHIELD_TYPE           "Custom WiFi using Custom WiFi Library"
