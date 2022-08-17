@@ -10,8 +10,8 @@
 
 // To demo how to include files in multi-file Projects
 
-#define WIFI_WEBSERVER_VERSION_MIN_TARGET      "WiFiWebServer v1.9.0"
-#define WIFI_WEBSERVER_VERSION_MIN             1009000
+#define WIFI_WEBSERVER_VERSION_MIN_TARGET      "WiFiWebServer v1.9.3"
+#define WIFI_WEBSERVER_VERSION_MIN             1009003
 
 #include "multiFileProject.h"
 
