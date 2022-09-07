@@ -12,7 +12,7 @@
   @file       Esp8266WebServer.h
   @author     Ivan Grokhotkov
 
-  Version: 1.9.3
+  Version: 1.9.4
 
   Version Modified By   Date      Comments
   ------- -----------  ---------- -----------
@@ -26,8 +26,9 @@
   1.8.0   K Hoang      26/04/2022 Add WiFiMulti library support and examples
   1.9.0   K Hoang      12/08/2022 Add support to RASPBERRY_PI_PICO_W using CYW4343 WiFi
   1.9.1   K Hoang      13/08/2022 Add WiFiMulti support to RASPBERRY_PI_PICO_W using CYW4343 WiFi
-  1.9.2   K Hoang      16/08/2022 Workarounnd for RP2040W WiFi.status() bug
+  1.9.2   K Hoang      16/08/2022 Workaround for RP2040W WiFi.status() bug
   1.9.3   K Hoang      16/08/2022 Better workaround for RP2040W WiFi.status() bug using ping() to local gateway
+  1.9.4   K Hoang      06/09/2022 Restore support to ESP32 and ESP8266
  **********************************************************************************************************************************/
 
 #pragma once
@@ -164,7 +165,19 @@
   #define WIFI_USE_MEGACOREX      true
   #error megaAVR architecture and MegaCoreX from WiFiWebServer not supported yet
 
-#else  
+#elif (ESP32)
+
+  #if (_WIFI_LOGLEVEL_ > 2)
+    #warning Use ESP32 from WiFiWebServer
+  #endif
+  
+#elif (ESP8266)
+
+  #if (_WIFI_LOGLEVEL_ > 2)
+    #warning Use ESP8266 from WiFiWebServer
+  #endif  
+
+#else
 
   #error Unknown or unsupported board
   

@@ -12,6 +12,7 @@
 ## Table of Contents
 
 * [Changelog](#changelog)
+  * [Releases v1.9.4](#releases-v194)
   * [Releases v1.9.3](#releases-v193)
   * [Releases v1.9.2](#releases-v192)
   * [Releases v1.9.1](#releases-v191)
@@ -48,6 +49,10 @@
 ---
 
 ## Changelog
+
+### Releases v1.9.4
+
+1. Restore support to ESP32 and ESP8266. Check [Problem using ESP8266 nodeMCU 1.0 #20](https://github.com/khoih-prog/WiFiWebServer/issues/20)
 
 ### Releases v1.9.3
 
