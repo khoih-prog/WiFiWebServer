@@ -12,7 +12,7 @@
   @file       Esp8266WebServer.h
   @author     Ivan Grokhotkov
 
-  Version: 1.9.4
+  Version: 1.9.5
 
   Version Modified By   Date      Comments
   ------- -----------  ---------- -----------
@@ -29,6 +29,7 @@
   1.9.2   K Hoang      16/08/2022 Workaround for RP2040W WiFi.status() bug
   1.9.3   K Hoang      16/08/2022 Better workaround for RP2040W WiFi.status() bug using ping() to local gateway
   1.9.4   K Hoang      06/09/2022 Restore support to ESP32 and ESP8266
+  1.9.5   K Hoang      10/09/2022 Restore support to Teensy, etc. Fix bug in examples
  **********************************************************************************************************************************/
 
 #pragma once

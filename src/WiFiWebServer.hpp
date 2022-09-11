@@ -12,7 +12,7 @@
   @file       Esp8266WebServer.h
   @author     Ivan Grokhotkov
 
-  Version: 1.9.4
+  Version: 1.9.5
 
   Version Modified By   Date      Comments
   ------- -----------  ---------- -----------
@@ -29,6 +29,7 @@
   1.9.2   K Hoang      16/08/2022 Workaround for RP2040W WiFi.status() bug
   1.9.3   K Hoang      16/08/2022 Better workaround for RP2040W WiFi.status() bug using ping() to local gateway
   1.9.4   K Hoang      06/09/2022 Restore support to ESP32 and ESP8266
+  1.9.5   K Hoang      10/09/2022 Restore support to Teensy, etc. Fix bug in examples
  **********************************************************************************************************************************/
 
 #pragma once
@@ -57,8 +58,8 @@
 
 /////////////////////////////////////////////////////////////////////////
 
-#elif    ( defined(ARDUINO_SAMD_ZERO) || defined(ARDUINO_SAMD_MKR1000) || defined(ARDUINO_SAMD_MKRWIFI1010) \
-      || defined(ARDUINO_SAMD_NANO_33_IOT) || defined(ARDUINO_SAMD_MKRFox1200) || defined(ARDUINO_SAMD_MKRWAN1300) || defined(ARDUINO_SAMD_MKRWAN1310) \
+#elif  ( defined(ARDUINO_SAMD_ZERO) || defined(ARDUINO_SAMD_MKR1000) || defined(ARDUINO_SAMD_MKRWIFI1010) \
+      || defined(ARDUINO_SAMD_NANO_33_IOT) || defined(ARDUINO_SAMD_MKRFox1200) || defined(ARDUINO_SAMD_MKRWAN1300) ||  defined(ARDUINO_SAMD_MKRWAN1310) \
       || defined(ARDUINO_SAMD_MKRGSM1400) || defined(ARDUINO_SAMD_MKRNB1500) || defined(ARDUINO_SAMD_MKRVIDOR4000) || defined(__SAMD21G18A__) \
       || defined(ARDUINO_SAMD_CIRCUITPLAYGROUND_EXPRESS) || defined(__SAMD21E18A__) || defined(__SAMD51__) || defined(__SAMD51J20A__) || defined(__SAMD51J19A__) \
       || defined(__SAMD51G19A__) || defined(__SAMD51P19A__) || defined(__SAMD21G18A__) )
@@ -74,9 +75,9 @@
 /////////////////////////////////////////////////////////////////////////
 
 #elif (defined(NRF52840_FEATHER) || defined(NRF52832_FEATHER) || defined(NRF52_SERIES) || defined(ARDUINO_NRF52_ADAFRUIT) || \
-     defined(NRF52840_FEATHER_SENSE) || defined(NRF52840_ITSYBITSY) || defined(NRF52840_CIRCUITPLAY) || \
-     defined(NRF52840_CLUE) || defined(NRF52840_METRO) || defined(NRF52840_PCA10056) || defined(PARTICLE_XENON) || \
-     defined(MDBT50Q_RX) || defined(NINA_B302_ublox) || defined(NINA_B112_ublox) )
+       defined(NRF52840_FEATHER_SENSE) || defined(NRF52840_ITSYBITSY) || defined(NRF52840_CIRCUITPLAY) || \
+       defined(NRF52840_CLUE) || defined(NRF52840_METRO) || defined(NRF52840_PCA10056) || defined(PARTICLE_XENON) || \
+       defined(MDBT50Q_RX) || defined(NINA_B302_ublox) || defined(NINA_B112_ublox) )
   #if defined(WIFI_USE_NRF528XX)
     #undef WIFI_USE_NRF528XX
   #endif
@@ -103,8 +104,8 @@
 /////////////////////////////////////////////////////////////////////////
 
 #elif ( defined(STM32F0) || defined(STM32F1) || defined(STM32F2) || defined(STM32F3)  ||defined(STM32F4) || defined(STM32F7) || \
-       defined(STM32L0) || defined(STM32L1) || defined(STM32L4) || defined(STM32H7)  ||defined(STM32G0) || defined(STM32G4) || \
-       defined(STM32WB) || defined(STM32MP1) ) && !( defined(ARDUINO_PORTENTA_H7_M7) || defined(ARDUINO_PORTENTA_H7_M4) )
+        defined(STM32L0) || defined(STM32L1) || defined(STM32L4) || defined(STM32H7)  ||defined(STM32G0) || defined(STM32G4) || \
+        defined(STM32WB) || defined(STM32MP1) ) && !( defined(ARDUINO_PORTENTA_H7_M7) || defined(ARDUINO_PORTENTA_H7_M4) )
   #if (_WIFI_LOGLEVEL_ > 2)     
     #warning STM32F/L/H/G/WB/MP1 board selected
   #endif
@@ -121,7 +122,7 @@
 /////////////////////////////////////////////////////////////////////////
 
 #elif ( defined(ARDUINO_NANO_RP2040_CONNECT) || defined(ARDUINO_ARCH_RP2040) || defined(ARDUINO_RASPBERRY_PI_PICO) || \
-      defined(ARDUINO_ADAFRUIT_FEATHER_RP2040) || defined(ARDUINO_GENERIC_RP2040) || defined(ARDUINO_RASPBERRY_PI_PICO_W) )
+        defined(ARDUINO_ADAFRUIT_FEATHER_RP2040) || defined(ARDUINO_GENERIC_RP2040) || defined(ARDUINO_RASPBERRY_PI_PICO_W) )
       
   #if (_WIFI_LOGLEVEL_ > 2)
     #if defined(ARDUINO_RASPBERRY_PI_PICO_W)
@@ -175,11 +176,17 @@
 
   #if (_WIFI_LOGLEVEL_ > 2)
     #warning Use ESP8266 from WiFiWebServer
-  #endif  
+  #endif
+
+#elif defined(CORE_TEENSY)
+
+  #if (_WIFI_LOGLEVEL_ > 2)
+    #warning Use Teensy from WiFiWebServer
+  #endif
 
 #else
 
-  #error Unknown or unsupported board
+  #warning Unknown or unsupported board
   
 #endif
 

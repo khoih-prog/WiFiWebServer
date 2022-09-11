@@ -266,15 +266,10 @@ This [**WiFiWebServer library**](https://github.com/khoih-prog/WiFiWebServer) cu
  7. [`Arduino SAMD core 1.8.13+`](https://github.com/arduino/ArduinoCore-samd) for SAMD ARM Cortex-M0+ boards. [![GitHub release](https://img.shields.io/github/release/arduino/ArduinoCore-samd.svg)](https://github.com/arduino/ArduinoCore-samd/releases/latest)
  8. [`Adafruit SAMD core 1.7.10+`](https://github.com/adafruit/ArduinoCore-samd) for SAMD ARM Cortex-M0+ and M4 boards (Nano 33 IoT, etc.). [![GitHub release](https://img.shields.io/github/release/adafruit/ArduinoCore-samd.svg)](https://github.com/adafruit/ArduinoCore-samd/releases/latest)
  9. [`Seeeduino SAMD core 1.8.3+`](https://github.com/Seeed-Studio/ArduinoCore-samd) for SAMD21/SAMD51 boards (XIAO M0, Wio Terminal, etc.). [![Latest release](https://img.shields.io/github/release/Seeed-Studio/ArduinoCore-samd.svg)](https://github.com/Seeed-Studio/ArduinoCore-samd/releases/latest/)
- 
 10. [`Adafruit nRF52 v1.3.0+`](https://github.com/adafruit/Adafruit_nRF52_Arduino) for nRF52 boards such as Adafruit NRF52840_FEATHER, NRF52832_FEATHER, NRF52840_FEATHER_SENSE, NRF52840_ITSYBITSY, NRF52840_CIRCUITPLAY, NRF52840_CLUE, NRF52840_METRO, NRF52840_PCA10056, PARTICLE_XENON, **NINA_B302_ublox**, etc. [![GitHub release](https://img.shields.io/github/release/adafruit/Adafruit_nRF52_Arduino.svg)](https://github.com/adafruit/Adafruit_nRF52_Arduino/releases/latest)
- 
 11. [`Arduino Core for STM32 v2.3.0+`](https://github.com/stm32duino/Arduino_Core_STM32) for STM32F/L/H/G/WB/MP1 boards. [![GitHub release](https://img.shields.io/github/release/stm32duino/Arduino_Core_STM32.svg)](https://github.com/stm32duino/Arduino_Core_STM32/releases/latest)
-
 12. [`Earle Philhower's arduino-pico core v2.5.2+`](https://github.com/earlephilhower/arduino-pico) for RP2040-based boards such as **RASPBERRY_PI_PICO, RASPBERRY_PI_PICO_W, ADAFRUIT_FEATHER_RP2040 and GENERIC_RP2040**, etc. [![GitHub release](https://img.shields.io/github/release/earlephilhower/arduino-pico.svg)](https://github.com/earlephilhower/arduino-pico/releases/latest)
-
 13. [`ArduinoCore-mbed mbed_rp2040, mbed_nano, mbed_portenta core 3.1.1+`](https://github.com/arduino/ArduinoCore-mbed) for Arduino (Use Arduino Board Manager) **Portenta_H7, RP2040-based boards, such as Nano_RP2040_Connect, RASPBERRY_PI_PICO**. [![GitHub release](https://img.shields.io/github/release/arduino/ArduinoCore-mbed.svg)](https://github.com/arduino/ArduinoCore-mbed/releases/latest)
-
 14. [`Arduino megaAVR core 1.8.7+`](https://github.com/arduino/ArduinoCore-megaavr/releases) for Arduino megaAVR boards such as **UNO_WIFI_REV2, NANO_EVERY**
 
 15. [`Functional-Vlpp library v1.0.2+`](https://github.com/khoih-prog/functional-vlpp) to use server's lambda function. To install, check [![arduino-library-badge](https://www.ardu-badge.com/badge/Functional-Vlpp.svg?)](https://www.ardu-badge.com/Functional-Vlpp)
@@ -915,7 +910,7 @@ The following are debug terminal output and screen shot when running example [**
 
 ```
 Starting AdvancedServer on SAMD_NANO_33_IOT
-WiFiWebServer v1.9.4
+WiFiWebServer v1.9.5
 [NN] ===============================
 [NN] 
 Used/default SPI pinout: 
@@ -1068,7 +1063,7 @@ The terminal output of **SAMD_NANO_33_IOT with WiFiNINA using WiFiNINA_Generic L
 
 ```
 Starting SimpleWebSocket on SAMD_NANO_33_IOT with WiFiNINA using WiFiNINA_Generic Library
-WiFiWebServer v1.9.4
+WiFiWebServer v1.9.5
 Connecting to SSID: HueNet1
 You're connected to the network, IP = 192.168.2.98
 SSID: HueNet1, Signal strength (RSSI):-24 dBm
@@ -1102,7 +1097,7 @@ The terminal output of **SAMD_NANO_33_IOT with WiFiNINA using WiFiNINA_Generic L
 
 ```
 Starting SimpleHTTPExample on SAMD_NANO_33_IOT with WiFiNINA using WiFiNINA_Generic Library
-WiFiWebServer v1.9.4
+WiFiWebServer v1.9.5
 Connecting to SSID: HueNet1
 You're connected to the network, IP = 192.168.2.98
 SSID: HueNet1, Signal strength (RSSI):-21 dBm
@@ -1161,7 +1156,7 @@ The terminal output of **SAMD_NANO_33_IOT with WiFiNINA using WiFiNINA_Generic L
 
 ```
 Starting DweetPost on SAMD_NANO_33_IOT with WiFiNINA using WiFiNINA_Generic Library
-WiFiWebServer v1.9.4
+WiFiWebServer v1.9.5
 Connecting to SSID: HueNet1
 You're connected to the network, IP = 192.168.2.98
 SSID: HueNet1, Signal strength (RSSI):-22 dBm
@@ -1184,7 +1179,7 @@ The terminal output of **SAMD_NANO_33_IOT with WiFiNINA using WiFiNINA_Generic L
 
 ```
 Starting DweetGet on SAMD_NANO_33_IOT with WiFiNINA using WiFiNINA_Generic Library
-WiFiWebServer v1.9.4
+WiFiWebServer v1.9.5
 Connecting to SSID: HueNet1
 You're connected to the network, IP = 192.168.2.98
 SSID: HueNet1, Signal strength (RSSI):-25 dBm
@@ -1213,7 +1208,7 @@ The terminal output of **SAMD_NANO_33_IOT with WiFiNINA using WiFiNINA_Generic L
 
 ```
 Starting MQTTClient_Auth on SAMD_NANO_33_IOT with WiFiNINA using WiFiNINA_Generic Library
-WiFiWebServer v1.9.4
+WiFiWebServer v1.9.5
 Please upgrade the firmware
 Connecting to WPA SSID: HueNet1
 Connected! IP address: 192.168.2.98
@@ -1234,7 +1229,7 @@ The terminal output of **SAMD_NANO_33_IOT with WiFiNINA using WiFiNINA_Generic L
 ```
 Start MQTT_ThingStream on SAMD_NANO_33_IOT
 Starting MQTTClient_Auth on SAMD_NANO_33_IOT with WiFiNINA using WiFiNINA_Generic Library
-WiFiWebServer v1.9.4
+WiFiWebServer v1.9.5
 Please upgrade the firmware
 Connecting to WPA SSID: HueNet1
 Connected! IP address: 192.168.2.98
@@ -1262,7 +1257,7 @@ The terminal output of **RASPBERRY_PI_PICO with Custom WiFi (ESP8266-AT) using C
 
 ```
 Starting WebClientRepeating on RASPBERRY_PI_PICO with Custom WiFi using Custom WiFi Library
-WiFiWebServer v1.9.4
+WiFiWebServer v1.9.5
 WiFi shield init done
 Connecting to SSID: HueNet1
 You're connected to the network, IP = 192.168.2.76
@@ -1334,7 +1329,7 @@ The following are debug terminal output and screen shot when running example [**
 
 ```
 Starting AdvancedServer on Nano RP2040 Connect with WiFiNINA using WiFiNINA_Generic Library
-WiFiWebServer v1.9.4
+WiFiWebServer v1.9.5
 Connecting to WPA SSID: HueNet1
 HTTP server started @ 192.168.2.130
 H[WIFI] handleClient: New Client
@@ -1460,7 +1455,7 @@ The terminal output of **ESP32_DEV** running [SimpleHTTPExample example](example
 
 ```
 Starting SimpleHTTPExample on ESP32_DEV with ESP WiFi using WiFi Library
-WiFiWebServer v1.9.4
+WiFiWebServer v1.9.5
 Connecting to SSID: HueNet1
 You're connected to the network, IP = 192.168.2.80
 SSID: HueNet1, Signal strength (RSSI):-23 dBm
@@ -1526,7 +1521,7 @@ The following are debug terminal output and screen shot when running example [**
 
 ```
 Starting AdvancedServer on PORTENTA_H7_M7 with Portenta_H7 WiFi
-WiFiWebServer v1.9.4
+WiFiWebServer v1.9.5
 Connecting to WPA SSID: HueNet1
 HTTP server started @ 192.168.2.138
 H[WIFI] String Len = 0, extend to 2048
@@ -1542,7 +1537,7 @@ The terminal output of **PORTENTA_H7_M7 with Portenta_H7 WiFi** running [MQTTCli
 
 ```
 Starting MQTTClient_Auth on PORTENTA_H7_M7 with Portenta_H7 WiFi
-WiFiWebServer v1.9.4
+WiFiWebServer v1.9.5
 Connecting to SSID: HueNet1
 Connected! IP address: 192.168.2.130
 Attempting MQTT connection to broker.emqx.io...connected
@@ -1562,7 +1557,7 @@ The terminal output of **PORTENTA_H7_M7 with Portenta_H7 WiFi** running [WebClie
 
 ```
 Starting WebClientRepeating on PORTENTA_H7_M7 with Portenta_H7 WiFi
-WiFiWebServer v1.9.4
+WiFiWebServer v1.9.5
 Connecting to SSID: HueNet1
 You're connected to the network, IP = 192.168.2.130
 SSID: HueNet1, Signal strength (RSSI):-33 dBm
@@ -1634,7 +1629,7 @@ The following are debug terminal output and screen shot when running example [**
 
 ```
 Starting AdvancedWebServer on ESP32C3_DEV with ESP WiFi using WiFi Library
-WiFiWebServer v1.9.4
+WiFiWebServer v1.9.5
 Connecting to WPA SSID: HueNet1
 HTTP server started @ 192.168.2.86
 HH
@@ -1653,7 +1648,7 @@ The following are debug terminal output and screen shot when running example [**
 
 ```
 Starting AdvancedWebServer on ESP32S3_DEV with ESP WiFi using WiFi Library
-WiFiWebServer v1.9.4
+WiFiWebServer v1.9.5
 Connecting to WPA SSID: HueNet1
 HTTP server started @ 192.168.2.86
 HH
@@ -1673,7 +1668,7 @@ The following are debug terminal output and screen shot when running example [**
 ```
 Starting AdvancedWebServer_WiFiMulti on Nano RP2040 Connect with WiFiNINA using WiFiNINA_Generic Library
 WiFiMulti_Generic v1.2.2
-WiFiWebServer v1.9.4
+WiFiWebServer v1.9.5
 Connecting WiFi...
 WiFi connected, IP address: 192.168.2.113
 You're connected to the network, IP = 192.168.2.113
@@ -1691,7 +1686,7 @@ The following are debug terminal output and screen shot when running example [**
 ```
 Starting MQTTClient_Auth_WiFiMulti on Nano RP2040 Connect with WiFiNINA using WiFiNINA_Generic Library
 WiFiMulti_Generic v1.2.2
-WiFiWebServer v1.9.4
+WiFiWebServer v1.9.5
 Connecting WiFi...
 WiFi connected, IP address: 192.168.2.113
 You're connected to the network, IP = 192.168.2.113
@@ -1721,7 +1716,7 @@ The following are debug terminal output and screen shot when running example [**
 ```
 Starting WiFiUdpNTPClient_WiFiMulti on Nano RP2040 Connect with WiFiNINA using WiFiNINA_Generic Library
 WiFiMulti_Generic v1.2.2
-WiFiWebServer v1.9.4
+WiFiWebServer v1.9.5
 Connecting WiFi...
 WiFi connected, IP address: 192.168.2.113
 You're connected to the network, IP = 192.168.2.113
@@ -1755,7 +1750,7 @@ The following are debug terminal output and screen shot when running example [**
 ```
 Starting AdvancedWebServer_WiFiMulti on RASPBERRY_PI_PICO_W with RP2040W CYW43439 WiFi
 WiFiMulti_Generic v1.2.2
-WiFiWebServer v1.9.4
+WiFiWebServer v1.9.5
 Connecting WiFi...
 
 WiFi connected, IP address: 192.168.2.180

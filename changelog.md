@@ -12,6 +12,7 @@
 ## Table of Contents
 
 * [Changelog](#changelog)
+  * [Releases v1.9.5](#releases-v195)
   * [Releases v1.9.4](#releases-v194)
   * [Releases v1.9.3](#releases-v193)
   * [Releases v1.9.2](#releases-v192)
@@ -49,6 +50,11 @@
 ---
 
 ## Changelog
+
+### Releases v1.9.5
+
+1. Restore support to Teensy, etc. 
+2. Fix bug in examples
 
 ### Releases v1.9.4
 
