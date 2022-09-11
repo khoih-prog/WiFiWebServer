@@ -100,7 +100,6 @@
 
 #if WIFI_USING_ESP_AT
   #define EspSerial       Serial1
-  #error WIFI_USING_ESP_AT is not supported for AdvancedWebServer
 #endif
 
 #if USE_WIFI_PORTENTA_H7
