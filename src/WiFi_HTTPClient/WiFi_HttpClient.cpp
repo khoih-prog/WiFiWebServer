@@ -12,7 +12,7 @@
   @file       Esp8266WebServer.h
   @author     Ivan Grokhotkov
 
-  Version: 1.9.5
+  Version: 1.10.0
 
   Version Modified By   Date      Comments
   ------- -----------  ---------- -----------
@@ -30,8 +30,9 @@
   1.9.3   K Hoang      16/08/2022 Better workaround for RP2040W WiFi.status() bug using ping() to local gateway
   1.9.4   K Hoang      06/09/2022 Restore support to ESP32 and ESP8266
   1.9.5   K Hoang      10/09/2022 Restore support to Teensy, etc. Fix bug in examples
+  1.10.0  K Hoang      13/11/2022 Add new features, such as CORS. Update code and examples
  *****************************************************************************************************************************/
- 
+
 // Class to simplify HTTP fetching on Arduino
 // (c) Copyright 2010-2011 MCQN Ltd
 // Released under Apache License, version 2.0
@@ -44,10 +45,14 @@
 
 #include "utility/WiFiDebug.h"
 
+////////////////////////////////////////
+
 // Initialize constants
 const char* WiFiHttpClient::kUserAgent = "Arduino/2.2.0";
 const char* WiFiHttpClient::kContentLengthPrefix = HTTP_HEADER_CONTENT_LENGTH ": ";
 const char* WiFiHttpClient::kTransferEncodingChunked = HTTP_HEADER_TRANSFER_ENCODING ": " HTTP_HEADER_VALUE_CHUNKED;
+
+////////////////////////////////////////
 
 WiFiHttpClient::WiFiHttpClient(Client& aClient, const char* aServerName, uint16_t aServerPort)
   : iClient(&aClient), iServerName(aServerName), iServerAddress(), iServerPort(aServerPort),
@@ -56,10 +61,14 @@ WiFiHttpClient::WiFiHttpClient(Client& aClient, const char* aServerName, uint16_
   resetState();
 }
 
+////////////////////////////////////////
+
 WiFiHttpClient::WiFiHttpClient(Client& aClient, const String& aServerName, uint16_t aServerPort)
   : WiFiHttpClient(aClient, aServerName.c_str(), aServerPort)
 {
 }
+
+////////////////////////////////////////
 
 WiFiHttpClient::WiFiHttpClient(Client& aClient, const IPAddress& aServerAddress, uint16_t aServerPort)
   : iClient(&aClient), iServerName(NULL), iServerAddress(aServerAddress), iServerPort(aServerPort),
@@ -68,20 +77,24 @@ WiFiHttpClient::WiFiHttpClient(Client& aClient, const IPAddress& aServerAddress,
   resetState();
 }
 
+////////////////////////////////////////
+
 void WiFiHttpClient::resetState()
 {
   iState          = eIdle;
   iStatusCode     = 0;
   iContentLength  = kNoContentLengthHeader;
-  
+
   iBodyLengthConsumed   = 0;
   iContentLengthPtr     = kContentLengthPrefix;
   iTransferEncodingChunkedPtr = kTransferEncodingChunked;
-  
+
   iIsChunked            = false;
   iChunkLength          = 0;
   iHttpResponseTimeout  = kHttpResponseTimeout;
 }
+
+////////////////////////////////////////
 
 void WiFiHttpClient::stop()
 {
@@ -89,23 +102,31 @@ void WiFiHttpClient::stop()
   resetState();
 }
 
+////////////////////////////////////////
+
 void WiFiHttpClient::connectionKeepAlive()
 {
   iConnectionClose = false;
 }
+
+////////////////////////////////////////
 
 void WiFiHttpClient::noDefaultRequestHeaders()
 {
   iSendDefaultRequestHeaders = false;
 }
 
+////////////////////////////////////////
+
 void WiFiHttpClient::beginRequest()
 {
   iState = eRequestStarted;
 }
 
+////////////////////////////////////////
+
 int WiFiHttpClient::startRequest(const char* aURLPath, const char* aHttpMethod,
-                                     const char* aContentType, int aContentLength, const byte aBody[])
+                                 const char* aContentType, int aContentLength, const byte aBody[])
 {
   if (iState == eReadingBody || iState == eReadingChunkLength || iState == eReadingBodyChunk)
   {
@@ -169,6 +190,7 @@ int WiFiHttpClient::startRequest(const char* aURLPath, const char* aHttpMethod,
       // This was a simple version of the API, so terminate the headers now
       finishHeaders();
     }
+
     // else we'll call it in endRequest or in the first call to print, etc.
 
     if (hasBody)
@@ -179,6 +201,8 @@ int WiFiHttpClient::startRequest(const char* aURLPath, const char* aHttpMethod,
 
   return ret;
 }
+
+////////////////////////////////////////
 
 int WiFiHttpClient::sendInitialHeaders(const char* aURLPath, const char* aHttpMethod)
 {
@@ -198,13 +222,13 @@ int WiFiHttpClient::sendInitialHeaders(const char* aURLPath, const char* aHttpMe
     {
       iClient->print("Host: ");
       iClient->print(iServerName);
-      
+
       if (iServerPort != kHttpPort)
       {
         iClient->print(":");
         iClient->print(iServerPort);
       }
-      
+
       iClient->println();
     }
 
@@ -222,14 +246,18 @@ int WiFiHttpClient::sendInitialHeaders(const char* aURLPath, const char* aHttpMe
 
   // Everything has gone well
   iState = eRequestStarted;
-  
+
   return HTTP_SUCCESS;
 }
+
+////////////////////////////////////////
 
 void WiFiHttpClient::sendHeader(const char* aHeader)
 {
   iClient->println(aHeader);
 }
+
+////////////////////////////////////////
 
 void WiFiHttpClient::sendHeader(const char* aHeaderName, const char* aHeaderValue)
 {
@@ -238,12 +266,16 @@ void WiFiHttpClient::sendHeader(const char* aHeaderName, const char* aHeaderValu
   iClient->println(aHeaderValue);
 }
 
+////////////////////////////////////////
+
 void WiFiHttpClient::sendHeader(const char* aHeaderName, const int aHeaderValue)
 {
   iClient->print(aHeaderName);
   iClient->print(": ");
   iClient->println(aHeaderValue);
 }
+
+////////////////////////////////////////
 
 void WiFiHttpClient::sendBasicAuth(const char* aUser, const char* aPassword)
 {
@@ -258,11 +290,11 @@ void WiFiHttpClient::sendBasicAuth(const char* aUser, const char* aPassword)
   // In Base64, each 3 bytes of unencoded data become 4 bytes of encoded data
   unsigned char input[3];
   unsigned char output[5]; // Leave space for a '\0' terminator so we can easily print
-  
+
   int userLen     = strlen(aUser);
   int passwordLen = strlen(aPassword);
   int inputOffset = 0;
-  
+
   for (int i = 0; i < (userLen + 1 + passwordLen); i++)
   {
     // Copy the relevant input byte into the input
@@ -278,7 +310,7 @@ void WiFiHttpClient::sendBasicAuth(const char* aUser, const char* aPassword)
     {
       input[inputOffset++] = aPassword[i - (userLen + 1)];
     }
-    
+
     // See if we've got a chunk to encode
     if ( (inputOffset == 3) || (i == userLen + passwordLen) )
     {
@@ -293,16 +325,20 @@ void WiFiHttpClient::sendBasicAuth(const char* aUser, const char* aPassword)
       inputOffset = 0;
     }
   }
-  
+
   // And end the header we've sent
   iClient->println();
 }
+
+////////////////////////////////////////
 
 void WiFiHttpClient::finishHeaders()
 {
   iClient->println();
   iState = eRequestSent;
 }
+
+////////////////////////////////////////
 
 void WiFiHttpClient::flushClientRx()
 {
@@ -312,10 +348,14 @@ void WiFiHttpClient::flushClientRx()
   }
 }
 
+////////////////////////////////////////
+
 void WiFiHttpClient::endRequest()
 {
   beginBody();
 }
+
+////////////////////////////////////////
 
 void WiFiHttpClient::beginBody()
 {
@@ -324,118 +364,165 @@ void WiFiHttpClient::beginBody()
     // We still need to finish off the headers
     finishHeaders();
   }
+
   // else the end of headers has already been sent, so nothing to do here
 }
+
+////////////////////////////////////////
 
 int WiFiHttpClient::get(const char* aURLPath)
 {
   return startRequest(aURLPath, HTTP_METHOD_GET);
 }
 
+////////////////////////////////////////
+
 int WiFiHttpClient::get(const String& aURLPath)
 {
   return get(aURLPath.c_str());
 }
+
+////////////////////////////////////////
 
 int WiFiHttpClient::post(const char* aURLPath)
 {
   return startRequest(aURLPath, HTTP_METHOD_POST);
 }
 
+////////////////////////////////////////
+
 int WiFiHttpClient::post(const String& aURLPath)
 {
   return post(aURLPath.c_str());
 }
+
+////////////////////////////////////////
 
 int WiFiHttpClient::post(const char* aURLPath, const char* aContentType, const char* aBody)
 {
   return post(aURLPath, aContentType, strlen(aBody), (const byte*)aBody);
 }
 
+////////////////////////////////////////
+
 int WiFiHttpClient::post(const String& aURLPath, const String& aContentType, const String& aBody)
 {
   return post(aURLPath.c_str(), aContentType.c_str(), aBody.length(), (const byte*)aBody.c_str());
 }
+
+////////////////////////////////////////
 
 int WiFiHttpClient::post(const char* aURLPath, const char* aContentType, int aContentLength, const byte aBody[])
 {
   return startRequest(aURLPath, HTTP_METHOD_POST, aContentType, aContentLength, aBody);
 }
 
+////////////////////////////////////////
+
 int WiFiHttpClient::put(const char* aURLPath)
 {
   return startRequest(aURLPath, HTTP_METHOD_PUT);
 }
+
+////////////////////////////////////////
 
 int WiFiHttpClient::put(const String& aURLPath)
 {
   return put(aURLPath.c_str());
 }
 
+////////////////////////////////////////
+
 int WiFiHttpClient::put(const char* aURLPath, const char* aContentType, const char* aBody)
 {
   return put(aURLPath, aContentType, strlen(aBody),  (const byte*)aBody);
 }
+
+////////////////////////////////////////
 
 int WiFiHttpClient::put(const String& aURLPath, const String& aContentType, const String& aBody)
 {
   return put(aURLPath.c_str(), aContentType.c_str(), aBody.length(), (const byte*)aBody.c_str());
 }
 
+////////////////////////////////////////
+
 int WiFiHttpClient::put(const char* aURLPath, const char* aContentType, int aContentLength, const byte aBody[])
 {
   return startRequest(aURLPath, HTTP_METHOD_PUT, aContentType, aContentLength, aBody);
 }
+
+////////////////////////////////////////
 
 int WiFiHttpClient::patch(const char* aURLPath)
 {
   return startRequest(aURLPath, HTTP_METHOD_PATCH);
 }
 
+////////////////////////////////////////
+
 int WiFiHttpClient::patch(const String& aURLPath)
 {
   return patch(aURLPath.c_str());
 }
+
+////////////////////////////////////////
 
 int WiFiHttpClient::patch(const char* aURLPath, const char* aContentType, const char* aBody)
 {
   return patch(aURLPath, aContentType, strlen(aBody),  (const byte*)aBody);
 }
 
+////////////////////////////////////////
+
 int WiFiHttpClient::patch(const String& aURLPath, const String& aContentType, const String& aBody)
 {
   return patch(aURLPath.c_str(), aContentType.c_str(), aBody.length(), (const byte*)aBody.c_str());
 }
+
+////////////////////////////////////////
 
 int WiFiHttpClient::patch(const char* aURLPath, const char* aContentType, int aContentLength, const byte aBody[])
 {
   return startRequest(aURLPath, HTTP_METHOD_PATCH, aContentType, aContentLength, aBody);
 }
 
+////////////////////////////////////////
+
 int WiFiHttpClient::del(const char* aURLPath)
 {
   return startRequest(aURLPath, HTTP_METHOD_DELETE);
 }
+
+////////////////////////////////////////
 
 int WiFiHttpClient::del(const String& aURLPath)
 {
   return del(aURLPath.c_str());
 }
 
+////////////////////////////////////////
+
 int WiFiHttpClient::del(const char* aURLPath, const char* aContentType, const char* aBody)
 {
   return del(aURLPath, aContentType, strlen(aBody),  (const byte*)aBody);
 }
+
+////////////////////////////////////////
 
 int WiFiHttpClient::del(const String& aURLPath, const String& aContentType, const String& aBody)
 {
   return del(aURLPath.c_str(), aContentType.c_str(), aBody.length(), (const byte*)aBody.c_str());
 }
 
+////////////////////////////////////////
+
 int WiFiHttpClient::del(const char* aURLPath, const char* aContentType, int aContentLength, const byte aBody[])
 {
   return startRequest(aURLPath, HTTP_METHOD_DELETE, aContentType, aContentLength, aBody);
 }
+
+////////////////////////////////////////
 
 int WiFiHttpClient::responseStatusCode()
 {
@@ -443,13 +530,14 @@ int WiFiHttpClient::responseStatusCode()
   {
     return HTTP_ERROR_API;
   }
-  
+
   // The first line will be of the form Status-Line:
   //   HTTP-Version SP Status-Code SP Reason-Phrase CRLF
   // Where HTTP-Version is of the form:
   //   HTTP-Version   = "HTTP" "/" 1*DIGIT "." 1*DIGIT
 
   int c = '\0';
+
   do
   {
     // Make sure the status code is reset, and likewise the state.  This
@@ -459,11 +547,11 @@ int WiFiHttpClient::responseStatusCode()
     iState      = eRequestSent;
 
     unsigned long timeoutStart = millis();
-    
+
     // Psuedo-regexp we're expecting before the status-code
     const char* statusPrefix  = "HTTP/*.* ";
     const char* statusPtr     = statusPrefix;
-    
+
     // Whilst we haven't timed out & haven't reached the end of the headers
     while ((c != '\n') && ( (millis() - timeoutStart) < iHttpResponseTimeout ))
     {
@@ -480,12 +568,13 @@ int WiFiHttpClient::responseStatusCode()
           switch (iState)
           {
             case eRequestSent:
+
               // We haven't reached the status code yet
               if ( (*statusPtr == '*') || (*statusPtr == c) )
               {
                 // This character matches, just move along
                 statusPtr++;
-                
+
                 if (*statusPtr == '\0')
                 {
                   // We've reached the end of the prefix
@@ -496,8 +585,9 @@ int WiFiHttpClient::responseStatusCode()
               {
                 return HTTP_ERROR_INVALID_RESPONSE;
               }
-              
+
               break;
+
             case eReadingStatusCode:
               if (isdigit(c))
               {
@@ -512,8 +602,9 @@ int WiFiHttpClient::responseStatusCode()
                 // rather than anything else, but let's be lenient
                 iState = eStatusCodeRead;
               }
-              
+
               break;
+
             case eStatusCodeRead:
               // We're just waiting for the end of the line now
               break;
@@ -521,7 +612,7 @@ int WiFiHttpClient::responseStatusCode()
             default:
               break;
           };
-          
+
           // We read something, reset the timeout counter
           timeoutStart = millis();
         }
@@ -533,14 +624,14 @@ int WiFiHttpClient::responseStatusCode()
         delay(kHttpWaitForDataDelay);
       }
     }
-    
+
     if ( (c == '\n') && (iStatusCode < 200 && iStatusCode != 101) )
     {
       // We've reached the end of an informational status line
       c = '\0'; // Clear c so we'll go back into the data reading loop
     }
   }
-  
+
   // If we've read a status code successfully but it's informational (1xx)
   // loop back to the start
   while ( (iState == eStatusCodeRead) && (iStatusCode < 200 && iStatusCode != 101) );
@@ -563,11 +654,13 @@ int WiFiHttpClient::responseStatusCode()
   }
 }
 
+////////////////////////////////////////
+
 int WiFiHttpClient::skipResponseHeaders()
 {
   // Just keep reading until we finish reading the headers or time out
   unsigned long timeoutStart = millis();
-  
+
   // Whilst we haven't timed out & haven't reached the end of the headers
   while ((!endOfHeadersReached()) && ( (millis() - timeoutStart) < iHttpResponseTimeout ))
   {
@@ -584,7 +677,7 @@ int WiFiHttpClient::skipResponseHeaders()
       delay(kHttpWaitForDataDelay);
     }
   }
-  
+
   if (endOfHeadersReached())
   {
     // Success
@@ -597,10 +690,14 @@ int WiFiHttpClient::skipResponseHeaders()
   }
 }
 
+////////////////////////////////////////
+
 bool WiFiHttpClient::endOfHeadersReached()
 {
   return (iState == eReadingBody || iState == eReadingChunkLength || iState == eReadingBodyChunk);
 };
+
+////////////////////////////////////////
 
 int WiFiHttpClient::contentLength()
 {
@@ -613,6 +710,8 @@ int WiFiHttpClient::contentLength()
   return iContentLength;
 }
 
+////////////////////////////////////////
+
 String WiFiHttpClient::responseBody()
 {
   int bodyLength = contentLength();
@@ -623,7 +722,7 @@ String WiFiHttpClient::responseBody()
   if (bodyLength > 0)
   {
     // try to reserve bodyLength bytes
-    if (response.reserve(bodyLength) == 0) 
+    if (response.reserve(bodyLength) == 0)
     {
       // String reserve failed
       return String((const char*)NULL);
@@ -639,24 +738,24 @@ String WiFiHttpClient::responseBody()
     // KH test
     int c = timedRead();
     //int c = iClient->read();
-    
+
     WS_LOGDEBUG1(F("WiFiHttpClient::responseBody => c ="), String(c));
     //////
 
-    if (c == -1) 
+    if (c == -1)
     {
       // read timed out, done
       break;
     }
 
-    if (!response.concat((char)c)) 
+    if (!response.concat((char)c))
     {
       // adding char failed
       return String((const char*)NULL);
     }
   }
 
-  if (bodyLength > 0 && (unsigned int)bodyLength != response.length()) 
+  if (bodyLength > 0 && (unsigned int)bodyLength != response.length())
   {
     // failure, we did not read in reponse content length bytes
     return String((const char*)NULL);
@@ -665,6 +764,8 @@ String WiFiHttpClient::responseBody()
   return response;
 }
 
+////////////////////////////////////////
+
 bool WiFiHttpClient::endOfBodyReached()
 {
   if (endOfHeadersReached() && (contentLength() != kNoContentLengthHeader))
@@ -672,9 +773,11 @@ bool WiFiHttpClient::endOfBodyReached()
     // We've got to the body and we know how long it will be
     return (iBodyLengthConsumed >= contentLength());
   }
-  
+
   return false;
 }
+
+////////////////////////////////////////
 
 int WiFiHttpClient::available()
 {
@@ -724,6 +827,7 @@ int WiFiHttpClient::available()
   }
 }
 
+////////////////////////////////////////
 
 int WiFiHttpClient::read()
 {
@@ -733,7 +837,7 @@ int WiFiHttpClient::read()
   }
 
   int ret = iClient->read();
-  
+
   if (ret >= 0)
   {
     if (endOfHeadersReached() && iContentLength > 0)
@@ -753,9 +857,11 @@ int WiFiHttpClient::read()
       }
     }
   }
-  
+
   return ret;
 }
+
+////////////////////////////////////////
 
 bool WiFiHttpClient::headerAvailable()
 {
@@ -788,6 +894,8 @@ bool WiFiHttpClient::headerAvailable()
   return (iHeaderLine.length() > 0);
 }
 
+////////////////////////////////////////
+
 String WiFiHttpClient::readHeaderName()
 {
   int colonIndex = iHeaderLine.indexOf(':');
@@ -799,6 +907,8 @@ String WiFiHttpClient::readHeaderName()
 
   return iHeaderLine.substring(0, colonIndex);
 }
+
+////////////////////////////////////////
 
 String WiFiHttpClient::readHeaderValue()
 {
@@ -819,10 +929,12 @@ String WiFiHttpClient::readHeaderValue()
   return iHeaderLine.substring(startIndex);
 }
 
+////////////////////////////////////////
+
 int WiFiHttpClient::read(uint8_t *buf, size_t size)
 {
   int ret = iClient->read(buf, size);
-  
+
   if (endOfHeadersReached() && iContentLength > 0)
   {
     // We're outputting the body now and we've seen a Content-Length header
@@ -832,9 +944,11 @@ int WiFiHttpClient::read(uint8_t *buf, size_t size)
       iBodyLengthConsumed += ret;
     }
   }
-  
+
   return ret;
 }
+
+////////////////////////////////////////
 
 int WiFiHttpClient::readHeader()
 {
@@ -852,13 +966,14 @@ int WiFiHttpClient::readHeader()
   switch (iState)
   {
     case eStatusCodeRead:
+
       // We're at the start of a line, or somewhere in the middle of reading
       // the Content-Length prefix
       if (*iContentLengthPtr == c)
       {
         // This character matches, just move along
         iContentLengthPtr++;
-        
+
         if (*iContentLengthPtr == '\0')
         {
           // We've reached the end of the prefix
@@ -873,7 +988,7 @@ int WiFiHttpClient::readHeader()
       {
         // This character matches, just move along
         iTransferEncodingChunkedPtr++;
-        
+
         if (*iTransferEncodingChunkedPtr == '\0')
         {
           // We've reached the end of the Transfer Encoding: chunked header
@@ -881,7 +996,8 @@ int WiFiHttpClient::readHeader()
           iState = eSkipToEndOfHeader;
         }
       }
-      else if (((iContentLengthPtr == kContentLengthPrefix) && (iTransferEncodingChunkedPtr == kTransferEncodingChunked)) && (c == '\r'))
+      else if (((iContentLengthPtr == kContentLengthPrefix) && (iTransferEncodingChunkedPtr == kTransferEncodingChunked))
+               && (c == '\r'))
       {
         // We've found a '\r' at the start of a line, so this is probably
         // the end of the headers
@@ -892,8 +1008,9 @@ int WiFiHttpClient::readHeader()
         // This isn't the Content-Length or Transfer Encoding chunked header, skip to the end of the line
         iState = eSkipToEndOfHeader;
       }
-      
+
       break;
+
     case eReadingContentLength:
       if (isdigit(c))
       {
@@ -906,8 +1023,9 @@ int WiFiHttpClient::readHeader()
         // rather than anything else, but let's be lenient
         iState = eSkipToEndOfHeader;
       }
-      
+
       break;
+
     case eLineStartingCRFound:
       if (c == '\n')
       {
@@ -921,8 +1039,9 @@ int WiFiHttpClient::readHeader()
           iState = eReadingBody;
         }
       }
-      
+
       break;
+
     default:
       // We're just waiting for the end of the line now
       break;
@@ -935,7 +1054,7 @@ int WiFiHttpClient::readHeader()
     iContentLengthPtr = kContentLengthPrefix;
     iTransferEncodingChunkedPtr = kTransferEncodingChunked;
   }
-  
+
   // And return the character read to whoever wants it
   return c;
 }

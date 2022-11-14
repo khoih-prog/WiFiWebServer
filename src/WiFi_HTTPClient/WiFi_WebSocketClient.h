@@ -12,7 +12,7 @@
   @file       Esp8266WebServer.h
   @author     Ivan Grokhotkov
 
-  Version: 1.9.5
+  Version: 1.10.0
 
   Version Modified By   Date      Comments
   ------- -----------  ---------- -----------
@@ -30,8 +30,9 @@
   1.9.3   K Hoang      16/08/2022 Better workaround for RP2040W WiFi.status() bug using ping() to local gateway
   1.9.4   K Hoang      06/09/2022 Restore support to ESP32 and ESP8266
   1.9.5   K Hoang      10/09/2022 Restore support to Teensy, etc. Fix bug in examples
+  1.10.0  K Hoang      13/11/2022 Add new features, such as CORS. Update code and examples
  *****************************************************************************************************************************/
- 
+
 // (c) Copyright Arduino. 2016
 // Released under Apache License, version 2.0
 
@@ -46,12 +47,16 @@
 
 #include "WiFi_HTTPClient/WiFi_HttpClient.h"
 
+////////////////////////////////////////
+
 static const int TYPE_CONTINUATION     = 0x0;
 static const int TYPE_TEXT             = 0x1;
 static const int TYPE_BINARY           = 0x2;
 static const int TYPE_CONNECTION_CLOSE = 0x8;
 static const int TYPE_PING             = 0x9;
 static const int TYPE_PONG             = 0xa;
+
+////////////////////////////////////////
 
 class WiFiWebSocketClient : public WiFiHttpClient
 {
@@ -109,7 +114,7 @@ class WiFiWebSocketClient : public WiFiHttpClient
     // Inherited from Print
     virtual size_t write(uint8_t aByte);
     virtual size_t write(const uint8_t *aBuffer, size_t aSize);
-    
+
     // Inherited from Stream
     virtual int   available();
     /** Read the next byte from the server.

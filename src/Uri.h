@@ -1,5 +1,5 @@
 /****************************************************************************************************************************
-  mimetable.h - Dead simple web-server.
+  Uri.h - Dead simple HTTP WebClient.
   For any WiFi shields, such as WiFiNINA W101, W102, W13x, or custom, such as ESP8266/ESP32-AT, Ethernet, etc
 
   WiFiWebServer is a library for the ESP32-based WiFi shields to run WebServer
@@ -33,77 +33,42 @@
   1.10.0  K Hoang      13/11/2022 Add new features, such as CORS. Update code and examples
  *****************************************************************************************************************************/
 
-#pragma once
+#ifndef URI_H
+#define URI_H
 
-#ifndef __MIMETABLE_H__
-#define __MIMETABLE_H__
+#include <Arduino.h>
+#include <vector>
 
-namespace mime
+////////////////////////////////////////
+
+class Uri
 {
+  protected:
+    const String _uri;
 
-enum type
-{
-  html,
-  htm,
-  css,
-  txt,
-  js,
-  json,
-  png,
-  gif,
-  jpg,
-  ico,
-  svg,
-  ttf,
-  otf,
-  woff,
-  woff2,
-  eot,
-  sfnt,
-  xml,
-  pdf,
-  zip,
-  gz,
-  appcache,
-  none,
-  maxType
+  public:
+    Uri(const char *uri) : _uri(uri) {}
+    Uri(const String &uri) : _uri(uri) {}
+    Uri(const __FlashStringHelper *uri) : _uri(String(uri)) {}
+    virtual ~Uri() {}
+
+    ////////////////////////////////////////
+
+    virtual Uri* clone() const
+    {
+      return new Uri(_uri);
+    };
+
+    ////////////////////////////////////////
+
+    virtual void initPathArgs(__attribute__((unused)) std::vector<String> &pathArgs) {}
+
+    ////////////////////////////////////////
+
+    virtual inline bool canHandle(const String &requestUri, __attribute__((unused)) std::vector<String> &pathArgs)
+    {
+      return _uri == requestUri;
+    }
 };
 
-struct Entry
-{
-  const char endsWith[16];
-  const char mimeType[32];
-};
-
-// Table of extension->MIME strings stored in PROGMEM, needs to be global due to GCC section typing rules
-const Entry mimeTable[maxType] =
-{
-  { ".html",      "text/html" },
-  { ".htm",       "text/html" },
-  { ".css",       "text/css" },
-  { ".txt",       "text/plain" },
-  { ".js",        "application/javascript" },
-  { ".json",      "application/json" },
-  { ".png",       "image/png" },
-  { ".gif",       "image/gif" },
-  { ".jpg",       "image/jpeg" },
-  { ".ico",       "image/x-icon" },
-  { ".svg",       "image/svg+xml" },
-  { ".ttf",       "application/x-font-ttf" },
-  { ".otf",       "application/x-font-opentype" },
-  { ".woff",      "application/font-woff" },
-  { ".woff2",     "application/font-woff2" },
-  { ".eot",       "application/vnd.ms-fontobject" },
-  { ".sfnt",      "application/font-sfnt" },
-  { ".xml",       "text/xml" },
-  { ".pdf",       "application/pdf" },
-  { ".zip",       "application/zip" },
-  { ".gz",        "application/x-gzip" },
-  { ".appcache",  "text/cache-manifest" },
-  { "",           "application/octet-stream" }
-};
-//extern const Entry mimeTable[maxType];
-}
-
-
-#endif    // __MIMETABLE_H__
+#endif

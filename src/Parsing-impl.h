@@ -12,7 +12,7 @@
   @file       Esp8266WebServer.h
   @author     Ivan Grokhotkov
 
-  Version: 1.9.5
+  Version: 1.10.0
 
   Version Modified By   Date      Comments
   ------- -----------  ---------- -----------
@@ -30,6 +30,7 @@
   1.9.3   K Hoang      16/08/2022 Better workaround for RP2040W WiFi.status() bug using ping() to local gateway
   1.9.4   K Hoang      06/09/2022 Restore support to ESP32 and ESP8266
   1.9.5   K Hoang      10/09/2022 Restore support to Teensy, etc. Fix bug in examples
+  1.10.0  K Hoang      13/11/2022 Add new features, such as CORS. Update code and examples
  **********************************************************************************************************************************/
 
 #pragma once
@@ -45,13 +46,12 @@
   #define WEBSERVER_MAX_POST_ARGS 32
 #endif
 
-
-/////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////
 
 // KH
 #if USE_NEW_WEBSERVER_VERSION
 
-/////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////
 
 static bool readBytesWithTimeout(WiFiClient& client, size_t maxLength, String& data, int timeout_ms)
 {
@@ -81,11 +81,11 @@ static bool readBytesWithTimeout(WiFiClient& client, size_t maxLength, String& d
   return data.length() == maxLength;
 }
 
-/////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////
 
 #else
 
-/////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////
 
 #if !WIFI_USE_PORTENTA_H7
 
@@ -140,7 +140,7 @@ static char* readBytesWithTimeout(WiFiClient& client, size_t maxLength, size_t& 
 
 #endif    // #if USE_NEW_WEBSERVER_VERSION
 
-/////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////
 
 bool WiFiWebServer::_parseRequest(WiFiClient& client)
 {
@@ -183,8 +183,8 @@ bool WiFiWebServer::_parseRequest(WiFiClient& client)
 
   HTTPMethod method = HTTP_GET;
 
-  // KH
 #if USE_NEW_WEBSERVER_VERSION
+
   if (methodStr == "HEAD")
   {
     method = HTTP_HEAD;
@@ -209,12 +209,15 @@ bool WiFiWebServer::_parseRequest(WiFiClient& client)
   {
     method = HTTP_PATCH;
   }
-#else
+
+#else   // #if USE_NEW_WEBSERVER_VERSION
+
   if (methodStr == "POST")
   {
     method = HTTP_POST;
   }
-  else if (methodStr == "DELETE") {
+  else if (methodStr == "DELETE")
+  {
 
     method = HTTP_DELETE;
   }
@@ -230,10 +233,10 @@ bool WiFiWebServer::_parseRequest(WiFiClient& client)
   {
     method = HTTP_PATCH;
   }
-#endif
+
+#endif    // #if USE_NEW_WEBSERVER_VERSION
 
   _currentMethod = method;
-
 
   WS_LOGDEBUG1(F("method: "), methodStr);
   WS_LOGDEBUG1(F("url: "), url);
@@ -258,7 +261,7 @@ bool WiFiWebServer::_parseRequest(WiFiClient& client)
     String boundaryStr;
     String headerName;
     String headerValue;
-    
+
     bool isForm     = false;
     bool isEncoded  = false;
     uint32_t contentLength  = 0;
@@ -281,18 +284,21 @@ bool WiFiWebServer::_parseRequest(WiFiClient& client)
 
       headerName  = req.substring(0, headerDiv);
       headerValue = req.substring(headerDiv + 1);
-      
+
       headerValue.trim();
       _collectHeader(headerName.c_str(), headerValue.c_str());
 
       WS_LOGDEBUG1(F("headerName: "), headerName);
       WS_LOGDEBUG1(F("headerValue: "), headerValue);
 
-      //KH
       if (headerName.equalsIgnoreCase("Content-Type"))
       {
+#if (ESP32 || ESP8266)
+        using namespace mime_esp;
+#else
         using namespace mime;
-        
+#endif
+
         if (headerValue.startsWith(mimeTable[txt].mimeType))
         {
           isForm = false;
@@ -305,18 +311,15 @@ bool WiFiWebServer::_parseRequest(WiFiClient& client)
         else if (headerValue.startsWith("multipart/"))
         {
           boundaryStr = headerValue.substring(headerValue.indexOf('=') + 1);
-          // KH
           boundaryStr.replace("\"", "");
-          //
           isForm = true;
         }
       }
-      //KH
       else if (headerName.equalsIgnoreCase("Content-Length"))
       {
         contentLength = headerValue.toInt();
+        _clientContentLength = headerValue.toInt();
       }
-      //KH
       else if (headerName.equalsIgnoreCase("Host"))
       {
         _hostHeader = headerValue;
@@ -325,6 +328,9 @@ bool WiFiWebServer::_parseRequest(WiFiClient& client)
 
     //KH
 #if USE_NEW_WEBSERVER_VERSION
+
+    ////////////////////////////////////////
+
     String plainBuf;
 
     if (   !isForm
@@ -421,7 +427,11 @@ bool WiFiWebServer::_parseRequest(WiFiClient& client)
 
   return true;
 
-#else
+  ////////////////////////////////////////
+
+#else   // #if USE_NEW_WEBSERVER_VERSION
+
+    ////////////////////////////////////////
 
     (void) isEncoded;
 
@@ -479,16 +489,15 @@ bool WiFiWebServer::_parseRequest(WiFiClient& client)
 
   return true;
 
-#endif
+#endif    // #if USE_NEW_WEBSERVER_VERSION
 }
 
-/////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////
 
 bool WiFiWebServer::_collectHeader(const char* headerName, const char* headerValue)
 {
   for (int i = 0; i < _headerKeysCount; i++)
   {
-    //KH
     if (_currentHeaders[i].key.equalsIgnoreCase(headerName))
     {
       _currentHeaders[i].value = headerValue;
@@ -499,15 +508,16 @@ bool WiFiWebServer::_collectHeader(const char* headerName, const char* headerVal
   return false;
 }
 
-/////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////
 
 #if USE_NEW_WEBSERVER_VERSION
 
-/////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////
 
 struct storeArgHandler
 {
-  void operator() (String& key, String& value, const String& data, int equal_index, int pos, int key_end_pos, int next_index)
+  void operator() (String& key, String& value, const String& data, int equal_index, int pos, int key_end_pos,
+                   int next_index)
   {
     key = WiFiWebServer::urlDecode(data.substring(pos, key_end_pos));
 
@@ -516,84 +526,90 @@ struct storeArgHandler
   }
 };
 
-/////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////
 
 struct nullArgHandler
 {
-  void operator() (String& key, String& value, const String& data, int equal_index, int pos, int key_end_pos, int next_index)
+  void operator() (String& key, String& value, const String& data, int equal_index, int pos, int key_end_pos,
+                   int next_index)
   {
-    (void)key; (void)value; (void)data; (void)equal_index; (void)pos; (void)key_end_pos; (void)next_index;
+    (void)key;
+    (void)value;
+    (void)data;
+    (void)equal_index;
+    (void)pos;
+    (void)key_end_pos;
+    (void)next_index;
     // do nothing
   }
 };
 
-/////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////
 
 void WiFiWebServer::_parseArguments(const String& data)
 {
   if (_currentArgs)
     delete[] _currentArgs;
 
-  _currentArgCount = _parseArgumentsPrivate(data, nullArgHandler());
+  _currentArgs = 0;
 
-  // allocate one more, this is needed because {"plain": plainBuf} is always added
-  _currentArgs = new RequestArgument[_currentArgCount + 1];
-
-  (void)_parseArgumentsPrivate(data, storeArgHandler());
-}
-
-/////////////////////////////////////////////////////////////////////////
-
-int WiFiWebServer::_parseArgumentsPrivate(const String& data, vl::Func<void(String&, String&, const String&, int, int, int, int)> handler)
-{
-
-  WS_LOGDEBUG1(F("args: "), data);
-
-  size_t pos    = 0;
-  int arg_total = 0;
-
-  while (true)
+  if (data.length() == 0)
   {
-    // skip empty expression
-    while (data[pos] == '&' || data[pos] == ';')
-      if (++pos >= data.length())
-        break;
+    _currentArgCount = 0;
+    _currentArgs = new RequestArgument[1];
 
-    // locate separators
-    int equal_index = data.indexOf('=', pos);
-    int key_end_pos = equal_index;
-    int next_index  = data.indexOf('&', pos);
-    int next_index2 = data.indexOf(';', pos);
-
-    if ((next_index == -1) || (next_index2 != -1 && next_index2 < next_index))
-      next_index = next_index2;
-
-    if ((key_end_pos == -1) || ((key_end_pos > next_index) && (next_index != -1)))
-      key_end_pos = next_index;
-
-    if (key_end_pos == -1)
-      key_end_pos = data.length();
-
-    // handle key/value
-    if ((int)pos < key_end_pos)
-    {
-      RequestArgument& arg = _currentArgs[arg_total];
-      handler(arg.key, arg.value, data, equal_index, pos, key_end_pos, next_index);
-
-      ++arg_total;
-      pos = next_index + 1;
-    }
-
-    if (next_index == -1)
-      break;
+    return;
   }
 
-  WS_LOGDEBUG1(F("args count: "), arg_total);
+  _currentArgCount = 1;
 
-  return arg_total;
+  for (int i = 0; i < (int)data.length(); )
+  {
+    i = data.indexOf('&', i);
+
+    if (i == -1)
+      break;
+
+    ++i;
+    ++_currentArgCount;
+  }
+
+  _currentArgs = new RequestArgument[_currentArgCount + 1];
+
+  int pos = 0;
+  int iarg;
+
+  for (iarg = 0; iarg < _currentArgCount;)
+  {
+    int equal_sign_index = data.indexOf('=', pos);
+    int next_arg_index = data.indexOf('&', pos);
+
+    if ((equal_sign_index == -1) || ((equal_sign_index > next_arg_index) && (next_arg_index != -1)))
+    {
+      if (next_arg_index == -1)
+        break;
+
+      pos = next_arg_index + 1;
+
+      continue;
+    }
+
+    RequestArgument& arg = _currentArgs[iarg];
+    arg.key = urlDecode(data.substring(pos, equal_sign_index));
+    arg.value = urlDecode(data.substring(equal_sign_index + 1, next_arg_index));
+
+    ++iarg;
+
+    if (next_arg_index == -1)
+      break;
+
+    pos = next_arg_index + 1;
+  }
+
+  _currentArgCount = iarg;
 }
 
-/////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////
 
 void WiFiWebServer::_uploadWriteByte(uint8_t b)
 {
@@ -609,28 +625,55 @@ void WiFiWebServer::_uploadWriteByte(uint8_t b)
   _currentUpload->buf[_currentUpload->currentSize++] = b;
 }
 
-/////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////
 
-uint8_t WiFiWebServer::_uploadReadByte(WiFiClient& client)
+int WiFiWebServer::_uploadReadByte(WiFiClient& client)
 {
   int res = client.read();
 
-  if (res == -1)
+  if (res < 0)
   {
-    while (!client.available() && client.connected())
-      yield();
+    // keep trying until you either read a valid byte or timeout
+    unsigned long startMillis = millis();
+    unsigned long timeoutIntervalMillis = client.getTimeout();
+    bool timedOut = false;
 
-    res = client.read();
+    for (;;)
+    {
+      if (!client.connected())
+        return -1;
+
+      // loosely modeled after blinkWithoutDelay pattern
+      while (!timedOut && !client.available() && client.connected())
+      {
+        delay(2);
+        timedOut = (millis() - startMillis) >= timeoutIntervalMillis;
+      }
+
+      res = client.read();
+
+      if (res >= 0)
+      {
+        return res; // exit on a valid read
+      }
+
+      timedOut = (millis() - startMillis) >= timeoutIntervalMillis;
+
+      if (timedOut)
+      {
+        return res; // exit on a timeout
+      }
+    }
   }
 
-  return (uint8_t)res;
+  return res;
 }
 
-/////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////
 
-#else
+#else   // #if USE_NEW_WEBSERVER_VERSION
 
-/////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////
 
 void WiFiWebServer::_parseArguments(const String& data)
 {
@@ -666,7 +709,7 @@ void WiFiWebServer::_parseArguments(const String& data)
   WS_LOGDEBUG1(F("args count: "), _currentArgCount);
 
   _currentArgs = new RequestArgument[_currentArgCount + 1];
-  
+
   int pos = 0;
   int iarg;
 
@@ -713,7 +756,7 @@ void WiFiWebServer::_parseArguments(const String& data)
   WS_LOGDEBUG1(F("args count: "), _currentArgCount);
 }
 
-/////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////
 
 void WiFiWebServer::_uploadWriteByte(uint8_t b)
 {
@@ -729,9 +772,9 @@ void WiFiWebServer::_uploadWriteByte(uint8_t b)
   _currentUpload.buf[_currentUpload.currentSize++] = b;
 }
 
-/////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////
 
-uint8_t WiFiWebServer::_uploadReadByte(WiFiClient& client)
+int WiFiWebServer::_uploadReadByte(WiFiClient& client)
 {
   int res = client.read();
 
@@ -743,18 +786,18 @@ uint8_t WiFiWebServer::_uploadReadByte(WiFiClient& client)
     res = client.read();
   }
 
-  return (uint8_t)res;
+  return res;
 }
 
-/////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////
 
-#endif
+#endif    // #if USE_NEW_WEBSERVER_VERSION
 
-/////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////
 
 #if USE_NEW_WEBSERVER_VERSION
 
-/////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////
 
 bool WiFiWebServer::_parseForm(WiFiClient& client, const String& boundary, uint32_t len)
 {
@@ -773,9 +816,9 @@ bool WiFiWebServer::_parseForm(WiFiClient& client, const String& boundary, uint3
   } while (line.length() == 0 && retry < 3);
 
   client.readStringUntil('\n');
-  
+
   //start reading the form
-  if (line == ("--" + boundary)) 
+  if (line == ("--" + boundary))
   {
     if (_postArgs)
       delete[] _postArgs;
@@ -789,7 +832,7 @@ bool WiFiWebServer::_parseForm(WiFiClient& client, const String& boundary, uint3
       String argValue;
       String argType;
       String argFilename;
-      
+
       bool argIsFile = false;
 
       line = client.readStringUntil('\r');
@@ -823,8 +866,12 @@ bool WiFiWebServer::_parseForm(WiFiClient& client, const String& boundary, uint3
 
           WS_LOGDEBUG1(F("PostArg Name: "), argName);
 
+#if (ESP32 || ESP8266)
+          using namespace mime_esp;
+#else
           using namespace mime;
-          
+#endif
+
           argType = mimeTable[txt].mimeType;
           line    = client.readStringUntil('\r');
           client.readStringUntil('\n');
@@ -890,8 +937,9 @@ bool WiFiWebServer::_parseForm(WiFiClient& client, const String& boundary, uint3
 
             _currentUpload->status = UPLOAD_FILE_WRITE;
             uint8_t argByte = _uploadReadByte(client);
-            
+
 readfile:
+
             while (argByte != 0x0D)
             {
               if (!client.connected())
@@ -942,14 +990,15 @@ readfile:
 #if USING_VLA
               // Better compiler warning than risk of fragmented heap
               uint8_t endBuf[boundary.length()];
-#else              
+#else
               // No compiler warning, but risk of fragmented heap
-              uint8_t* endBuf = new uint8_t[boundary.length()]; 
-              
+              uint8_t* endBuf = new uint8_t[boundary.length()];
+
               if (!endBuf)
               {
                 return false;
-              }      
+              }
+
 #endif
 
               client.readBytes(endBuf, boundary.length());
@@ -975,9 +1024,10 @@ readfile:
                 if (line == "--")
                 {
                   WS_LOGDEBUG(F("Done Parsing POST"));
+
                   break;
                 }
-                
+
                 continue;
               }
               else
@@ -986,7 +1036,7 @@ readfile:
                 _uploadWriteByte(0x0A);
                 _uploadWriteByte((uint8_t)('-'));
                 _uploadWriteByte((uint8_t)('-'));
-                
+
                 uint32_t i = 0;
 
                 while (i < boundary.length())
@@ -997,10 +1047,13 @@ readfile:
                 argByte = _uploadReadByte(client);
                 goto readfile;
               }
-#if !USING_VLA           
+
+#if !USING_VLA
+
               if (endBuf)
                 delete [] endBuf;
-#endif              
+
+#endif
             }
             else
             {
@@ -1015,7 +1068,8 @@ readfile:
     }
 
     int iarg;
-    int totalArgs = ((WEBSERVER_MAX_POST_ARGS - _postArgsLen) < _currentArgCount) ? (WEBSERVER_MAX_POST_ARGS - _postArgsLen) : _currentArgCount;
+    int totalArgs = ((WEBSERVER_MAX_POST_ARGS - _postArgsLen) < _currentArgCount) ? (WEBSERVER_MAX_POST_ARGS - _postArgsLen)
+                    : _currentArgCount;
 
     for (iarg = 0; iarg < totalArgs; iarg++)
     {
@@ -1044,7 +1098,7 @@ readfile:
       _postArgs = nullptr;
       _postArgsLen = 0;
     }
-    
+
     return true;
   }
 
@@ -1063,13 +1117,13 @@ bool WiFiWebServer::_parseFormUploadAborted()
   return false;
 }
 
-/////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////
 
-#else
+#else   // #if USE_NEW_WEBSERVER_VERSION
 
-/////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////
 
-bool WiFiWebServer::_parseForm(WiFiClient& client, const String& boundary, uint32_t len) 
+bool WiFiWebServer::_parseForm(WiFiClient& client, const String& boundary, uint32_t len)
 {
   WS_LOGDEBUG1(F("Parse Form: Boundary: "), boundary);
   WS_LOGDEBUG1(F("Length: "), len);
@@ -1099,7 +1153,7 @@ bool WiFiWebServer::_parseForm(WiFiClient& client, const String& boundary, uint3
       String argValue;
       String argType;
       String argFilename;
-      
+
       bool argIsFile = false;
 
       line = client.readStringUntil('\r');
@@ -1195,6 +1249,7 @@ bool WiFiWebServer::_parseForm(WiFiClient& client, const String& boundary, uint3
             uint8_t argByte       = _uploadReadByte(client);
 
 readfile:
+
             while (argByte != 0x0D)
             {
               if (!client.connected())
@@ -1245,16 +1300,17 @@ readfile:
 #if USING_VLA
               // Better compiler warning than risk of fragmented heap
               uint8_t endBuf[boundary.length()];
-#else              
+#else
               // No compiler warning, but risk of fragmented heap
-              uint8_t* endBuf = new uint8_t[boundary.length()]; 
-              
+              uint8_t* endBuf = new uint8_t[boundary.length()];
+
               if (!endBuf)
               {
                 return false;
-              }      
+              }
+
 #endif
-              
+
               client.readBytes(endBuf, boundary.length());
 
               if (strstr((const char*)endBuf, boundary.c_str()) != NULL)
@@ -1281,6 +1337,7 @@ readfile:
 
                   break;
                 }
+
                 continue;
               }
               else
@@ -1289,7 +1346,7 @@ readfile:
                 _uploadWriteByte(0x0A);
                 _uploadWriteByte((uint8_t)('-'));
                 _uploadWriteByte((uint8_t)('-'));
-                
+
                 uint32_t i = 0;
 
                 while (i < boundary.length())
@@ -1299,12 +1356,15 @@ readfile:
 
                 argByte = _uploadReadByte(client);
                 goto readfile;
-              }            
-#if !USING_VLA              
+              }
+
+#if !USING_VLA
+
               if (endBuf)
                 delete [] endBuf;
-#endif               
-            }          
+
+#endif
+            }
             else
             {
               _uploadWriteByte(0x0D);
@@ -1327,7 +1387,9 @@ readfile:
       arg.value = _currentArgs[iarg].value;
     }
 
-    if (_currentArgs) delete[] _currentArgs;
+    if (_currentArgs)
+      delete[] _currentArgs;
+
     _currentArgs = new RequestArgument[postArgsLen];
 
     for (iarg = 0; iarg < postArgsLen; iarg++)
@@ -1350,7 +1412,7 @@ readfile:
   return false;
 }
 
-/////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////
 
 bool WiFiWebServer::_parseFormUploadAborted()
 {
@@ -1362,11 +1424,11 @@ bool WiFiWebServer::_parseFormUploadAborted()
   return false;
 }
 
-/////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////
 
-#endif
+#endif    // #if USE_NEW_WEBSERVER_VERSION
 
-/////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////
 
 String WiFiWebServer::urlDecode(const String& text)
 {
@@ -1405,6 +1467,6 @@ String WiFiWebServer::urlDecode(const String& text)
   return decoded;
 }
 
-/////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////
 
 #endif    // Parsing_Impl_H

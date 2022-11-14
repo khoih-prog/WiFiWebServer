@@ -12,7 +12,7 @@
   @file       Esp8266WebServer.h
   @author     Ivan Grokhotkov
 
-  Version: 1.9.5
+  Version: 1.10.0
 
   Version Modified By   Date      Comments
   ------- -----------  ---------- -----------
@@ -30,6 +30,7 @@
   1.9.3   K Hoang      16/08/2022 Better workaround for RP2040W WiFi.status() bug using ping() to local gateway
   1.9.4   K Hoang      06/09/2022 Restore support to ESP32 and ESP8266
   1.9.5   K Hoang      10/09/2022 Restore support to Teensy, etc. Fix bug in examples
+  1.10.0  K Hoang      13/11/2022 Add new features, such as CORS. Update code and examples
  **********************************************************************************************************************************/
 
 #pragma once
@@ -38,13 +39,13 @@
 #define WiFiWebServer_H
 
 #ifndef WIFI_WEBSERVER_VERSION
-  #define WIFI_WEBSERVER_VERSION          "WiFiWebServer v1.9.5"
+  #define WIFI_WEBSERVER_VERSION          "WiFiWebServer v1.10.0"
 
   #define WIFI_WEBSERVER_VERSION_MAJOR    1
-  #define WIFI_WEBSERVER_VERSION_MINOR    9
-  #define WIFI_WEBSERVER_VERSION_PATCH    5
+  #define WIFI_WEBSERVER_VERSION_MINOR    10
+  #define WIFI_WEBSERVER_VERSION_PATCH    0
 
-  #define WIFI_WEBSERVER_VERSION_INT      1009005
+  #define WIFI_WEBSERVER_VERSION_INT      1010000
 #endif
 
 #include "WiFiWebServer.hpp"

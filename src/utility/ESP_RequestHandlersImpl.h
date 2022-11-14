@@ -12,7 +12,7 @@
   @file       Esp8266WebServer.h
   @author     Ivan Grokhotkov
 
-  Version: 1.9.5
+  Version: 1.10.0
 
   Version Modified By   Date      Comments
   ------- -----------  ---------- -----------
@@ -30,6 +30,7 @@
   1.9.3   K Hoang      16/08/2022 Better workaround for RP2040W WiFi.status() bug using ping() to local gateway
   1.9.4   K Hoang      06/09/2022 Restore support to ESP32 and ESP8266
   1.9.5   K Hoang      10/09/2022 Restore support to Teensy, etc. Fix bug in examples
+  1.10.0  K Hoang      13/11/2022 Add new features, such as CORS. Update code and examples
  *****************************************************************************************************************************/
 
 #pragma once
@@ -38,43 +39,49 @@
 #define ESP_RequestHandlersImpl_H
 
 #include "RequestHandler.h"
-#include "esp_detail/mimetable.h"
+#include "utility/esp_detail/mimetable.h"
 #include "FS.h"
 #include "WString.h"
 #include <MD5Builder.h>
 #include <base64.h>
 
+#include "Uri.h"
+
+#include "utility/WiFiDebug.h"
+
+////////////////////////////////////////
+////////////////////////////////////////
+
 class FunctionRequestHandler : public RequestHandler
 {
   public:
 
-    FunctionRequestHandler(WiFiWebServer::THandlerFunction fn, WiFiWebServer::THandlerFunction ufn, const String &uri, const HTTPMethod& method)
+    FunctionRequestHandler(WiFiWebServer::THandlerFunction fn, WiFiWebServer::THandlerFunction ufn, const Uri &uri,
+                           const HTTPMethod& method)
       : _fn(fn)
       , _ufn(ufn)
-      , _uri(uri)
+      , _uri(uri.clone())
       , _method(method)
     {
+      _uri->initPathArgs(pathArgs);
     }
+
+    ~FunctionRequestHandler()
+    {
+      delete _uri;
+    }
+
+    ////////////////////////////////////////
 
     bool canHandle(const HTTPMethod& requestMethod, const String& requestUri) override
     {
       if (_method != HTTP_ANY && _method != requestMethod)
         return false;
 
-      if (requestUri == _uri)
-        return true;
-
-      if (_uri.endsWith("/*"))
-      {
-        String _uristart = _uri;
-        _uristart.replace("/*", "");
-
-        if (requestUri.startsWith(_uristart))
-          return true;
-      }
-
-      return false;
+      return _uri->canHandle(requestUri, pathArgs);
     }
+
+    ////////////////////////////////////////
 
     bool canUpload(const String& requestUri) override
     {
@@ -84,128 +91,245 @@ class FunctionRequestHandler : public RequestHandler
       return true;
     }
 
-    bool handle(WiFiWebServer& server, const HTTPMethod& requestMethod, const String& requestUri) override
+    ////////////////////////////////////////
+
+    bool handle(WiFiWebServer& server, const HTTPMethod& requestMethod, /*const*/ String& requestUri) override
     {
       WFW_UNUSED(server);
-      
+
       if (!canHandle(requestMethod, requestUri))
         return false;
 
       _fn();
+
       return true;
     }
+
+    ////////////////////////////////////////
 
     void upload(WiFiWebServer& server, const String& requestUri, const HTTPUpload& upload) override
     {
       WFW_UNUSED(server);
       WFW_UNUSED(upload);
-      
+
       if (canUpload(requestUri))
         _ufn();
     }
 
+    ////////////////////////////////////////
+
   protected:
+
     WiFiWebServer::THandlerFunction _fn;
     WiFiWebServer::THandlerFunction _ufn;
-    String _uri;
+
+    Uri *_uri;
+
     HTTPMethod _method;
 };
 
-class StaticRequestHandler : public RequestHandler 
+////////////////////////////////////////
+////////////////////////////////////////
+
+class StaticRequestHandler : public RequestHandler
 {
     using WebServerType = WiFiWebServer;
-    
-public:
+
+  public:
+
     StaticRequestHandler(FS& fs, const char* path, const char* uri, const char* cache_header)
-    : _fs(fs)
-    , _uri(uri)
-    , _path(path)
-    , _cache_header(cache_header)
+      : _fs(fs)
+      , _uri(uri)
+      , _path(path)
+      , _cache_header(cache_header)
     {
-        //DEBUGV("StaticRequestHandler: path=%s uri=%s, cache_header=%s\r\n", path, uri, cache_header == __null ? "" : cache_header);
-        _isFile = fs.exists(path);
-        _baseUriLength = _uri.length();
+      _isFile = fs.exists(path);
+      _baseUriLength = _uri.length();
     }
 
-    bool validMethod(HTTPMethod requestMethod){
-        return (requestMethod == HTTP_GET) || (requestMethod == HTTP_HEAD);
-    }
+    ////////////////////////////////////////
 
-    /* Deprecated version. Please use mime::getContentType instead */
-    static String getContentType(const String& path) __attribute__((deprecated)) 
+    bool canHandle(const HTTPMethod& requestMethod, const String& requestUri) override
     {
-        return mime_esp::getContentType(path);
+      if (requestMethod != HTTP_GET)
+        return false;
+
+      if ((_isFile && requestUri != _uri) || !requestUri.startsWith(_uri))
+        return false;
+
+      return true;
     }
 
-protected:
-    FS _fs;
-    bool _isFile;
-    String _uri;
-    String _path;
-    String _cache_header;
-    size_t _baseUriLength;
+    ////////////////////////////////////////
+
+    bool handle(WiFiWebServer& server, const HTTPMethod& requestMethod, /*const*/ String& requestUri) override
+    {
+      if (!canHandle(requestMethod, requestUri))
+        return false;
+
+      WS_LOGDEBUG3(F("StaticRequestHandler::handle: request ="), requestUri, F(", _uri ="), _uri);
+
+      String path(_path);
+
+      if (!_isFile)
+      {
+        // Base URI doesn't point to a file.
+        // If a directory is requested, look for index file.
+        if (requestUri.endsWith("/"))
+          requestUri += "index.htm";
+
+        // Append whatever follows this URI in request to get the file path.
+        path += requestUri.substring(_baseUriLength);
+      }
+
+      WS_LOGDEBUG3(F("StaticRequestHandler::handle: path ="), path, F(", _isFile ="), _isFile);
+
+      String contentType = getContentType(path);
+
+      using namespace mime_esp;
+
+      // look for gz file, only if the original specified path is not a gz.
+      // So part only works to send gzip via content encoding when a non compressed is asked for
+      // if you point the the path to gzip you will serve the gzip as content type "application/x-gzip"
+      // not text or javascript etc...
+      if (!path.endsWith(FPSTR(mimeTable[gz].endsWith)) && !_fs.exists(path))
+      {
+        String pathWithGz = path + FPSTR(mimeTable[gz].endsWith);
+
+        if (_fs.exists(pathWithGz))
+          path += FPSTR(mimeTable[gz].endsWith);
+      }
+
+      File f = _fs.open(path, "r");
+
+      if (!f || !f.available())
+        return false;
+
+      if (_cache_header.length() != 0)
+        server.sendHeader("Cache-Control", _cache_header);
+
+      server.streamFile(f, contentType);
+
+      return true;
+    }
+
+    ////////////////////////////////////////
+
+    static String getContentType(const String& path)
+    {
+      using namespace mime_esp;
+
+      char buff[sizeof(mimeTable[0].mimeType)];
+
+      // Check all entries but last one for match, return if found
+      for (size_t i = 0; i < sizeof(mimeTable) / sizeof(mimeTable[0]) - 1; i++)
+      {
+        strcpy_P(buff, mimeTable[i].endsWith);
+
+        if (path.endsWith(buff))
+        {
+          strcpy_P(buff, mimeTable[i].mimeType);
+
+          return String(buff);
+        }
+      }
+
+      // Fall-through and just return default type
+      strcpy_P(buff, mimeTable[sizeof(mimeTable) / sizeof(mimeTable[0]) - 1].mimeType);
+
+      return String(buff);
+    }
+
+    ////////////////////////////////////////
+
+    bool validMethod(HTTPMethod requestMethod)
+    {
+      return (requestMethod == HTTP_GET) || (requestMethod == HTTP_HEAD);
+    }
+
+    ////////////////////////////////////////
+
+  protected:
+    FS      _fs;
+    String  _uri;
+    String  _path;
+    String  _cache_header;
+    bool    _isFile;
+    size_t  _baseUriLength;
 };
 
+////////////////////////////////////////
+////////////////////////////////////////
 
-class StaticFileRequestHandler
-    :
-public StaticRequestHandler 
+
+class StaticFileRequestHandler : public StaticRequestHandler
 {
     using SRH = StaticRequestHandler;
     using WebServerType = WiFiWebServer;
 
-public:
+  public:
+
+    ////////////////////////////////////////
+
     StaticFileRequestHandler(FS& fs, const char* path, const char* uri, const char* cache_header)
-        :
-    StaticRequestHandler{fs, path, uri, cache_header}
+      :
+      StaticRequestHandler{fs, path, uri, cache_header}
     {
-        File f = SRH::_fs.open(path, "r");
-        MD5Builder calcMD5;
-        calcMD5.begin();
-        calcMD5.addStream(f, f.size());
-        calcMD5.calculate();
-        calcMD5.getBytes(_ETag_md5);
-        f.close();
+      File f = SRH::_fs.open(path, "r");
+      MD5Builder calcMD5;
+      calcMD5.begin();
+      calcMD5.addStream(f, f.size());
+      calcMD5.calculate();
+      calcMD5.getBytes(_ETag_md5);
+      f.close();
     }
 
-    bool canHandle(const HTTPMethod& requestMethod, const String& requestUri) override  
+    ////////////////////////////////////////
+
+    bool canHandle(const HTTPMethod& requestMethod, const String& requestUri) override
     {
-        return SRH::validMethod(requestMethod) && requestUri == SRH::_uri;
+      return SRH::validMethod(requestMethod) && requestUri == SRH::_uri;
     }
 
-    bool handle(WiFiWebServer& server, const HTTPMethod& requestMethod, const String& requestUri) 
+    ////////////////////////////////////////
+
+    bool handle(WiFiWebServer& server, const HTTPMethod& requestMethod, const String& requestUri)
     {
-        if (!canHandle(requestMethod, requestUri))
-            return false;
+      if (!canHandle(requestMethod, requestUri))
+        return false;
 
-        
-        const String etag = "\"" + base64::encode(_ETag_md5, 16) + "\"";
 
-        if(server.header("If-None-Match") == etag){
-            server.send(304);
-            return true;
-        }
+      const String etag = "\"" + base64::encode(_ETag_md5, 16) + "\"";
 
-        File f = SRH::_fs.open(SRH::_path, "r");
-
-        if (!f)
-            return false;
-
-        if (!_isFile) {
-            f.close();
-            return false;
-        }
-
-        if (SRH::_cache_header.length() != 0)
-            server.sendHeader("Cache-Control", SRH::_cache_header);
-
-        server.sendHeader("ETag", etag);
-
-        server.streamFile(f, mime_esp::getContentType(SRH::_path), requestMethod);
+      if (server.header("If-None-Match") == etag)
+      {
+        server.send(304);
         return true;
+      }
+
+      File f = SRH::_fs.open(SRH::_path, "r");
+
+      if (!f)
+        return false;
+
+      if (!_isFile)
+      {
+        f.close();
+        return false;
+      }
+
+      if (SRH::_cache_header.length() != 0)
+        server.sendHeader("Cache-Control", SRH::_cache_header);
+
+      server.sendHeader("ETag", etag);
+
+      server.streamFile(f, mime_esp::getContentType(SRH::_path), requestMethod);
+      return true;
     }
 
-protected:
+    ////////////////////////////////////////
+
+  protected:
     uint8_t _ETag_md5[16];
 };
 

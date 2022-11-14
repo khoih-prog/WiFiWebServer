@@ -12,7 +12,7 @@
   @file       Esp8266WebServer.h
   @author     Ivan Grokhotkov
 
-  Version: 1.9.5
+  Version: 1.10.0
 
   Version Modified By   Date      Comments
   ------- -----------  ---------- -----------
@@ -30,8 +30,9 @@
   1.9.3   K Hoang      16/08/2022 Better workaround for RP2040W WiFi.status() bug using ping() to local gateway
   1.9.4   K Hoang      06/09/2022 Restore support to ESP32 and ESP8266
   1.9.5   K Hoang      10/09/2022 Restore support to Teensy, etc. Fix bug in examples
+  1.10.0  K Hoang      13/11/2022 Add new features, such as CORS. Update code and examples
  *****************************************************************************************************************************/
- 
+
 // (c) Copyright Arduino. 2016
 // Released under Apache License, version 2.0
 
@@ -42,12 +43,16 @@
 #include "utility/WiFiDebug.h"
 #include "WiFi_HTTPClient/WiFi_WebSocketClient.h"
 
+////////////////////////////////////////
+
 WiFiWebSocketClient::WiFiWebSocketClient(Client& aClient, const char* aServerName, uint16_t aServerPort)
   : WiFiHttpClient(aClient, aServerName, aServerPort),
     iTxStarted(false),
     iRxSize(0)
 {
 }
+
+////////////////////////////////////////
 
 WiFiWebSocketClient::WiFiWebSocketClient(Client& aClient, const String& aServerName, uint16_t aServerPort)
   : WiFiHttpClient(aClient, aServerName, aServerPort),
@@ -56,6 +61,8 @@ WiFiWebSocketClient::WiFiWebSocketClient(Client& aClient, const String& aServerN
 {
 }
 
+////////////////////////////////////////
+
 WiFiWebSocketClient::WiFiWebSocketClient(Client& aClient, const IPAddress& aServerAddress, uint16_t aServerPort)
   : WiFiHttpClient(aClient, aServerAddress, aServerPort),
     iTxStarted(false),
@@ -63,12 +70,14 @@ WiFiWebSocketClient::WiFiWebSocketClient(Client& aClient, const IPAddress& aServ
 {
 }
 
+////////////////////////////////////////
+
 int WiFiWebSocketClient::begin(const char* aPath)
 {
   // start the GET request
   beginRequest();
   connectionKeepAlive();
-  
+
   int status = get(aPath);
 
   if (status == 0)
@@ -81,7 +90,7 @@ int WiFiWebSocketClient::begin(const char* aPath)
     {
       randomKey[i] = random(0x01, 0xff);
     }
-    
+
     memset(base64RandomKey, 0x00, sizeof(base64RandomKey));
     base64_encode(randomKey, sizeof(randomKey), (unsigned char*)base64RandomKey, sizeof(base64RandomKey));
 
@@ -106,10 +115,14 @@ int WiFiWebSocketClient::begin(const char* aPath)
   return (status == 101) ? 0 : status;
 }
 
+////////////////////////////////////////
+
 int WiFiWebSocketClient::begin(const String& aPath)
 {
   return begin(aPath.c_str());
 }
+
+////////////////////////////////////////
 
 int WiFiWebSocketClient::beginMessage(int aType)
 {
@@ -125,6 +138,8 @@ int WiFiWebSocketClient::beginMessage(int aType)
 
   return 0;
 }
+
+////////////////////////////////////////
 
 int WiFiWebSocketClient::endMessage()
 {
@@ -169,11 +184,11 @@ int WiFiWebSocketClient::endMessage()
   {
     maskKey[i] = random(0xff);
   }
-  
+
   WiFiHttpClient::write(maskKey, sizeof(maskKey));
 
   // mask the data and send
-  for (int i = 0; i < (int)iTxSize; i++) 
+  for (int i = 0; i < (int)iTxSize; i++)
   {
     iTxBuffer[i] ^= maskKey[i % sizeof(maskKey)];
   }
@@ -186,10 +201,14 @@ int WiFiWebSocketClient::endMessage()
   return (WiFiHttpClient::write(iTxBuffer, txSize) == txSize) ? 0 : 1;
 }
 
+////////////////////////////////////////
+
 size_t WiFiWebSocketClient::write(uint8_t aByte)
 {
   return write(&aByte, sizeof(aByte));
 }
+
+////////////////////////////////////////
 
 size_t WiFiWebSocketClient::write(const uint8_t *aBuffer, size_t aSize)
 {
@@ -218,6 +237,8 @@ size_t WiFiWebSocketClient::write(const uint8_t *aBuffer, size_t aSize)
 
   return aSize;
 }
+
+////////////////////////////////////////
 
 int WiFiWebSocketClient::parseMessage()
 {
@@ -288,12 +309,12 @@ int WiFiWebSocketClient::parseMessage()
   else if (TYPE_PING == messageType())
   {
     beginMessage(TYPE_PONG);
-    
+
     while (available())
     {
       write(read());
     }
-    
+
     endMessage();
 
     iRxSize = 0;
@@ -307,15 +328,21 @@ int WiFiWebSocketClient::parseMessage()
   return iRxSize;
 }
 
+////////////////////////////////////////
+
 int WiFiWebSocketClient::messageType()
 {
   return (iRxOpCode & 0x0f);
 }
 
+////////////////////////////////////////
+
 bool WiFiWebSocketClient::isFinal()
 {
   return ((iRxOpCode & 0x80) != 0);
 }
+
+////////////////////////////////////////
 
 String WiFiWebSocketClient::readString()
 {
@@ -335,6 +362,8 @@ String WiFiWebSocketClient::readString()
   return s;
 }
 
+////////////////////////////////////////
+
 int WiFiWebSocketClient::ping()
 {
   uint8_t pingData[16];
@@ -347,9 +376,11 @@ int WiFiWebSocketClient::ping()
 
   beginMessage(TYPE_PING);
   write(pingData, sizeof(pingData));
-  
+
   return endMessage();
 }
+
+////////////////////////////////////////
 
 int WiFiWebSocketClient::available()
 {
@@ -360,6 +391,8 @@ int WiFiWebSocketClient::available()
 
   return iRxSize;
 }
+
+////////////////////////////////////////
 
 int WiFiWebSocketClient::read()
 {
@@ -372,6 +405,8 @@ int WiFiWebSocketClient::read()
 
   return -1;
 }
+
+////////////////////////////////////////
 
 int WiFiWebSocketClient::read(uint8_t *aBuffer, size_t aSize)
 {
@@ -394,6 +429,8 @@ int WiFiWebSocketClient::read(uint8_t *aBuffer, size_t aSize)
   return readCount;
 }
 
+////////////////////////////////////////
+
 int WiFiWebSocketClient::peek()
 {
   int p = WiFiHttpClient::peek();
@@ -407,6 +444,8 @@ int WiFiWebSocketClient::peek()
   return p;
 }
 
+////////////////////////////////////////
+
 void WiFiWebSocketClient::flushRx()
 {
   while (available())
@@ -414,3 +453,6 @@ void WiFiWebSocketClient::flushRx()
     read();
   }
 }
+
+////////////////////////////////////////
+

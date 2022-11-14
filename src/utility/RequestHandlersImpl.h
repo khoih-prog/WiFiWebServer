@@ -12,7 +12,7 @@
   @file       Esp8266WebServer.h
   @author     Ivan Grokhotkov
 
-  Version: 1.9.5
+  Version: 1.10.0
 
   Version Modified By   Date      Comments
   ------- -----------  ---------- -----------
@@ -30,6 +30,7 @@
   1.9.3   K Hoang      16/08/2022 Better workaround for RP2040W WiFi.status() bug using ping() to local gateway
   1.9.4   K Hoang      06/09/2022 Restore support to ESP32 and ESP8266
   1.9.5   K Hoang      10/09/2022 Restore support to Teensy, etc. Fix bug in examples
+  1.10.0  K Hoang      13/11/2022 Add new features, such as CORS. Update code and examples
  *****************************************************************************************************************************/
 
 #pragma once
@@ -41,17 +42,25 @@
 #include "RequestHandler.h"
 #include "mimetable.h"
 
+////////////////////////////////////////
+////////////////////////////////////////
+
 class FunctionRequestHandler : public RequestHandler
 {
   public:
 
-    FunctionRequestHandler(WiFiWebServer::THandlerFunction fn, WiFiWebServer::THandlerFunction ufn, const String &uri, const HTTPMethod& method)
+    ////////////////////////////////////////
+
+    FunctionRequestHandler(WiFiWebServer::THandlerFunction fn, WiFiWebServer::THandlerFunction ufn, const String &uri,
+                           const HTTPMethod& method)
       : _fn(fn)
       , _ufn(ufn)
       , _uri(uri)
       , _method(method)
     {
     }
+
+    ////////////////////////////////////////
 
     bool canHandle(const HTTPMethod& requestMethod, const String& requestUri) override
     {
@@ -73,6 +82,8 @@ class FunctionRequestHandler : public RequestHandler
       return false;
     }
 
+    ////////////////////////////////////////
+
     bool canUpload(const String& requestUri) override
     {
       if (!_ufn || !canHandle(HTTP_POST, requestUri))
@@ -81,10 +92,12 @@ class FunctionRequestHandler : public RequestHandler
       return true;
     }
 
-    bool handle(WiFiWebServer& server, const HTTPMethod& requestMethod, const String& requestUri) override
+    ////////////////////////////////////////
+
+    bool handle(WiFiWebServer& server, const HTTPMethod& requestMethod, /*const*/ String& requestUri) override
     {
       WFW_UNUSED(server);
-      
+
       if (!canHandle(requestMethod, requestUri))
         return false;
 
@@ -92,14 +105,18 @@ class FunctionRequestHandler : public RequestHandler
       return true;
     }
 
+    ////////////////////////////////////////
+
     void upload(WiFiWebServer& server, const String& requestUri, const HTTPUpload& upload) override
     {
       WFW_UNUSED(server);
       WFW_UNUSED(upload);
-      
+
       if (canUpload(requestUri))
         _ufn();
     }
+
+    ////////////////////////////////////////
 
   protected:
     WiFiWebServer::THandlerFunction _fn;
@@ -108,9 +125,14 @@ class FunctionRequestHandler : public RequestHandler
     HTTPMethod _method;
 };
 
+////////////////////////////////////////
+////////////////////////////////////////
+
 class StaticRequestHandler : public RequestHandler
 {
   public:
+
+    ////////////////////////////////////////
 
     bool canHandle(const HTTPMethod& requestMethod, const String& requestUri) override
     {
@@ -123,7 +145,11 @@ class StaticRequestHandler : public RequestHandler
       return true;
     }
 
+    ////////////////////////////////////////
+
 #if USE_NEW_WEBSERVER_VERSION
+
+    ////////////////////////////////////////
 
     static String getContentType(const String& path)
     {
@@ -147,36 +173,63 @@ class StaticRequestHandler : public RequestHandler
       return String(buff);
     }
 
-#else
+    ////////////////////////////////////////
+
+#else   // #if USE_NEW_WEBSERVER_VERSION
+
+    ////////////////////////////////////////
 
     static String getContentType(const String& path)
     {
-      if (path.endsWith(".html"))           return "text/html";
-      else if (path.endsWith(".htm"))       return "text/html";
-      else if (path.endsWith(".css"))       return "text/css";
-      else if (path.endsWith(".txt"))       return "text/plain";
-      else if (path.endsWith(".js"))        return "application/javascript";
-      else if (path.endsWith(".png"))       return "image/png";
-      else if (path.endsWith(".gif"))       return "image/gif";
-      else if (path.endsWith(".jpg"))       return "image/jpeg";
-      else if (path.endsWith(".ico"))       return "image/x-icon";
-      else if (path.endsWith(".svg"))       return "image/svg+xml";
-      else if (path.endsWith(".ttf"))       return "application/x-font-ttf";
-      else if (path.endsWith(".otf"))       return "application/x-font-opentype";
-      else if (path.endsWith(".woff"))      return "application/font-woff";
-      else if (path.endsWith(".woff2"))     return "application/font-woff2";
-      else if (path.endsWith(".eot"))       return "application/vnd.ms-fontobject";
-      else if (path.endsWith(".sfnt"))      return "application/font-sfnt";
-      else if (path.endsWith(".xml"))       return "text/xml";
-      else if (path.endsWith(".pdf"))       return "application/pdf";
-      else if (path.endsWith(".zip"))       return "application/zip";
-      else if (path.endsWith(".gz"))        return "application/x-gzip";
-      else if (path.endsWith(".appcache"))  return "text/cache-manifest";
+      if (path.endsWith(".html"))
+        return "text/html";
+      else if (path.endsWith(".htm"))
+        return "text/html";
+      else if (path.endsWith(".css"))
+        return "text/css";
+      else if (path.endsWith(".txt"))
+        return "text/plain";
+      else if (path.endsWith(".js"))
+        return "application/javascript";
+      else if (path.endsWith(".png"))
+        return "image/png";
+      else if (path.endsWith(".gif"))
+        return "image/gif";
+      else if (path.endsWith(".jpg"))
+        return "image/jpeg";
+      else if (path.endsWith(".ico"))
+        return "image/x-icon";
+      else if (path.endsWith(".svg"))
+        return "image/svg+xml";
+      else if (path.endsWith(".ttf"))
+        return "application/x-font-ttf";
+      else if (path.endsWith(".otf"))
+        return "application/x-font-opentype";
+      else if (path.endsWith(".woff"))
+        return "application/font-woff";
+      else if (path.endsWith(".woff2"))
+        return "application/font-woff2";
+      else if (path.endsWith(".eot"))
+        return "application/vnd.ms-fontobject";
+      else if (path.endsWith(".sfnt"))
+        return "application/font-sfnt";
+      else if (path.endsWith(".xml"))
+        return "text/xml";
+      else if (path.endsWith(".pdf"))
+        return "application/pdf";
+      else if (path.endsWith(".zip"))
+        return "application/zip";
+      else if (path.endsWith(".gz"))
+        return "application/x-gzip";
+      else if (path.endsWith(".appcache"))
+        return "text/cache-manifest";
 
       return "application/octet-stream";
     }
 
-#endif
+    ////////////////////////////////////////
+
+#endif    // #if USE_NEW_WEBSERVER_VERSION
 
   protected:
 
@@ -188,7 +241,7 @@ class StaticRequestHandler : public RequestHandler
 };
 
 #else // #if !(ESP32 || ESP8266)
-  #include "ESP_RequestHandlersImpl.h"
+#include "ESP_RequestHandlersImpl.h"
 #endif
 
 

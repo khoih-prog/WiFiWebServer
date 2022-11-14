@@ -12,7 +12,7 @@
   @file       Esp8266WebServer.h
   @author     Ivan Grokhotkov
 
-  Version: 1.9.5
+  Version: 1.10.0
 
   Version Modified By   Date      Comments
   ------- -----------  ---------- -----------
@@ -30,6 +30,7 @@
   1.9.3   K Hoang      16/08/2022 Better workaround for RP2040W WiFi.status() bug using ping() to local gateway
   1.9.4   K Hoang      06/09/2022 Restore support to ESP32 and ESP8266
   1.9.5   K Hoang      10/09/2022 Restore support to Teensy, etc. Fix bug in examples
+  1.10.0  K Hoang      13/11/2022 Add new features, such as CORS. Update code and examples
  *****************************************************************************************************************************/
 
 #pragma once
@@ -41,6 +42,11 @@
   #define WFW_UNUSED(x) (void)(x)
 #endif
 
+#include "utility/WiFiDebug.h"
+
+#include <vector>
+
+////////////////////////////////////////
 
 class RequestHandler
 {
@@ -48,50 +54,89 @@ class RequestHandler
 
     virtual ~RequestHandler() { }
 
+    ////////////////////////////////////////
+
     virtual bool canHandle(const HTTPMethod& method, const String& uri)
     {
       WFW_UNUSED(method);
       WFW_UNUSED(uri);
-      
+
       return false;
     }
+
+    ////////////////////////////////////////
 
     virtual bool canUpload(const String& uri)
     {
       WFW_UNUSED(uri);
-      
+
       return false;
     }
 
-    virtual bool handle(WiFiWebServer& server, const HTTPMethod& requestMethod, const String& requestUri)
+    ////////////////////////////////////////
+
+    virtual bool handle(WiFiWebServer& server, const HTTPMethod& requestMethod, /*const*/ String& requestUri)
     {
       WFW_UNUSED(server);
       WFW_UNUSED(requestMethod);
       WFW_UNUSED(requestUri);
-      
+
       return false;
     }
 
-    virtual void upload(WiFiWebServer& server, const String& requestUri, const HTTPUpload& upload) 
+    ////////////////////////////////////////
+
+    virtual void upload(WiFiWebServer& server, const String& requestUri, const HTTPUpload& upload)
     {
       WFW_UNUSED(server);
       WFW_UNUSED(requestUri);
       WFW_UNUSED(upload);
     }
 
+    ////////////////////////////////////////
+
     RequestHandler* next()
     {
       return _next;
     }
+
+    ////////////////////////////////////////
 
     void next(RequestHandler* r)
     {
       _next = r;
     }
 
+    ////////////////////////////////////////
+
   private:
 
     RequestHandler* _next = nullptr;
+
+    ////////////////////////////////////////
+
+  protected:
+    std::vector<String> pathArgs;
+
+    ////////////////////////////////////////
+
+  public:
+
+    ////////////////////////////////////////
+
+    const String& pathArg(unsigned int i)
+    {
+      if (i < pathArgs.size())
+      {
+        return pathArgs[i];
+      }
+      else
+      {
+        WS_LOGERROR3(F("RequestHandler::pathArg: error i ="), i, F(" > pathArgs.size() ="), pathArgs.size());
+
+        return pathArgs[0];
+      }
+    }
 };
 
 #endif    // RequestHandler_H

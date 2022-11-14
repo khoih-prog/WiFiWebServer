@@ -12,27 +12,8 @@
   Original author:
   @file       Esp8266WebServer.h
   @author     Ivan Grokhotkov
-
-  Version: 1.9.5
-
-  Version Modified By   Date      Comments
-  ------- -----------  ---------- -----------
-  1.0.0   K Hoang      12/02/2020 Initial coding for SAMD21, Nano 33 IoT, etc running WiFiNINA
-  ...
-  1.6.0   K Hoang      13/02/2022 Add support to new ESP32-S3 and ESP32_C3
-  1.6.1   K Hoang      13/02/2022 Fix v1.6.0 issue
-  1.6.2   K Hoang      22/02/2022 Add support to megaAVR using Arduino megaAVR core
-  1.6.3   K Hoang      02/03/2022 Fix decoding error bug
-  1.7.0   K Hoang      05/04/2022 Fix issue with Portenta_H7 core v2.7.2+
-  1.8.0   K Hoang      26/04/2022 Add WiFiMulti library support and examples
-  1.9.0   K Hoang      12/08/2022 Add support to RASPBERRY_PI_PICO_W using CYW4343 WiFi
-  1.9.1   K Hoang      13/08/2022 Add WiFiMulti support to RASPBERRY_PI_PICO_W using CYW4343 WiFi
-  1.9.2   K Hoang      16/08/2022 Workaround for RP2040W WiFi.status() bug
-  1.9.3   K Hoang      16/08/2022 Better workaround for RP2040W WiFi.status() bug using ping() to local gateway
-  1.9.4   K Hoang      06/09/2022 Restore support to ESP32 and ESP8266
-  1.9.5   K Hoang      10/09/2022 Restore support to Teensy, etc. Fix bug in examples
  *****************************************************************************************************************************/
- 
+
 #pragma once
 
 // Reintroduce to prevent duplication compile error if other lib/core already has LIB64

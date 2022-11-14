@@ -12,7 +12,7 @@
   @file       Esp8266WebServer.h
   @author     Ivan Grokhotkov
 
-  Version: 1.9.5
+  Version: 1.10.0
 
   Version Modified By   Date      Comments
   ------- -----------  ---------- -----------
@@ -30,6 +30,7 @@
   1.9.3   K Hoang      16/08/2022 Better workaround for RP2040W WiFi.status() bug using ping() to local gateway
   1.9.4   K Hoang      06/09/2022 Restore support to ESP32 and ESP8266
   1.9.5   K Hoang      10/09/2022 Restore support to Teensy, etc. Fix bug in examples
+  1.10.0  K Hoang      13/11/2022 Add new features, such as CORS. Update code and examples
  *****************************************************************************************************************************/
 
 #pragma once
@@ -48,9 +49,9 @@
 #include <stdio.h>
 
 #ifdef DEBUG_WIFI_WEBSERVER_PORT
-#define WS_DEBUG_OUTPUT DEBUG_WIFI_WEBSERVER_PORT
+  #define WS_DEBUG_OUTPUT DEBUG_WIFI_WEBSERVER_PORT
 #else
-#define WS_DEBUG_OUTPUT Serial
+  #define WS_DEBUG_OUTPUT Serial
 #endif
 
 // Change _WIFI_LOGLEVEL_ to set tracing and logging verbosity
@@ -82,6 +83,7 @@ const char WWS_LINE[]  = "========================================\n";
 #define WS_LOGERROR1(x,y)      if(_WIFI_LOGLEVEL_>0) { WWS_PRINT_MARK; WWS_PRINT(x); WWS_PRINT_SP; WWS_PRINTLN(y); }
 #define WS_LOGERROR2(x,y,z)    if(_WIFI_LOGLEVEL_>0) { WWS_PRINT_MARK; WWS_PRINT(x); WWS_PRINT_SP; WWS_PRINT(y); WWS_PRINT_SP; WWS_PRINTLN(z); }
 #define WS_LOGERROR3(x,y,z,w)  if(_WIFI_LOGLEVEL_>0) { WWS_PRINT_MARK; WWS_PRINT(x); WWS_PRINT_SP; WWS_PRINT(y); WWS_PRINT_SP; WWS_PRINT(z); WWS_PRINT_SP; WWS_PRINTLN(w); }
+#define WS_LOGERROR5(x,y,z,w, xx, yy)  if(_WIFI_LOGLEVEL_>0) { WWS_PRINT_MARK; WWS_PRINT(x); WWS_PRINT_SP; WWS_PRINT(y); WWS_PRINT_SP; WWS_PRINT(z); WWS_PRINT_SP; WWS_PRINT(w); WWS_PRINT_SP; WWS_PRINT(xx); WWS_PRINT_SP; WWS_PRINTLN(yy);}
 
 ///////////////////////////////////////
 
@@ -90,6 +92,7 @@ const char WWS_LINE[]  = "========================================\n";
 #define WS_LOGWARN1(x,y)       if(_WIFI_LOGLEVEL_>1) { WWS_PRINT_MARK; WWS_PRINT(x); WWS_PRINT_SP; WWS_PRINTLN(y); }
 #define WS_LOGWARN2(x,y,z)     if(_WIFI_LOGLEVEL_>1) { WWS_PRINT_MARK; WWS_PRINT(x); WWS_PRINT_SP; WWS_PRINT(y); WWS_PRINT_SP; WWS_PRINTLN(z); }
 #define WS_LOGWARN3(x,y,z,w)   if(_WIFI_LOGLEVEL_>1) { WWS_PRINT_MARK; WWS_PRINT(x); WWS_PRINT_SP; WWS_PRINT(y); WWS_PRINT_SP; WWS_PRINT(z); WWS_PRINT_SP; WWS_PRINTLN(w); }
+#define WS_LOGWARN5(x,y,z,w, xx, yy)  if(_WIFI_LOGLEVEL_>1) { WWS_PRINT_MARK; WWS_PRINT(x); WWS_PRINT_SP; WWS_PRINT(y); WWS_PRINT_SP; WWS_PRINT(z); WWS_PRINT_SP; WWS_PRINT(w); WWS_PRINT_SP; WWS_PRINT(xx); WWS_PRINT_SP; WWS_PRINTLN(yy);}
 
 ///////////////////////////////////////
 
@@ -98,6 +101,7 @@ const char WWS_LINE[]  = "========================================\n";
 #define WS_LOGINFO1(x,y)       if(_WIFI_LOGLEVEL_>2) { WWS_PRINT_MARK; WWS_PRINT(x); WWS_PRINT_SP; WWS_PRINTLN(y); }
 #define WS_LOGINFO2(x,y,z)     if(_WIFI_LOGLEVEL_>2) { WWS_PRINT_MARK; WWS_PRINT(x); WWS_PRINT_SP; WWS_PRINT(y); WWS_PRINT_SP; WWS_PRINTLN(z); }
 #define WS_LOGINFO3(x,y,z,w)   if(_WIFI_LOGLEVEL_>2) { WWS_PRINT_MARK; WWS_PRINT(x); WWS_PRINT_SP; WWS_PRINT(y); WWS_PRINT_SP; WWS_PRINT(z); WWS_PRINT_SP; WWS_PRINTLN(w); }
+#define WS_LOGINFO5(x,y,z,w, xx, yy)  if(_WIFI_LOGLEVEL_>2) { WWS_PRINT_MARK; WWS_PRINT(x); WWS_PRINT_SP; WWS_PRINT(y); WWS_PRINT_SP; WWS_PRINT(z); WWS_PRINT_SP; WWS_PRINT(w); WWS_PRINT_SP; WWS_PRINT(xx); WWS_PRINT_SP; WWS_PRINTLN(yy);}
 
 ///////////////////////////////////////
 
@@ -106,5 +110,6 @@ const char WWS_LINE[]  = "========================================\n";
 #define WS_LOGDEBUG1(x,y)      if(_WIFI_LOGLEVEL_>3) { WWS_PRINT_MARK; WWS_PRINT(x); WWS_PRINT_SP; WWS_PRINTLN(y); }
 #define WS_LOGDEBUG2(x,y,z)    if(_WIFI_LOGLEVEL_>3) { WWS_PRINT_MARK; WWS_PRINT(x); WWS_PRINT_SP; WWS_PRINT(y); WWS_PRINT_SP; WWS_PRINTLN(z); }
 #define WS_LOGDEBUG3(x,y,z,w)  if(_WIFI_LOGLEVEL_>3) { WWS_PRINT_MARK; WWS_PRINT(x); WWS_PRINT_SP; WWS_PRINT(y); WWS_PRINT_SP; WWS_PRINT(z); WWS_PRINT_SP; WWS_PRINTLN(w); }
+#define WS_LOGDEBUG5(x,y,z,w, xx, yy)  if(_WIFI_LOGLEVEL_>3) { WWS_PRINT_MARK; WWS_PRINT(x); WWS_PRINT_SP; WWS_PRINT(y); WWS_PRINT_SP; WWS_PRINT(z); WWS_PRINT_SP; WWS_PRINT(w); WWS_PRINT_SP; WWS_PRINT(xx); WWS_PRINT_SP; WWS_PRINTLN(yy);}
 
 #endif    // WiFiDebug_H

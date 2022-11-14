@@ -12,7 +12,7 @@
   @file       Esp8266WebServer.h
   @author     Ivan Grokhotkov
 
-  Version: 1.9.5
+  Version: 1.10.0
 
   Version Modified By   Date      Comments
   ------- -----------  ---------- -----------
@@ -30,11 +30,14 @@
   1.9.3   K Hoang      16/08/2022 Better workaround for RP2040W WiFi.status() bug using ping() to local gateway
   1.9.4   K Hoang      06/09/2022 Restore support to ESP32 and ESP8266
   1.9.5   K Hoang      10/09/2022 Restore support to Teensy, etc. Fix bug in examples
+  1.10.0  K Hoang      13/11/2022 Add new features, such as CORS. Update code and examples
  *****************************************************************************************************************************/
 
 #include "RingBuffer.h"
 
 #include <Arduino.h>
+
+////////////////////////////////////////
 
 WiFi_RingBuffer::WiFi_RingBuffer(unsigned int size)
 {
@@ -45,12 +48,18 @@ WiFi_RingBuffer::WiFi_RingBuffer(unsigned int size)
   init();
 }
 
+////////////////////////////////////////
+
 WiFi_RingBuffer::~WiFi_RingBuffer() {}
+
+////////////////////////////////////////
 
 void WiFi_RingBuffer::reset()
 {
   ringBufP = ringBuf;
 }
+
+////////////////////////////////////////
 
 void WiFi_RingBuffer::init()
 {
@@ -58,14 +67,18 @@ void WiFi_RingBuffer::init()
   memset(ringBuf, 0, _size + 1);
 }
 
+////////////////////////////////////////
+
 void WiFi_RingBuffer::push(char c)
 {
   *ringBufP = c;
   ringBufP++;
-  
+
   if (ringBufP >= ringBufEnd)
     ringBufP = ringBuf;
 }
+
+////////////////////////////////////////
 
 bool WiFi_RingBuffer::endsWith(const char* str)
 {
@@ -73,7 +86,7 @@ bool WiFi_RingBuffer::endsWith(const char* str)
 
   // b is the start position into the ring buffer
   char* b = ringBufP - findStrLen;
-  
+
   if (b < ringBuf)
     b = b + _size;
 
@@ -86,7 +99,7 @@ bool WiFi_RingBuffer::endsWith(const char* str)
       return false;
 
     b++;
-    
+
     if (b == ringBufEnd)
       b = ringBuf;
   }
@@ -94,9 +107,10 @@ bool WiFi_RingBuffer::endsWith(const char* str)
   return true;
 }
 
+////////////////////////////////////////
+
 void WiFi_RingBuffer::getStr(char * destination, unsigned int skipChars)
 {
-  //int len = ringBufP-ringBuf-skipChars;
   unsigned int len = ringBufP - ringBuf - skipChars;
 
   // copy buffer to destination string
@@ -106,9 +120,10 @@ void WiFi_RingBuffer::getStr(char * destination, unsigned int skipChars)
   //destination[len]=0;
 }
 
+////////////////////////////////////////
+
 void WiFi_RingBuffer::getStrN(char * destination, unsigned int skipChars, unsigned int num)
 {
-  //int len = ringBufP-ringBuf-skipChars;
   unsigned int len = ringBufP - ringBuf - skipChars;
 
   if (len > num)

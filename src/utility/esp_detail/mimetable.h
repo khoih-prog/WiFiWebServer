@@ -12,7 +12,7 @@
   @file       Esp8266WebServer.h
   @author     Ivan Grokhotkov
 
-  Version: 1.9.5
+  Version: 1.10.0
 
   Version Modified By   Date      Comments
   ------- -----------  ---------- -----------
@@ -30,6 +30,7 @@
   1.9.3   K Hoang      16/08/2022 Better workaround for RP2040W WiFi.status() bug using ping() to local gateway
   1.9.4   K Hoang      06/09/2022 Restore support to ESP32 and ESP8266
   1.9.5   K Hoang      10/09/2022 Restore support to Teensy, etc. Fix bug in examples
+  1.10.0  K Hoang      13/11/2022 Add new features, such as CORS. Update code and examples
  *****************************************************************************************************************************/
 
 #pragma once
@@ -41,48 +42,52 @@
 
 #include "WString.h"
 
+////////////////////////////////////////
+
 namespace mime_esp
 {
-  enum type
-  {
-    html,
-    htm,
-    txt,
-  #ifndef MIMETYPE_MINIMAL    // allow to compile with only the strict minimum of mime-types
-    css,
-    js,
-    json,
-    png,
-    gif,
-    jpg,
-    jpeg,
-    ico,
-    svg,
-    ttf,
-    otf,
-    woff,
-    woff2,
-    eot,
-    sfnt,
-    xml,
-    pdf,
-    zip,
-    appcache,
-  #endif // MIMETYPE_MINIMAL
-    gz,
-    none,
-    maxType
-  };
-  
-  struct Entry
-  {
-    const char * endsWith;
-    const char * mimeType;
-  };
-  
-  extern const Entry mimeTable[maxType];
-  
-  String getContentType(const String& path);
+
+enum type
+{
+  html,
+  htm,
+  css,
+  txt,
+  js,
+  json,
+  png,
+  gif,
+  jpg,
+  ico,
+  svg,
+  ttf,
+  otf,
+  woff,
+  woff2,
+  eot,
+  sfnt,
+  xml,
+  pdf,
+  zip,
+  gz,
+  appcache,
+  none,
+  maxType
+};
+
+////////////////////////////////////////
+
+struct Entry
+{
+  const char * endsWith;
+  const char * mimeType;
+};
+
+////////////////////////////////////////
+
+extern const Entry mimeTable[maxType];
+
+String getContentType(const String& path);
 }
 
 #endif    // #if (ESP32 || ESP8266)

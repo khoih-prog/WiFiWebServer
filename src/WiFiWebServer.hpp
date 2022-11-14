@@ -12,7 +12,7 @@
   @file       Esp8266WebServer.h
   @author     Ivan Grokhotkov
 
-  Version: 1.9.5
+  Version: 1.10.0
 
   Version Modified By   Date      Comments
   ------- -----------  ---------- -----------
@@ -30,6 +30,7 @@
   1.9.3   K Hoang      16/08/2022 Better workaround for RP2040W WiFi.status() bug using ping() to local gateway
   1.9.4   K Hoang      06/09/2022 Restore support to ESP32 and ESP8266
   1.9.5   K Hoang      10/09/2022 Restore support to Teensy, etc. Fix bug in examples
+  1.10.0  K Hoang      13/11/2022 Add new features, such as CORS. Update code and examples
  **********************************************************************************************************************************/
 
 #pragma once
@@ -37,9 +38,9 @@
 #ifndef WiFiWebServer_HPP
 #define WiFiWebServer_HPP
 
-#define USE_NEW_WEBSERVER_VERSION       true
+#define USE_NEW_WEBSERVER_VERSION       		true
 
-/////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////
 
 #if ( defined(ARDUINO_PORTENTA_H7_M7) || defined(ARDUINO_PORTENTA_H7_M4) )
   #if defined(WIFI_USE_PORTENTA_H7)
@@ -54,9 +55,13 @@
   
   #if (_WIFI_LOGLEVEL_ > 2)
     #warning Use mbed-portenta architecture for PORTENTA_H7 from WiFiWebServer
+    
+    #undef _WIFI_LOGLEVEL_
+    // Somehow Portenta_H7 with latest core hangs if printing too much
+    #define _WIFI_LOGLEVEL_			1
   #endif
 
-/////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////
 
 #elif  ( defined(ARDUINO_SAMD_ZERO) || defined(ARDUINO_SAMD_MKR1000) || defined(ARDUINO_SAMD_MKRWIFI1010) \
       || defined(ARDUINO_SAMD_NANO_33_IOT) || defined(ARDUINO_SAMD_MKRFox1200) || defined(ARDUINO_SAMD_MKRWAN1300) ||  defined(ARDUINO_SAMD_MKRWAN1310) \
@@ -72,7 +77,7 @@
     #warning Use SAMD architecture from WiFiWebServer
   #endif
 
-/////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////
 
 #elif (defined(NRF52840_FEATHER) || defined(NRF52832_FEATHER) || defined(NRF52_SERIES) || defined(ARDUINO_NRF52_ADAFRUIT) || \
        defined(NRF52840_FEATHER_SENSE) || defined(NRF52840_ITSYBITSY) || defined(NRF52840_CIRCUITPLAY) || \
@@ -89,7 +94,7 @@
   
   #include <Adafruit_TinyUSB.h>
 
-/////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////
 
 #elif ( defined(ARDUINO_SAM_DUE) || defined(__SAM3X8E__) )
   #if defined(WIFI_USE_SAM_DUE)
@@ -101,7 +106,7 @@
     #warning Use SAM_DUE architecture from WiFiWebServer
   #endif
 
-/////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////
 
 #elif ( defined(STM32F0) || defined(STM32F1) || defined(STM32F2) || defined(STM32F3)  ||defined(STM32F4) || defined(STM32F7) || \
         defined(STM32L0) || defined(STM32L1) || defined(STM32L4) || defined(STM32H7)  ||defined(STM32G0) || defined(STM32G4) || \
@@ -119,7 +124,7 @@
     #warning Use STM32 architecture from WiFiWebServer
   #endif
 
-/////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////
 
 #elif ( defined(ARDUINO_NANO_RP2040_CONNECT) || defined(ARDUINO_ARCH_RP2040) || defined(ARDUINO_RASPBERRY_PI_PICO) || \
         defined(ARDUINO_ADAFRUIT_FEATHER_RP2040) || defined(ARDUINO_GENERIC_RP2040) || defined(ARDUINO_RASPBERRY_PI_PICO_W) )
@@ -141,7 +146,7 @@
     #warning Use RP2040 architecture from WiFiWebServer
   #endif
 
-/////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////
 
 #elif ( defined(ARDUINO_AVR_UNO_WIFI_REV2) || defined(ARDUINO_AVR_NANO_EVERY) )  
 
@@ -155,6 +160,8 @@
   #if (_WIFI_LOGLEVEL_ > 2)
     #warning Use Arduino megaAVR architecture from WiFiWebServer
   #endif
+
+////////////////////////////////////////
   
 #elif ( defined(__AVR_ATmega4809__)     || defined(ARDUINO_AVR_ATmega4809) || defined(ARDUINO_AVR_ATmega4808) || \
         defined(ARDUINO_AVR_ATmega3209) || defined(ARDUINO_AVR_ATmega3208) || defined(ARDUINO_AVR_ATmega1609) || \
@@ -166,11 +173,15 @@
   #define WIFI_USE_MEGACOREX      true
   #error megaAVR architecture and MegaCoreX from WiFiWebServer not supported yet
 
+////////////////////////////////////////
+
 #elif (ESP32)
 
   #if (_WIFI_LOGLEVEL_ > 2)
     #warning Use ESP32 from WiFiWebServer
   #endif
+
+////////////////////////////////////////
   
 #elif (ESP8266)
 
@@ -178,11 +189,15 @@
     #warning Use ESP8266 from WiFiWebServer
   #endif
 
+////////////////////////////////////////
+
 #elif defined(CORE_TEENSY)
 
   #if (_WIFI_LOGLEVEL_ > 2)
     #warning Use Teensy from WiFiWebServer
   #endif
+
+////////////////////////////////////////
 
 #else
 
@@ -190,7 +205,7 @@
   
 #endif
 
-/////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////
 
 // To support lambda function in class
 #include <functional-vlpp.h>
@@ -198,6 +213,8 @@
 #if !defined(USE_WIFI_NINA)
   #define USE_WIFI_NINA     true
 #endif
+
+////////////////////////////////////////
 
 // Modify to use new WiFiNINA_Generic library to support boards besides Nano-33 IoT, MKRWiFi1010, Adafruit MetroM4, etc.
 #if USE_WIFI_NINA
@@ -225,10 +242,12 @@
   #endif
 #endif
 
-/////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////
 
 #include "utility/mimetable.h"
 #include "utility/RingBuffer.h"
+
+////////////////////////////////////////
 
 // KH, For PROGMEM commands
 // ESP32/ESP8266 includes <pgmspace.h> by default, and memccpy_P was already defined there
@@ -237,7 +256,7 @@
   #define memccpy_P(dest, src, c, n) memccpy((dest), (src), (c), (n))
 #endif
 
-/////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////
 
 // Permit redefinition of SENDCONTENT_P_BUFFER_SZ in sketch, default is 4K, minimum is 256 bytes
 #ifndef SENDCONTENT_P_BUFFER_SZ
@@ -257,13 +276,13 @@
   #endif
 #endif
 
-/////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////
 
 #ifndef PGM_VOID_P
   #define PGM_VOID_P const void *
 #endif
 
-//////
+////////////////////////////////////////
 
 enum HTTPMethod 
 { 
@@ -298,6 +317,8 @@ enum HTTPAuthMethod
   DIGEST_AUTH 
 };
 
+////////////////////////////////////////
+
 #define HTTP_DOWNLOAD_UNIT_SIZE 1460
 
 // Permit user to increase HTTP_UPLOAD_BUFLEN larger than default 2K
@@ -314,7 +335,7 @@ enum HTTPAuthMethod
 #define CONTENT_LENGTH_UNKNOWN ((size_t) -1)
 #define CONTENT_LENGTH_NOT_SET ((size_t) -2)
 
-/////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////
 
 #define RETURN_NEWLINE       "\r\n"
 
@@ -323,7 +344,11 @@ enum HTTPAuthMethod
 
 typedef std::string WWString;
 
-/////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////
+
+#include "Uri.h"
+
+////////////////////////////////////////
 
 class WiFiWebServer;
 
@@ -339,22 +364,37 @@ typedef struct
   uint8_t buf[HTTP_UPLOAD_BUFLEN];
 } HTTPUpload;
 
+////////////////////////////////////////
+
 #include "utility/RequestHandler.h"
 
 #if (ESP32 || ESP8266)
     #include "FS.h"
 #endif
 
+////////////////////////////////////////
+////////////////////////////////////////
+
 class WiFiWebServer
 {
   public:
+  
+#if (ESP32 || ESP8266)  
+    WiFiWebServer(IPAddress addr, int port = 80);
+#endif
+    
     WiFiWebServer(int port = 80);
-    ~WiFiWebServer();
+    virtual ~WiFiWebServer();
 
-    void begin();
-    void handleClient();
+    virtual void begin();
+     
+#if USE_NEW_WEBSERVER_VERSION 
+    virtual void begin(uint16_t port);
+#endif
+        
+    virtual void handleClient();
 
-    void close();
+    virtual void close();
     void stop();
 
     bool authenticate(const char * username, const char * password);
@@ -371,38 +411,49 @@ class WiFiWebServer
     void onNotFound(THandlerFunction fn);   //called when handler is not assigned
     void onFileUpload(THandlerFunction fn); //handle file uploads
 
-    String uri() 
+		////////////////////////////////////////
+
+    inline String uri() 
     {
       return _currentUri;
     }
+
+		////////////////////////////////////////
     
-    HTTPMethod method() 
+    inline HTTPMethod method() 
     {
       return _currentMethod;
     }
+
+		////////////////////////////////////////
     
-    WiFiClient client() 
+    virtual inline WiFiClient client() 
     {
       return _currentClient;
     }
+
+		////////////////////////////////////////
     
-    //KH
 #if USE_NEW_WEBSERVER_VERSION
-    HTTPUpload& upload() 
+    inline HTTPUpload& upload() 
     {
       return *_currentUpload;
     }
 #else
-    HTTPUpload& upload() 
+    inline HTTPUpload& upload() 
     {
       return _currentUpload;
     }
 #endif
+
+		////////////////////////////////////////
+       
+    String 	pathArg(unsigned int i); 				// get request path argument by number
     
-    String arg(const String& name);         // get request argument value by name
-    String arg(int i);                      // get request argument value by number
-    String argName(int i);                  // get request argument name by number
-    
+    String 	arg(const String& name);        // get request argument value by name
+		String 	arg(int i);              				// get request argument value by number
+		String 	argName(int i);          				// get request argument name by number
+  
     int     args();                         // get arguments count
     bool    hasArg(const String& name);     // check if argument exists
     void    collectHeaders(const char* headerKeys[], const size_t headerKeysCount); // set the request headers to collect
@@ -411,6 +462,15 @@ class WiFiWebServer
     String  headerName(int i);              // get request header name by number
     int     headers();                      // get header count
     bool    hasHeader(const String& name);  // check if header exists
+
+		////////////////////////////////////////
+    
+    inline int clientContentLength() 
+    { 
+    	return _clientContentLength; 
+    }
+
+		////////////////////////////////////////
 
     String hostHeader();                    // get request host header if available or empty String if not
 
@@ -421,23 +481,54 @@ class WiFiWebServer
     void send(int code, const char* content_type = NULL, const String& content = String(""));
     void send(int code, char* content_type, const String& content);
     void send(int code, const String& content_type, const String& content);
-    //KH
+
     void send(int code, char*  content_type, const String& content, size_t contentLength);
+    void send(int code, const char* content_type, const char* content);
+    void send(int code, const char* content_type, const char* content, size_t contentLength);
+
+		////////////////////////////////////////
     
+    inline void enableDelay(bool value)
+    {
+    	_nullDelay = value;
+    }
+
+		////////////////////////////////////////
+        
+		inline void enableCORS(bool value = true) 
+		{
+  		_corsEnabled = value;
+		}
+
+		////////////////////////////////////////
+    
+		inline void enableCrossOrigin(bool value = true) 
+		{
+			enableCORS(value);
+		}
+
+		////////////////////////////////////////
+        
     void setContentLength(size_t contentLength);
     void sendHeader(const String& name, const String& value, bool first = false);
     void sendContent(const String& content);
-    void sendContent(const String& content, size_t size);
+    void sendContent(const String& content, size_t contentLength);
+    
+    // New
+    void sendContent(const char* content, size_t contentLength);
+    //////
 
     // KH, Restore PROGMEM commands
     void send_P(int code, PGM_P content_type, PGM_P content);
     void send_P(int code, PGM_P content_type, PGM_P content, size_t contentLength);
     
     void sendContent_P(PGM_P content);
-    void sendContent_P(PGM_P content, size_t size);
+    void sendContent_P(PGM_P content, size_t contentLength);
     //////
 
     static String urlDecode(const String& text);
+
+		////////////////////////////////////////
     
 #if !(ESP32 || ESP8266)
     template<typename T> size_t streamFile(T &file, const String& contentType) 
@@ -454,62 +545,82 @@ class WiFiWebServer
       
       return _currentClient.write(file);
     }
+
+		////////////////////////////////////////
     
 #else
+
+		////////////////////////////////////////
     
     void serveStatic(const char* uri, fs::FS& fs, const char* path, const char* cache_header = NULL ); // serve static pages from file system
 
     // Handle a GET request by sending a response header and stream file content to response body
-      template<typename T>
-      size_t streamFile(T &file, const String& contentType) 
-      {
-        return streamFile(file, contentType, HTTP_GET);
-      }
+      //template<typename T>
+      //size_t streamFile(T &file, const String& contentType) 
+      //{
+      //  return streamFile(file, contentType, HTTP_GET);
+     //}
 
       // Implement GET and HEAD requests for files.
       // Stream body on HTTP_GET but not on HTTP_HEAD requests.
       template<typename T>
-      size_t streamFile(T &file, const String& contentType, HTTPMethod requestMethod) 
+      size_t streamFile(T &file, const String& contentType, const int code = 200)
       {
-        size_t contentLength = 0;
-        
-        _streamFileCore(file.size(), file.name(), contentType);
-        
-        if (requestMethod == HTTP_GET) 
-        {
-            contentLength = _customClientWrite(file);
-        }
-        return contentLength
-        ;
+				_streamFileCore(file.size(), file.name(), contentType, code);
+				
+    		return _currentClient.write(file);     
       }
+
+		////////////////////////////////////////
+      
 #endif    
 
   protected:
+
+		////////////////////////////////////////
+  
+		virtual size_t _currentClientWrite(const char* buffer, size_t length) 
+		{ 
+			return _currentClient.write( buffer, length ); 
+		}
+
+		////////////////////////////////////////
+
+#if (ESP32 || ESP8266)		
+		virtual size_t _currentClientWrite_P(PGM_P buffer, size_t length) 
+		{ 
+			return _currentClient.write_P( buffer, length ); 
+		}
+#endif
+
+		////////////////////////////////////////
+  
     void _addRequestHandler(RequestHandler* handler);
     void _handleRequest();
     void _finalizeResponse();
     bool _parseRequest(WiFiClient& client);
     
-    //KH
-    #if USE_NEW_WEBSERVER_VERSION
+#if USE_NEW_WEBSERVER_VERSION
     void _parseArguments(const String& data);
     int  _parseArgumentsPrivate(const String& data, vl::Func<void(String&,String&,const String&,int,int,int,int)> handler);
     bool _parseForm(WiFiClient& client, const String& boundary, uint32_t len);
-    #else
+#else
     void _parseArguments(const String& data);
     bool _parseForm(WiFiClient& client, const String& boundary, uint32_t len);
-    #endif
+#endif
     
     static String _responseCodeToString(int code);    
     bool          _parseFormUploadAborted();
     void          _uploadWriteByte(uint8_t b);
-    uint8_t       _uploadReadByte(WiFiClient& client);
+    int       		_uploadReadByte(WiFiClient& client);
     void          _prepareHeader(String& response, int code, const char* content_type, size_t contentLength);
     void          _prepareHeader(WWString& response, int code, const char* content_type, size_t contentLength);
     bool          _collectHeader(const char* headerName, const char* headerValue);
     
 #if (ESP32 || ESP8266)
-    void _streamFileCore(const size_t fileSize, const String & fileName, const String & contentType);
+    void _streamFileCore(const size_t fileSize, const String & fileName, const String & contentType, const int code = 200);
+
+		////////////////////////////////////////
 
     template<typename T>
     size_t _customClientWrite(T &file) 
@@ -527,6 +638,9 @@ class WiFiWebServer
 
       return contentLength;
     }
+
+		////////////////////////////////////////
+    
 #endif
     
     struct RequestArgument 
@@ -534,8 +648,10 @@ class WiFiWebServer
       String key;
       String value;
     };
-
-    WiFiServer  _server;
+    
+    bool    					_corsEnabled;
+    
+    WiFiServer  			_server;
 
     WiFiClient        _currentClient;
     HTTPMethod        _currentMethod;
@@ -543,6 +659,8 @@ class WiFiWebServer
     uint8_t           _currentVersion;
     HTTPClientStatus  _currentStatus;
     unsigned long     _statusChange;
+    
+    bool     					_nullDelay;
 
     RequestHandler*   _currentHandler   = nullptr;
     RequestHandler*   _firstHandler     = nullptr;
@@ -553,12 +671,10 @@ class WiFiWebServer
     int               _currentArgCount;
     RequestArgument*  _currentArgs      = nullptr;
 
-    //KH = nullptr
 #if USE_NEW_WEBSERVER_VERSION
     HTTPUpload*       _currentUpload    = nullptr;
     int               _postArgsLen;
-    RequestArgument*  _postArgs         = nullptr;
-    
+    RequestArgument*  _postArgs         = nullptr;    
 #else
     HTTPUpload        _currentUpload;
 #endif
@@ -566,8 +682,8 @@ class WiFiWebServer
     int               _headerKeysCount;
     RequestArgument*  _currentHeaders   = nullptr;
     size_t            _contentLength;
+    int              	_clientContentLength;				// "Content-Length" from header of incoming POST or GET request
     String            _responseHeaders;
-
     String            _hostHeader;
     bool              _chunked;
 };

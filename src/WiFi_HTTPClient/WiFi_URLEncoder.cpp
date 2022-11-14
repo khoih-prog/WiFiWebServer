@@ -12,7 +12,7 @@
   @file       Esp8266WebServer.h
   @author     Ivan Grokhotkov
 
-  Version: 1.9.5
+  Version: 1.10.0
 
   Version Modified By   Date      Comments
   ------- -----------  ---------- -----------
@@ -30,6 +30,7 @@
   1.9.3   K Hoang      16/08/2022 Better workaround for RP2040W WiFi.status() bug using ping() to local gateway
   1.9.4   K Hoang      06/09/2022 Restore support to ESP32 and ESP8266
   1.9.5   K Hoang      10/09/2022 Restore support to Teensy, etc. Fix bug in examples
+  1.10.0  K Hoang      13/11/2022 Add new features, such as CORS. Update code and examples
  *****************************************************************************************************************************/
 
 // Library to simplify HTTP fetching on Arduino
@@ -41,23 +42,32 @@
 #include "utility/WiFiDebug.h"
 #include "WiFi_HTTPClient/WiFi_URLEncoder.h"
 
+////////////////////////////////////////
+
 WiFiURLEncoderClass::WiFiURLEncoderClass()
 {
 }
 
+////////////////////////////////////////
 WiFiURLEncoderClass::~WiFiURLEncoderClass()
 {
 }
+
+////////////////////////////////////////
 
 String WiFiURLEncoderClass::encode(const char* str)
 {
   return encode(str, strlen(str));
 }
 
+////////////////////////////////////////
+
 String WiFiURLEncoderClass::encode(const String& str)
 {
   return encode(str.c_str(), str.length());
 }
+
+////////////////////////////////////////
 
 String WiFiURLEncoderClass::encode(const char* str, int length)
 {
@@ -65,17 +75,17 @@ String WiFiURLEncoderClass::encode(const char* str, int length)
 
   encoded.reserve(length);
 
-  for (int i = 0; i < length; i++) 
+  for (int i = 0; i < length; i++)
   {
     char c = str[i];
 
     const char HEX_DIGIT_MAPPER[] = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'};
 
-    if (isAlphaNumeric(c) || (c == '-') || (c == '.') || (c == '_') || (c == '~')) 
+    if (isAlphaNumeric(c) || (c == '-') || (c == '.') || (c == '_') || (c == '~'))
     {
       encoded += c;
-    } 
-    else 
+    }
+    else
     {
       char s[4];
 
@@ -90,5 +100,7 @@ String WiFiURLEncoderClass::encode(const char* str, int length)
 
   return encoded;
 }
+
+////////////////////////////////////////
 
 WiFiURLEncoderClass WiFiURLEncoder;

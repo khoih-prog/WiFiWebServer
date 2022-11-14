@@ -12,29 +12,10 @@
   Original author:
   @file       Esp8266WebServer.h
   @author     Ivan Grokhotkov
-
-  Version: 1.9.5
-
-  Version Modified By   Date      Comments
-  ------- -----------  ---------- -----------
-  1.0.0   K Hoang      12/02/2020 Initial coding for SAMD21, Nano 33 IoT, etc running WiFiNINA
-  ...
-  1.6.0   K Hoang      13/02/2022 Add support to new ESP32-S3 and ESP32_C3
-  1.6.1   K Hoang      13/02/2022 Fix v1.6.0 issue
-  1.6.2   K Hoang      22/02/2022 Add support to megaAVR using Arduino megaAVR core
-  1.6.3   K Hoang      02/03/2022 Fix decoding error bug
-  1.7.0   K Hoang      05/04/2022 Fix issue with Portenta_H7 core v2.7.2+
-  1.8.0   K Hoang      26/04/2022 Add WiFiMulti library support and examples
-  1.9.0   K Hoang      12/08/2022 Add support to RASPBERRY_PI_PICO_W using CYW4343 WiFi
-  1.9.1   K Hoang      13/08/2022 Add WiFiMulti support to RASPBERRY_PI_PICO_W using CYW4343 WiFi
-  1.9.2   K Hoang      16/08/2022 Workaround for RP2040W WiFi.status() bug
-  1.9.3   K Hoang      16/08/2022 Better workaround for RP2040W WiFi.status() bug using ping() to local gateway
-  1.9.4   K Hoang      06/09/2022 Restore support to ESP32 and ESP8266
-  1.9.5   K Hoang      10/09/2022 Restore support to Teensy, etc. Fix bug in examples
  *****************************************************************************************************************************/
- 
+
 #if !(ESP32 || ESP8266)
- 
+
 #include "cencode.h"
 
 const int CHARS_PER_LINE = 72;
@@ -82,8 +63,8 @@ int base64_encode_block(const char* plaintext_in, int length_in, char* code_out,
         result = (fragment & 0x0fc) >> 2;
         *codechar++ = base64_encode_value(result);
         result = (fragment & 0x003) << 4;
-        
-        // fall through
+
+      // fall through
 
       case step_B:
         if (plainchar == plaintextend)
@@ -97,9 +78,9 @@ int base64_encode_block(const char* plaintext_in, int length_in, char* code_out,
         result |= (fragment & 0x0f0) >> 4;
         *codechar++ = base64_encode_value(result);
         result = (fragment & 0x00f) << 2;
-        
-        // fall through
-        
+
+      // fall through
+
       case step_C:
         if (plainchar == plaintextend)
         {
@@ -121,7 +102,7 @@ int base64_encode_block(const char* plaintext_in, int length_in, char* code_out,
           *codechar++ = '\n';
           state_in->stepcount = 0;
         }
-        
+
         // fall through
       }
   }
@@ -141,10 +122,12 @@ int base64_encode_blockend(char* code_out, base64_encodestate* state_in)
       *codechar++ = '=';
       *codechar++ = '=';
       break;
+
     case step_C:
       *codechar++ = base64_encode_value(state_in->result);
       *codechar++ = '=';
       break;
+
     case step_A:
       break;
   }

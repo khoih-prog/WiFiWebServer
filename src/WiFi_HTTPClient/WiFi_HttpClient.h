@@ -12,7 +12,7 @@
   @file       Esp8266WebServer.h
   @author     Ivan Grokhotkov
 
-  Version: 1.9.5
+  Version: 1.10.0
 
   Version Modified By   Date      Comments
   ------- -----------  ---------- -----------
@@ -30,6 +30,7 @@
   1.9.3   K Hoang      16/08/2022 Better workaround for RP2040W WiFi.status() bug using ping() to local gateway
   1.9.4   K Hoang      06/09/2022 Restore support to ESP32 and ESP8266
   1.9.5   K Hoang      10/09/2022 Restore support to Teensy, etc. Fix bug in examples
+  1.10.0  K Hoang      13/11/2022 Add new features, such as CORS. Update code and examples
  *****************************************************************************************************************************/
 
 // Class to simplify HTTP fetching on Arduino
@@ -46,6 +47,8 @@
 #include "Client.h"
 
 #include "utility/WiFiDebug.h"
+
+////////////////////////////////////////
 
 static const int HTTP_SUCCESS = 0;
 
@@ -65,6 +68,8 @@ static const int HTTP_ERROR_TIMED_OUT = -3;
 // server?
 static const int HTTP_ERROR_INVALID_RESPONSE = -4;
 
+////////////////////////////////////////
+
 // Define some of the common methods and headers here
 // That lets other code reuse them without having to declare another copy
 // of them, so saves code space and RAM
@@ -80,6 +85,8 @@ static const int HTTP_ERROR_INVALID_RESPONSE = -4;
 #define HTTP_HEADER_USER_AGENT        "User-Agent"
 #define HTTP_HEADER_VALUE_CHUNKED     "chunked"
 
+////////////////////////////////////////
+
 // Number of milliseconds that we wait each time there isn't any data
 // available to be read (during status code and header processing)
 #define kHttpWaitForDataDelay     1000L
@@ -88,6 +95,8 @@ static const int HTTP_ERROR_INVALID_RESPONSE = -4;
 // data before returning HTTP_ERROR_TIMED_OUT (during status code and header
 // processing)
 #define kHttpResponseTimeout      30000L
+
+////////////////////////////////////////
 
 class WiFiHttpClient : public Client
 {
@@ -223,10 +232,14 @@ class WiFiHttpClient : public Client
     */
     void sendHeader(const char* aHeader);
 
+    ////////////////////////////////////////
+
     void sendHeader(const String& aHeader)
     {
       sendHeader(aHeader.c_str());
     }
+
+    ////////////////////////////////////////
 
     /** Send an additional header line.  This is an alternate form of
       sendHeader() which takes the header name and content as separate strings.
@@ -237,10 +250,14 @@ class WiFiHttpClient : public Client
     */
     void sendHeader(const char* aHeaderName, const char* aHeaderValue);
 
+    ////////////////////////////////////////
+
     void sendHeader(const String& aHeaderName, const String& aHeaderValue)
     {
       sendHeader(aHeaderName.c_str(), aHeaderValue.c_str());
     }
+
+    ////////////////////////////////////////
 
     /** Send an additional header line.  This is an alternate form of
       sendHeader() which takes the header name and content separately but where
@@ -252,10 +269,14 @@ class WiFiHttpClient : public Client
     */
     void sendHeader(const char* aHeaderName, const int aHeaderValue);
 
+    ////////////////////////////////////////
+
     void sendHeader(const String& aHeaderName, const int aHeaderValue)
     {
       sendHeader(aHeaderName.c_str(), aHeaderValue);
     }
+
+    ////////////////////////////////////////
 
     /** Send a basic authentication header.  This will encode the given username
       and password, and send them in suitable header line for doing Basic
@@ -265,10 +286,14 @@ class WiFiHttpClient : public Client
     */
     void sendBasicAuth(const char* aUser, const char* aPassword);
 
+    ////////////////////////////////////////
+
     void sendBasicAuth(const String& aUser, const String& aPassword)
     {
       sendBasicAuth(aUser.c_str(), aPassword.c_str());
     }
+
+    ////////////////////////////////////////
 
     /** Get the HTTP status code contained in the response.
       For example, 200 for successful request, 404 for file not found, etc.
@@ -322,16 +347,22 @@ class WiFiHttpClient : public Client
       @return true if we are now at the end of the body, else false
     */
     bool endOfBodyReached();
-    
-    virtual bool endOfStream() 
+
+    ////////////////////////////////////////
+
+    virtual bool endOfStream()
     {
       return endOfBodyReached();
     };
-    
-    virtual bool completed() 
+
+    ////////////////////////////////////////
+
+    virtual bool completed()
     {
       return endOfBodyReached();
     };
+
+    ////////////////////////////////////////
 
     /** Return the length of the body.
       Also skips response headers if they have not been read already
@@ -341,13 +372,17 @@ class WiFiHttpClient : public Client
     */
     int contentLength();
 
+    ////////////////////////////////////////
+
     /** Returns if the response body is chunked
       @return true if response body is chunked, false otherwise
     */
-    int isResponseChunked() 
+    int isResponseChunked()
     {
       return iIsChunked;
     }
+
+    ////////////////////////////////////////
 
     /** Return the response body as a String
       Also skips response headers if they have not been read already
@@ -364,80 +399,107 @@ class WiFiHttpClient : public Client
     */
     void noDefaultRequestHeaders();
 
+    ////////////////////////////////////////
+
     // Inherited from Print
     // Note: 1st call to these indicates the user is sending the body, so if need
     // Note: be we should finish the header first
-    virtual size_t write(uint8_t aByte) 
+    virtual size_t write(uint8_t aByte)
     {
-      if (iState < eRequestSent) 
+      if (iState < eRequestSent)
       {
         finishHeaders();
       };
-      
+
       return iClient-> write(aByte);
     };
-    
-    virtual size_t write(const uint8_t *aBuffer, size_t aSize) 
+
+    ////////////////////////////////////////
+
+    virtual size_t write(const uint8_t *aBuffer, size_t aSize)
     {
-      if (iState < eRequestSent) 
+      if (iState < eRequestSent)
       {
         finishHeaders();
       };
+
       return iClient->write(aBuffer, aSize);
     };
-    
+
+    ////////////////////////////////////////
+
     // Inherited from Stream
     virtual int available();
-    
+
     /** Read the next byte from the server.
       @return Byte read or -1 if there are no bytes available.
     */
     virtual int read();
     virtual int read(uint8_t *buf, size_t size);
-    
-    virtual int peek() 
+
+    ////////////////////////////////////////
+
+    virtual int peek()
     {
       return iClient->peek();
     };
-    
-    virtual void flush() 
+
+    ////////////////////////////////////////
+
+    virtual void flush()
     {
       iClient->flush();
     };
 
+    ////////////////////////////////////////
+
     // Inherited from Client
-    virtual int connect(IPAddress ip, uint16_t port) 
+    virtual int connect(IPAddress ip, uint16_t port)
     {
       return iClient->connect(ip, port);
     };
-    
-    virtual int connect(const char *host, uint16_t port) 
+
+    ////////////////////////////////////////
+
+    virtual int connect(const char *host, uint16_t port)
     {
       return iClient->connect(host, port);
     };
-    
+
+    ////////////////////////////////////////
+
     virtual void stop();
-    
-    virtual uint8_t connected() 
+
+    ////////////////////////////////////////
+
+    virtual uint8_t connected()
     {
       return iClient->connected();
     };
-    
-    virtual operator bool() 
+
+    ////////////////////////////////////////
+
+    virtual operator bool()
     {
       return bool(iClient);
     };
-    
-    virtual uint32_t httpResponseTimeout() 
+
+    ////////////////////////////////////////
+
+    virtual uint32_t httpResponseTimeout()
     {
       return iHttpResponseTimeout;
     };
-    
-    virtual void setHttpResponseTimeout(uint32_t timeout) 
+
+    ////////////////////////////////////////
+
+    virtual void setHttpResponseTimeout(uint32_t timeout)
     {
       iHttpResponseTimeout = timeout;
     };
-    
+
+    ////////////////////////////////////////
+
   protected:
     /** Reset internal state data back to the "just initialised" state
     */
@@ -458,10 +520,12 @@ class WiFiHttpClient : public Client
     /** Reading any pending data from the client (used in connection keep alive mode)
     */
     void flushClientRx();
-   
+
     static const char* kContentLengthPrefix;
     static const char* kTransferEncodingChunked;
-    
+
+    ////////////////////////////////////////
+
     typedef enum
     {
       eIdle,
@@ -476,6 +540,8 @@ class WiFiHttpClient : public Client
       eReadingChunkLength,
       eReadingBodyChunk
     } tHttpState;
+
+    ////////////////////////////////////////
 
     // Client we're using
     Client* iClient = nullptr;
