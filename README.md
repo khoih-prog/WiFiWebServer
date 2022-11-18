@@ -464,7 +464,7 @@ Supposing the STM32 stm32 core version is 2.3.0. These files must be copied into
 - `~/.arduino15/packages/STM32/hardware/stm32/2.3.0/system/STM32F7xx/stm32f7xx_hal_conf_default.h` for Nucleo-144 STM32F7.
 
 Whenever a new version is installed, remember to copy this file into the new version directory. For example, new version is x.yy.zz,
-theses files must be copied into the corresponding directory:
+these files must be copied into the corresponding directory:
 
 - `~/.arduino15/packages/STM32/hardware/stm32/x.yy.zz/system/STM32F4xx/stm32f4xx_hal_conf_default.h`
 - `~/.arduino15/packages/STM32/hardware/stm32/x.yy.zz/system/STM32F7xx/stm32f7xx_hal_conf_default.h
@@ -480,7 +480,7 @@ Supposing the STM32 stm32 core version is 2.3.0. These files must be copied into
 - `~/.arduino15/packages/STM32/hardware/stm32/2.3.0/variants/STM32L0xx/L052R(6-8)T_L053R(6-8)T_L063R8T/NUCLEO_L053R8/variant.h` for Nucleo-64 NUCLEO_L053R8.
 
 Whenever a new version is installed, remember to copy this file into the new version directory. For example, new version is x.yy.zz,
-theses files must be copied into the corresponding directory:
+these files must be copied into the corresponding directory:
 
 - `~/.arduino15/packages/STM32/hardware/stm32/x.yy.zz/variants/STM32F7xx/F765Z(G-I)T_F767Z(G-I)T_F777ZIT/NUCLEO_F767ZI/variant.h`
 - `~/.arduino15/packages/STM32/hardware/stm32/x.yy.zz/variants/STM32L0xx/L052R(6-8)T_L053R(6-8)T_L063R8T/NUCLEO_L053R8/variant.h`
@@ -609,7 +609,7 @@ For example
         defined(NRF52840_FEATHER_SENSE) || defined(NRF52840_ITSYBITSY) || defined(NRF52840_CIRCUITPLAY) || defined(NRF52840_CLUE) || \
         defined(NRF52840_METRO) || defined(NRF52840_PCA10056) || defined(PARTICLE_XENON) || defined(NINA_B302_ublox) || defined(NINA_B112_ublox) )
 
-  #warning You have to modify pin usage accoring to actual connection for NRF528XX
+  #warning You have to modify pin usage according to actual connection for NRF528XX
   // To define pin out for WiFiNINA here
 
   //#define PINS_COUNT           (60u)
@@ -1243,7 +1243,7 @@ STM32_Pub
 Attempting MQTT connection to broker.emqx.io
 ...connected
 Published connection message successfully!
-Subcribed to: STM32_Sub
+Subscribed to: STM32_Sub
 MQTT Message Send : STM32_Pub => Hello from MQTT_ThingStream on SAMD_NANO_33_IOT with WiFiNINA using WiFiNINA_Generic Library
 MQTT Message receive [STM32_Pub] Hello from MQTT_ThingStream on SAMD_NANO_33_IOT with WiFiNINA using WiFiNINA_Generic Library
 MQTT Message Send : STM32_Pub => Hello from MQTT_ThingStream on SAMD_NANO_33_IOT with WiFiNINA using WiFiNINA_Generic Library
@@ -1697,7 +1697,7 @@ You're connected to the network, IP = 192.168.2.113
 SSID: HueNet1, Signal strength (RSSI):-18 dBm
 Attempting MQTT connection to broker.emqx.io...connected
 Published connection message successfully!
-Subcribed to: Nano RP2040 ConnectSub
+Subscribed to: Nano RP2040 ConnectSub
 H
 MQTT Message Send : Nano RP2040 ConnectPub => Hello from MQTTClient_Auth__WiFiMulti on Nano RP2040 Connect with WiFiNINA using WiFiNINA_Generic Library
 Message arrived [Nano RP2040 ConnectPub] Hello from MQTTClient_Auth__WiFiMulti on Nano RP2040 Connect with WiFiNINA using WiFiNINA_Generic Library
