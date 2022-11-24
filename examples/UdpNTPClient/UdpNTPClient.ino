@@ -1,22 +1,22 @@
 /****************************************************************************************************************************
   UdpNTPClient.ino - Simple Arduino web server sample for SAMD21 running WiFiNINA shield
   For any WiFi shields, such as WiFiNINA W101, W102, W13x, or custom, such as ESP8266/ESP32-AT, Ethernet, etc
-  
+
   WiFiWebServer is a library for the ESP32-based WiFi shields to run WebServer
   Based on and modified from ESP8266 https://github.com/esp8266/Arduino/releases
   Based on  and modified from Arduino WiFiNINA library https://www.arduino.cc/en/Reference/WiFiNINA
   Built by Khoi Hoang https://github.com/khoih-prog/WiFiWebServer
   Licensed under MIT license
-  
+
   Get the time from a Network Time Protocol (NTP) time server.
   Demonstrates use of UDP to send and receive data packets
   For more on NTP time servers and the messages needed to communicate with them,
   see http://en.wikipedia.org/wiki/Network_Time_Protocol
-  
+
   NOTE: The serial buffer size must be larger than 36 + packet size
   In this example we use an UDP packet of 48 bytes so the buffer must be
   at least 36+48=84 bytes that exceeds the default buffer size (64).
-  
+
   You must modify the serial buffer size to 128
   For HardwareSerial modify _SS_MAX_RX_BUFF in
   Arduino\hardware\arduino\avr\cores\arduino\HardwareSerial.h
@@ -69,10 +69,15 @@ void sendNTPpacket(char *ntpSrv)
 void setup()
 {
   Serial.begin(115200);
+
   while (!Serial && millis() < 5000);
 
-  Serial.print(F("\nStarting UdpNTPClient on ")); Serial.print(BOARD_NAME);
-  Serial.print(F(" with ")); Serial.println(SHIELD_TYPE); 
+  delay(200);
+
+  Serial.print(F("\nStarting UdpNTPClient on "));
+  Serial.print(BOARD_NAME);
+  Serial.print(F(" with "));
+  Serial.println(SHIELD_TYPE);
   Serial.println(WIFI_WEBSERVER_VERSION);
 
 #if WIFI_USING_ESP_AT
@@ -83,49 +88,72 @@ void setup()
   WiFi.init(&EspSerial);
 
   Serial.println(F("WiFi shield init done"));
-  
+
 #endif
 
-#if !(ESP32 || ESP8266)
-  
+#if ! (ESP32 || ESP8266)
   // check for the presence of the shield
-  #if USE_WIFI_NINA
-    if (WiFi.status() == WL_NO_MODULE)
-  #else
-    if (WiFi.status() == WL_NO_SHIELD)
-  #endif
-    {
-      Serial.println(F("WiFi shield not present"));
-      // don't continue
-      while (true);
-    }
+#if USE_WIFI_NINA
 
-  #if USE_WIFI_NINA
-    String fv = WiFi.firmwareVersion();
-    
-    if (fv < WIFI_FIRMWARE_LATEST_VERSION)
-    {
-      Serial.println(F("Please upgrade the firmware"));
-    }
-  #endif
-  
+  if (WiFi.status() == WL_NO_MODULE)
+#else
+  if (WiFi.status() == WL_NO_SHIELD)
+#endif
+  {
+    Serial.println(F("WiFi shield not present"));
+
+    // don't continue
+    while (true);
+  }
+
 #endif
 
-  Serial.print(F("Connecting to SSID: "));
-  Serial.println(ssid);
-  
-  status = WiFi.begin(ssid, pass);
+#if USE_WIFI_NINA
+  String fv = WiFi.firmwareVersion();
 
-  delay(1000);
-   
+  if (fv < WIFI_FIRMWARE_LATEST_VERSION)
+  {
+    Serial.println(F("Please upgrade the firmware"));
+  }
+
+#endif
+
+#if (ESP32 || ESP8266)
+  WiFi.mode(WIFI_STA);
+
+  Serial.print(F("Connecting to WPA SSID: "));
+  Serial.println(ssid);
+
+  if (WiFi.status() != WL_CONNECTED)
+  {
+    if (strlen(pass) >= 8)
+    {
+      WiFi.begin(ssid, pass);
+    }
+    else
+    {
+      WiFi.begin(ssid);
+    }
+  }
+
+  while (WiFi.status() != WL_CONNECTED)
+  {
+    delay(500);
+  }
+
+#else
+
   // attempt to connect to WiFi network
   while ( status != WL_CONNECTED)
   {
-    delay(500);
-        
+    //delay(500);
+    Serial.print(F("Connecting to WPA SSID: "));
+    Serial.println(ssid);
     // Connect to WPA/WPA2 network
-    status = WiFi.status();
+    status = WiFi.begin(ssid, pass);
   }
+
+#endif
 
   // you're connected now, so print out the data
   Serial.print(F("You're connected to the network, IP = "));
@@ -137,13 +165,13 @@ void setup()
   Serial.println(localPort);
 }
 
-void loop() 
+void loop()
 {
   sendNTPpacket(timeServer); // send an NTP packet to a time server
   // wait to see if a reply is available
   delay(1000);
-  
-  if (Udp.parsePacket()) 
+
+  if (Udp.parsePacket())
   {
     Serial.println(F("Packet received"));
     // We've received a packet, read the data from it
@@ -173,22 +201,25 @@ void loop()
     Serial.print(F("The UTC time is "));       // UTC is the time at Greenwich Meridian (GMT)
     Serial.print((epoch  % 86400L) / 3600); // print the hour (86400 equals secs per day)
     Serial.print(':');
-    
-    if (((epoch % 3600) / 60) < 10) 
+
+    if (((epoch % 3600) / 60) < 10)
     {
       // In the first 10 minutes of each hour, we'll want a leading '0'
       Serial.print('0');
     }
+
     Serial.print((epoch  % 3600) / 60); // print the minute (3600 equals secs per minute)
     Serial.print(':');
-    
-    if ((epoch % 60) < 10) 
+
+    if ((epoch % 60) < 10)
     {
       // In the first 10 seconds of each minute, we'll want a leading '0'
       Serial.print('0');
     }
+
     Serial.println(epoch % 60); // print the second
   }
+
   // wait ten seconds before asking for the time again
   delay(10000);
 }

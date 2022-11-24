@@ -44,7 +44,7 @@ bool isWiFiConnected()
   {
     WFM_LOGINFO1("Client connected, Local IP = ", WiFi.localIP());
     WiFiConnected = true;
-  
+
     return true;
   }
 
@@ -61,8 +61,9 @@ void heartBeatPrint()
   static int num = 1;
 
 #if defined(ARDUINO_RASPBERRY_PI_PICO_W)
+
   if (WiFiConnected)
-#else  
+#else
   if (WiFi.status() == WL_CONNECTED)
 #endif
     Serial.print(F("H"));        // H means connected to WiFi
@@ -77,7 +78,7 @@ void heartBeatPrint()
   else if (num++ % 10 == 0)
   {
     Serial.print(F(" "));
-  } 
+  }
 }
 
 uint8_t connectMultiWiFi()
@@ -85,18 +86,18 @@ uint8_t connectMultiWiFi()
 #if defined(ESP32)
   // For ESP32, this better be 0 to shorten the connect time.
   // For ESP32-S2/C3, must be > 500
-  #if ( USING_ESP32_S2 || USING_ESP32_C3 )
-    #define WIFI_MULTI_1ST_CONNECT_WAITING_MS           500L
-  #else
-    // For ESP32 core v1.0.6, must be >= 500
-    #define WIFI_MULTI_1ST_CONNECT_WAITING_MS           800L
-  #endif
+#if ( USING_ESP32_S2 || USING_ESP32_C3 )
+#define WIFI_MULTI_1ST_CONNECT_WAITING_MS           500L
+#else
+  // For ESP32 core v1.0.6, must be >= 500
+#define WIFI_MULTI_1ST_CONNECT_WAITING_MS           800L
+#endif
 #elif (defined(ESP8266))
   // For ESP8266, this better be 2200 to enable connect the 1st time
-  #define WIFI_MULTI_1ST_CONNECT_WAITING_MS             2200L
+#define WIFI_MULTI_1ST_CONNECT_WAITING_MS             2200L
 #else
   // For general board, this better be 1000 to enable connect the 1st time
-  #define WIFI_MULTI_1ST_CONNECT_WAITING_MS             1000L
+#define WIFI_MULTI_1ST_CONNECT_WAITING_MS             1000L
 #endif
 
 #define WIFI_MULTI_CONNECT_WAITING_MS                   500L
@@ -149,6 +150,7 @@ uint8_t connectMultiWiFi()
 void check_WiFi()
 {
 #if ( defined(ARDUINO_PORTENTA_H7_M7) || defined(ARDUINO_PORTENTA_H7_M4) )
+
   // Workaround for bug in https://github.com/arduino/ArduinoCore-mbed/issues/381
   if ( (WiFi.status() != WL_CONNECTED) || (WiFi.RSSI() == 0) )
 #elif ( defined(ARDUINO_RASPBERRY_PI_PICO_W) )
@@ -170,9 +172,9 @@ void check_status()
   static uint32_t current_millis;
 
 #if ( defined(ARDUINO_RASPBERRY_PI_PICO_W) )
-  #define WIFICHECK_INTERVAL    10000L
+#define WIFICHECK_INTERVAL    10000L
 #else
-  #define WIFICHECK_INTERVAL    1000L
+#define WIFICHECK_INTERVAL    1000L
 #endif
 
 #define HEARTBEAT_INTERVAL    10000L
@@ -217,10 +219,13 @@ void printWifiStatus()
 void setup()
 {
   Serial.begin(115200);
+
   while (!Serial && millis() < 5000);
 
-  Serial.print(F("\nStarting WebClient_WiFiMulti on "));  Serial.print(BOARD_NAME);
-  Serial.print(F(" with ")); Serial.println(SHIELD_TYPE);
+  Serial.print(F("\nStarting WebClient_WiFiMulti on "));
+  Serial.print(BOARD_NAME);
+  Serial.print(F(" with "));
+  Serial.println(SHIELD_TYPE);
   Serial.println(WIFIMULTI_GENERIC_VERSION);
   Serial.println(WIFI_WEBSERVER_VERSION);
 
@@ -239,12 +244,14 @@ void setup()
 
   // check for the presence of the shield
 #if USE_WIFI_NINA
+
   if (WiFi.status() == WL_NO_MODULE)
 #else
   if (WiFi.status() == WL_NO_SHIELD)
 #endif
   {
     Serial.println(F("WiFi shield not present"));
+
     // don't continue
     while (true);
   }
@@ -256,6 +263,7 @@ void setup()
   {
     Serial.println(F("Please upgrade the firmware"));
   }
+
 #endif
 
 #endif

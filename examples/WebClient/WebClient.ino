@@ -44,10 +44,13 @@ void printWifiStatus()
 void setup()
 {
   Serial.begin(115200);
+
   while (!Serial && millis() < 5000);
 
-  Serial.print(F("\nStarting WebClient on "));  Serial.print(BOARD_NAME);
-  Serial.print(F(" with ")); Serial.println(SHIELD_TYPE);
+  Serial.print(F("\nStarting WebClient on "));
+  Serial.print(BOARD_NAME);
+  Serial.print(F(" with "));
+  Serial.println(SHIELD_TYPE);
   Serial.println(WIFI_WEBSERVER_VERSION);
 
 #if WIFI_USING_ESP_AT
@@ -65,12 +68,14 @@ void setup()
 
   // check for the presence of the shield
 #if USE_WIFI_NINA
+
   if (WiFi.status() == WL_NO_MODULE)
 #else
   if (WiFi.status() == WL_NO_SHIELD)
 #endif
   {
     Serial.println(F("WiFi shield not present"));
+
     // don't continue
     while (true);
   }
@@ -82,6 +87,7 @@ void setup()
   {
     Serial.println(F("Please upgrade the firmware"));
   }
+
 #endif
 
 #endif

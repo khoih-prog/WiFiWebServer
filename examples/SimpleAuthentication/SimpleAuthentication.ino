@@ -1,7 +1,7 @@
 /****************************************************************************************************************************
   SimpleAuthentication.ino - Simple Arduino web server sample for SAMD21 running WiFiNINA shield
   For any WiFi shields, such as WiFiNINA W101, W102, W13x, or custom, such as ESP8266/ESP32-AT, Ethernet, etc
-  
+
   WiFiWebServer is a library for the ESP32-based WiFi shields to run WebServer
   Based on and modified from ESP8266 https://github.com/esp8266/Arduino/releases
   Based on  and modified from Arduino WiFiNINA library https://www.arduino.cc/en/Reference/WiFiNINA
@@ -9,7 +9,7 @@
   Licensed under MIT license
  ***************************************************************************************************************************************/
 
-#include "defines.h"    
+#include "defines.h"
 
 int status = WL_IDLE_STATUS;     // the Wifi radio's status
 int reqCount = 0;                // number of requests received
@@ -20,21 +20,22 @@ WiFiWebServer server(80);
 bool is_authenticated()
 {
   Serial.println(F("Enter is_authenticated"));
-  
+
   if (server.hasHeader(F("Cookie")))
   {
     Serial.print(F("Found cookie: "));
     String cookie = server.header(F("Cookie"));
     Serial.println(cookie);
+
     if (cookie.indexOf(F("NINASESSIONID=1")) != -1)
     {
       Serial.println(F("Authentication Successful"));
       return true;
     }
   }
-  
+
   Serial.println(F("Authentication Failed"));
-  
+
   return false;
 }
 
@@ -46,7 +47,7 @@ void handleLogin()
   if (server.hasHeader(F("Cookie")))
   {
     Serial.print(F("Found cookie: "));
-    
+
     String cookie = server.header(F("Cookie"));
     Serial.println(cookie);
   }
@@ -72,6 +73,7 @@ void handleLogin()
       Serial.println(F("Log in Successful"));
       return;
     }
+
     msg = F("Wrong username/password! try again.");
     Serial.println(F("Log in Failed"));
   }
@@ -83,7 +85,7 @@ void handleLogin()
   content += msg;
   content += F("<br>");
   content += F("You also can go <a href='/inline'>here</a></body></html>");
-  
+
   server.send(200, F("text/html"), content);
 }
 
@@ -94,7 +96,7 @@ void handleRoot()
 {
   static String content;
   static uint16_t previousStrLen = ORIGINAL_STR_LEN;
-  
+
   Serial.println(F("Enter handleRoot"));
 
   if (!is_authenticated())
@@ -102,11 +104,11 @@ void handleRoot()
     server.sendHeader(F("Location"), F("/login"));
     server.sendHeader(F("Cache-Control"), F("no-cache"));
     server.send(301);
-    
+
     return;
   }
 
-  content = F("<html><body><H2>Hello, you successfully connected to WiFiNINA on "); 
+  content = F("<html><body><H2>Hello, you successfully connected to WiFiNINA on ");
   content += BOARD_NAME;
   content += F("!</H2><br>");
 
@@ -124,7 +126,7 @@ void handleRoot()
     WS_LOGERROR3(F("String Len > "), previousStrLen, F(", extend to"), content.length() + 48);
 
     previousStrLen = content.length() + 48;
-    
+
     content.reserve(previousStrLen);
   }
   else
@@ -136,9 +138,9 @@ void handleRoot()
 
 //no need authentication
 void handleNotFound()
-{ 
+{
   String message = F("File Not Found\n\n");
-  
+
   message += F("URI: ");
   message += server.uri();
   message += F("\nMethod: ");
@@ -146,22 +148,25 @@ void handleNotFound()
   message += F("\nArguments: ");
   message += server.args();
   message += F("\n");
-  
+
   for (uint8_t i = 0; i < server.args(); i++)
   {
     message += " " + server.argName(i) + ": " + server.arg(i) + "\n";
   }
-  
+
   server.send(404, F("text/plain"), message);
 }
 
 void setup()
 {
   Serial.begin(115200);
+
   while (!Serial && millis() < 5000);
 
-  Serial.print(F("\nStarting SimpleAuthentication on ")); Serial.print(BOARD_NAME);
-  Serial.print(F(" with ")); Serial.println(SHIELD_TYPE); 
+  Serial.print(F("\nStarting SimpleAuthentication on "));
+  Serial.print(BOARD_NAME);
+  Serial.print(F(" with "));
+  Serial.println(SHIELD_TYPE);
   Serial.println(WIFI_WEBSERVER_VERSION);
 
 #if WIFI_USING_ESP_AT
@@ -172,46 +177,49 @@ void setup()
   WiFi.init(&EspSerial);
 
   Serial.println(F("WiFi shield init done"));
-  
+
 #endif
 
 #if !(ESP32 || ESP8266)
-  
-  // check for the presence of the shield
-  #if USE_WIFI_NINA
-    if (WiFi.status() == WL_NO_MODULE)
-  #else
-    if (WiFi.status() == WL_NO_SHIELD)
-  #endif
-    {
-      Serial.println(F("WiFi shield not present"));
-      // don't continue
-      while (true);
-    }
 
-  #if USE_WIFI_NINA
-    String fv = WiFi.firmwareVersion();
-    
-    if (fv < WIFI_FIRMWARE_LATEST_VERSION)
-    {
-      Serial.println(F("Please upgrade the firmware"));
-    }
-  #endif
-  
+  // check for the presence of the shield
+#if USE_WIFI_NINA
+
+  if (WiFi.status() == WL_NO_MODULE)
+#else
+  if (WiFi.status() == WL_NO_SHIELD)
+#endif
+  {
+    Serial.println(F("WiFi shield not present"));
+
+    // don't continue
+    while (true);
+  }
+
+#if USE_WIFI_NINA
+  String fv = WiFi.firmwareVersion();
+
+  if (fv < WIFI_FIRMWARE_LATEST_VERSION)
+  {
+    Serial.println(F("Please upgrade the firmware"));
+  }
+
+#endif
+
 #endif
 
   Serial.print(F("Connecting to SSID: "));
   Serial.println(ssid);
-  
+
   status = WiFi.begin(ssid, pass);
 
   delay(1000);
-   
+
   // attempt to connect to WiFi network
   while ( status != WL_CONNECTED)
   {
     delay(500);
-        
+
     // Connect to WPA/WPA2 network
     status = WiFi.status();
   }

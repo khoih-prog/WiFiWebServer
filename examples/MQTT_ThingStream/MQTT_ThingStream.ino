@@ -1,7 +1,7 @@
 /****************************************************************************************************************************
   MQTT_ThingStream.ino - Dead simple MQTT Client for WiFi shields
   For any WiFi shields, such as WiFiNINA W101, W102, W13x, or custom, such as ESP8266/ESP32-AT, Ethernet, etc
-  
+
   WiFiWebServer is a library for the ESP32-based WiFi shields to run WebServer
   Forked and modified from ESP8266 https://github.com/esp8266/Arduino/releases
   Forked and modified from Arduino WiFiNINA library https://www.arduino.cc/en/Reference/WiFiNINA
@@ -38,28 +38,28 @@ const char my_key[]   = "FIXME";
 
 #if USING_THINGSTREAM_IO
 
-const char *MQTT_PREFIX_TOPIC   = "esp32-sniffer/";
-const char *MQTT_ANNOUNCE_TOPIC = "/status";
-const char *MQTT_CONTROL_TOPIC  = "/control";
-const char *MQTT_BLE_TOPIC      = "/ble";
+  const char *MQTT_PREFIX_TOPIC   = "esp32-sniffer/";
+  const char *MQTT_ANNOUNCE_TOPIC = "/status";
+  const char *MQTT_CONTROL_TOPIC  = "/control";
+  const char *MQTT_BLE_TOPIC      = "/ble";
 
 
-// GOT FROM ThingsStream!
-const char *MQTT_SERVER     = "mqtt.thingstream.io";
-const char *MQTT_USER       = "MQTT_USER";
-const char *MQTT_PASS       = "MQTT_PASS";
-const char *MQTT_CLIENT_ID  = "MQTT_CLIENT_ID";
+  // GOT FROM ThingsStream!
+  const char *MQTT_SERVER     = "mqtt.thingstream.io";
+  const char *MQTT_USER       = "MQTT_USER";
+  const char *MQTT_PASS       = "MQTT_PASS";
+  const char *MQTT_CLIENT_ID  = "MQTT_CLIENT_ID";
 
-String topic    = MQTT_PREFIX_TOPIC + String("12345678") + MQTT_BLE_TOPIC;
-String subTopic = MQTT_PREFIX_TOPIC + String("12345678") + MQTT_BLE_TOPIC;
+  String topic    = MQTT_PREFIX_TOPIC + String("12345678") + MQTT_BLE_TOPIC;
+  String subTopic = MQTT_PREFIX_TOPIC + String("12345678") + MQTT_BLE_TOPIC;
 
 #else
 
-const char* MQTT_SERVER = "broker.emqx.io";        // Broker address
+  const char* MQTT_SERVER = "broker.emqx.io";        // Broker address
 
-const char*  ID         = "MQTTClient_SSL-Client";  // Name of our device, must be unique
-String      topic       = "STM32_Pub";              // Topic to subcribe to
-String      subTopic    = "STM32_Sub";              // Topic to subcribe to
+  const char*  ID         = "MQTTClient_SSL-Client";  // Name of our device, must be unique
+  String      topic       = "STM32_Pub";              // Topic to subcribe to
+  String      subTopic    = "STM32_Sub";              // Topic to subcribe to
 
 #endif
 
@@ -80,26 +80,26 @@ PubSubClient client(MQTT_SERVER, MQTT_PORT, mqtt_receive_callback, wifiClient);
 /*
    Called whenever a payload is received from a subscribed MQTT topic
 */
-void mqtt_receive_callback(char* topic, byte* payload, unsigned int length) 
+void mqtt_receive_callback(char* topic, byte* payload, unsigned int length)
 {
   Serial.print("MQTT Message receive [");
   Serial.print(topic);
   Serial.print("] ");
-  
-  for (unsigned int i = 0; i < length; i++) 
+
+  for (unsigned int i = 0; i < length; i++)
   {
     Serial.print((char)payload[i]);
   }
-  
+
   Serial.println();
 }
 
-void reconnect() 
+void reconnect()
 {
   static String data = "Hello from MQTTClient_ThingStream on " + String(BOARD_NAME);
-  
+
   // Loop until we're reconnected
-  while (!client.connected()) 
+  while (!client.connected())
   {
     Serial.print("Attempting MQTT connection to ");
     Serial.println(MQTT_SERVER);
@@ -112,28 +112,28 @@ void reconnect()
     int connect_status = client.connect(ID);
 #endif
 
-    if (connect_status)                                
+    if (connect_status)
     {
       Serial.println("...connected");
-      
+
       // Once connected, publish an announcement...
       client.publish(topic.c_str(), data.c_str());
 
       Serial.println("Published connection message successfully!");
-     
+
       Serial.print("Subcribed to: ");
       Serial.println(subTopic);
-      
+
       client.subscribe(subTopic.c_str());
       // for loopback testing
       client.subscribe(topic.c_str());
-    } 
-    else 
+    }
+    else
     {
       Serial.print("failed, rc=");
       Serial.print(client.state());
       Serial.println(" try again in 5 seconds");
-      
+
       // Wait 5 seconds before retrying
       delay(5000);
     }
@@ -144,10 +144,13 @@ void setup()
 {
   // Open serial communications and wait for port to open:
   Serial.begin(115200);
+
   while (!Serial && millis() < 5000);
 
-  Serial.print(F("\nStarting MQTT_ThingStream on ")); Serial.print(BOARD_NAME);
-  Serial.print(F(" with ")); Serial.println(SHIELD_TYPE); 
+  Serial.print(F("\nStarting MQTT_ThingStream on "));
+  Serial.print(BOARD_NAME);
+  Serial.print(F(" with "));
+  Serial.println(SHIELD_TYPE);
   Serial.println(WIFI_WEBSERVER_VERSION);
 
 #if WIFI_USING_ESP_AT
@@ -158,46 +161,49 @@ void setup()
   WiFi.init(&EspSerial);
 
   Serial.println(F("WiFi shield init done"));
-  
+
 #endif
 
 #if !(ESP32 || ESP8266)
-  
-  // check for the presence of the shield
-  #if USE_WIFI_NINA
-    if (WiFi.status() == WL_NO_MODULE)
-  #else
-    if (WiFi.status() == WL_NO_SHIELD)
-  #endif
-    {
-      Serial.println(F("WiFi shield not present"));
-      // don't continue
-      while (true);
-    }
 
-  #if USE_WIFI_NINA
-    String fv = WiFi.firmwareVersion();
-    
-    if (fv < WIFI_FIRMWARE_LATEST_VERSION)
-    {
-      Serial.println(F("Please upgrade the firmware"));
-    }
-  #endif
-  
+  // check for the presence of the shield
+#if USE_WIFI_NINA
+
+  if (WiFi.status() == WL_NO_MODULE)
+#else
+  if (WiFi.status() == WL_NO_SHIELD)
+#endif
+  {
+    Serial.println(F("WiFi shield not present"));
+
+    // don't continue
+    while (true);
+  }
+
+#if USE_WIFI_NINA
+  String fv = WiFi.firmwareVersion();
+
+  if (fv < WIFI_FIRMWARE_LATEST_VERSION)
+  {
+    Serial.println(F("Please upgrade the firmware"));
+  }
+
+#endif
+
 #endif
 
   Serial.print(F("Connecting to SSID: "));
   Serial.println(ssid);
-  
+
   status = WiFi.begin(ssid, pass);
 
   delay(1000);
-   
+
   // attempt to connect to WiFi network
   while ( status != WL_CONNECTED)
   {
     delay(500);
-        
+
     // Connect to WPA/WPA2 network
     status = WiFi.status();
   }
@@ -209,7 +215,7 @@ void setup()
   // combined length of clientId, username and password exceed this use the
   // following to increase the buffer size:
   //client.setBufferSize(256);
-  
+
   Serial.println("***************************************");
   Serial.println(topic);
   Serial.println("***************************************");
@@ -220,18 +226,18 @@ void setup()
 String data         = "Hello from MQTT_ThingStream on " + String(BOARD_NAME) + " with " + String(SHIELD_TYPE);
 const char *pubData = data.c_str();
 
-void loop() 
+void loop()
 {
   static unsigned long now;
-  
-  if (!client.connected()) 
+
+  if (!client.connected())
   {
     reconnect();
   }
 
   // Sending Data
   now = millis();
-  
+
   if (now - lastMsg > MQTT_PUBLISH_INTERVAL_MS)
   {
     lastMsg = now;
@@ -246,6 +252,6 @@ void loop()
     Serial.print(" => ");
     Serial.println(data);
   }
-  
+
   client.loop();
 }

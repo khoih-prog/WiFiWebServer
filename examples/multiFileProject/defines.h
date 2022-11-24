@@ -1,7 +1,7 @@
 /****************************************************************************************************************************
   defines.h
   For any WiFi shields, such as WiFiNINA W101, W102, W13x, or custom, such as ESP8266/ESP32-AT, Ethernet, etc
-  
+
   WiFiWebServer is a library for the ESP32-based WiFi shields to run WebServer
   Based on and modified from ESP8266 https://github.com/esp8266/Arduino/releases
   Based on  and modified from Arduino WiFiNINA library https://www.arduino.cc/en/Reference/WiFiNINA
@@ -36,21 +36,21 @@
 
   #define USE_WIFI_NINA         false
 
-  // To use the default WiFi library here 
+  // To use the default WiFi library here
   #define USE_WIFI_CUSTOM       false
-  
+
 #elif (ESP32)
 
   #define USE_WIFI_NINA         false
 
-  // To use the default WiFi library here 
+  // To use the default WiFi library here
   #define USE_WIFI_CUSTOM       false
 
 #elif (ESP8266)
 
   #define USE_WIFI_NINA         false
 
-  // To use the default WiFi library here 
+  // To use the default WiFi library here
   #define USE_WIFI_CUSTOM       true
 
 #elif ( defined(ARDUINO_SAMD_MKR1000)  || defined(ARDUINO_SAMD_MKRWIFI1010) )
@@ -66,23 +66,23 @@
   #define USE_WIFI_CUSTOM       false
 
 #elif defined(ARDUINO_RASPBERRY_PI_PICO_W)
- 
+
   #define USE_WIFI_NINA         false
   #define USE_WIFI101           false
   #define USE_WIFI_CUSTOM       false
-  
+
 #elif defined(ARDUINO_AVR_UNO_WIFI_REV2)
- 
+
   #define USE_WIFI_NINA         false
   #define USE_WIFI101           true
   #define USE_WIFI_CUSTOM       false
 
-#else 
+#else
 
   #define USE_WIFI_NINA         false
   #define USE_WIFI101           false
-  
-  // If not USE_WIFI_NINA, you can USE_WIFI_CUSTOM, then include the custom WiFi library here 
+
+  // If not USE_WIFI_NINA, you can USE_WIFI_CUSTOM, then include the custom WiFi library here
   #define USE_WIFI_CUSTOM       true
 
 #endif
@@ -115,21 +115,21 @@
   #define SHIELD_TYPE           "ESP WiFi using WiFi Library"
 #elif defined(ARDUINO_RASPBERRY_PI_PICO_W)
   #warning Using RP2040W CYW43439 WiFi
-  #define SHIELD_TYPE           "RP2040W CYW43439 WiFi" 
+  #define SHIELD_TYPE           "RP2040W CYW43439 WiFi"
 #elif USE_WIFI_CUSTOM
   #warning Using Custom WiFi using Custom WiFi Library
   #define SHIELD_TYPE           "Custom WiFi using Custom WiFi Library"
 #else
-  #define SHIELD_TYPE           "Unknown WiFi shield/Library" 
+  #define SHIELD_TYPE           "Unknown WiFi shield/Library"
 #endif
 
 #if ( defined(NRF52840_FEATHER) || defined(NRF52832_FEATHER) || defined(NRF52_SERIES) || defined(ARDUINO_NRF52_ADAFRUIT) || \
         defined(NRF52840_FEATHER_SENSE) || defined(NRF52840_ITSYBITSY) || defined(NRF52840_CIRCUITPLAY) || defined(NRF52840_CLUE) || \
         defined(NRF52840_METRO) || defined(NRF52840_PCA10056) || defined(PARTICLE_XENON) || defined(NINA_B302_ublox) || defined(NINA_B112_ublox) )
-  #if defined(WIFI_USE_NRF528XX)
-    #undef WIFI_USE_NRF528XX
-  #endif
-  #define WIFI_USE_NRF528XX          true
+#if defined(WIFI_USE_NRF528XX)
+  #undef WIFI_USE_NRF528XX
+#endif
+#define WIFI_USE_NRF528XX          true
 #endif
 
 #if    ( defined(ARDUINO_SAMD_ZERO) || defined(ARDUINO_SAMD_MKR1000) || defined(ARDUINO_SAMD_MKRWIFI1010) \
@@ -137,10 +137,10 @@
       || defined(ARDUINO_SAMD_MKRGSM1400) || defined(ARDUINO_SAMD_MKRNB1500) || defined(ARDUINO_SAMD_MKRVIDOR4000) || defined(__SAMD21G18A__) \
       || defined(ARDUINO_SAMD_CIRCUITPLAYGROUND_EXPRESS) || defined(__SAMD21E18A__) || defined(__SAMD51__) || defined(__SAMD51J20A__) || defined(__SAMD51J19A__) \
       || defined(__SAMD51G19A__) || defined(__SAMD51P19A__) || defined(__SAMD21G18A__) )
-  #if defined(WIFI_USE_SAMD)
-    #undef WIFI_USE_SAMD
-  #endif
-  #define WIFI_USE_SAMD      true
+#if defined(WIFI_USE_SAMD)
+  #undef WIFI_USE_SAMD
+#endif
+#define WIFI_USE_SAMD      true
 #endif
 
 #if ( defined(ARDUINO_SAM_DUE) || defined(__SAM3X8E__) )
@@ -154,10 +154,10 @@
 #if ( defined(STM32F0) || defined(STM32F1) || defined(STM32F2) || defined(STM32F3)  ||defined(STM32F4) || defined(STM32F7) || \
        defined(STM32L0) || defined(STM32L1) || defined(STM32L4) || defined(STM32H7)  ||defined(STM32G0) || defined(STM32G4) || \
        defined(STM32WB) || defined(STM32MP1) ) && ! ( defined(ARDUINO_PORTENTA_H7_M7) || defined(ARDUINO_PORTENTA_H7_M4) )
-  #if defined(WIFI_USE_STM32)
-    #undef WIFI_USE_STM32
-  #endif
-  #define WIFI_USE_STM32      true
+#if defined(WIFI_USE_STM32)
+  #undef WIFI_USE_STM32
+#endif
+#define WIFI_USE_STM32      true
 #endif
 
 #ifdef CORE_TEENSY
@@ -380,7 +380,7 @@
     #define BOARD_NAME    BOARD_TYPE
   #else
     #define BOARD_NAME    "Unknown Board"
-  #endif  
+  #endif
 #endif
 
 #endif    //defines_h
