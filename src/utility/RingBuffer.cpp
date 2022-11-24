@@ -12,7 +12,7 @@
   @file       Esp8266WebServer.h
   @author     Ivan Grokhotkov
 
-  Version: 1.10.0
+  Version: 1.10.1
 
   Version Modified By   Date      Comments
   ------- -----------  ---------- -----------
@@ -31,6 +31,7 @@
   1.9.4   K Hoang      06/09/2022 Restore support to ESP32 and ESP8266
   1.9.5   K Hoang      10/09/2022 Restore support to Teensy, etc. Fix bug in examples
   1.10.0  K Hoang      13/11/2022 Add new features, such as CORS. Update code and examples
+  1.10.1  K Hoang      24/11/2022 Using new WiFi101_Generic library to send larger data
  *****************************************************************************************************************************/
 
 #include "RingBuffer.h"

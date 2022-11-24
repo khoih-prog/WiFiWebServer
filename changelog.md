@@ -17,6 +17,7 @@
 ## Table of Contents
 
 * [Changelog](#changelog)
+  * [Releases v1.10.1](#releases-v1101)
   * [Releases v1.10.0](#releases-v1100)
   * [Releases v1.9.5](#releases-v195)
   * [Releases v1.9.4](#releases-v194)
@@ -56,6 +57,11 @@
 ---
 
 ## Changelog
+
+### Releases v1.10.1
+
+1. Using new [`WiFi101_Generic library`](https://github.com/khoih-prog/WiFi101_Generic) for sending larger data
+2. Update `Packages' Patches`
 
 ### Releases v1.10.0
 

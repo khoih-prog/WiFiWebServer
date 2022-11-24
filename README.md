@@ -45,6 +45,7 @@
   * [10. For RTL8720DN boards using AmebaD core](#10-for-rtl8720dn-boards-using-amebad-core)
   * [11. For SAMD21 and SAMD51 boards using ArduinoCore-fab-sam core](#11-For-SAMD21-and-SAMD51-boards-using-ArduinoCore-fab-sam-core)
   * [12. For Seeeduino RP2040 boards](#12-For-Seeeduino-RP2040-boards)
+  * [13. For Seeeduino nRF52840 boards](#13-For-Seeeduino-nRF52840-boards)
 * [How to configure to use different WiFi Libraries](#how-to-configure-to-use-different-wifi-libraries) 
   * [1. Modify pin-to-pin connection in WiFiNINA_Generic library](#1-modify-pin-to-pin-connection-in-wifinina_generic-library)
   * [2. How to select which built-in WiFi or shield to use](#2-how-to-select-which-built-in-wifi-or-shield-to-use) 
@@ -246,7 +247,7 @@ This [**WiFiWebServer library**](https://github.com/khoih-prog/WiFiWebServer) cu
 #### Currently supported WiFi shields/modules
 
 1. WiFiNINA using [`WiFiNINA_Generic library`](https://github.com/khoih-prog/WiFiNINA_Generic)
-2. WiFi101 using [`WiFi101 library`](https://github.com/arduino-libraries/WiFi101) or [`Modified WiFi101 Library v0.16.1+`](https://github.com/khoih-prog/WiFi101)
+2. WiFi101 using [`WiFi101_Generic library`](https://github.com/khoih-prog/WiFi101_Generic) **New**
 3. u-blox W101, W102 using [`WiFiNINA_Generic library`](https://github.com/khoih-prog/WiFiNINA_Generic)
 4. ESP8266-AT command using [`WiFiEspAT library`](https://github.com/jandrassy/WiFiEspAT)
 5. ESP8266/ESP32-AT command using [`ESP_AT_Lib library`](https://github.com/khoih-prog/ESP_AT_Lib)
@@ -275,9 +276,9 @@ This [**WiFiWebServer library**](https://github.com/khoih-prog/WiFiWebServer) cu
 14. [`Arduino megaAVR core 1.8.7+`](https://github.com/arduino/ArduinoCore-megaavr/releases) for Arduino megaAVR boards such as **UNO_WIFI_REV2, NANO_EVERY**
 
 15. [`Functional-Vlpp library v1.0.2+`](https://github.com/khoih-prog/functional-vlpp) to use server's lambda function. To install, check [![arduino-library-badge](https://www.ardu-badge.com/badge/Functional-Vlpp.svg?)](https://www.ardu-badge.com/Functional-Vlpp)
-16. [`WiFiNINA_Generic library v1.8.14-7+`](https://github.com/khoih-prog/WiFiNINA_Generic) if using WiFiNINA. To install, check [![arduino-library-badge](https://www.ardu-badge.com/badge/WiFiNINA_Generic.svg?)](https://www.ardu-badge.com/WiFiNINA_Generic).
+16. [`WiFiNINA_Generic library v1.8.15-1+`](https://github.com/khoih-prog/WiFiNINA_Generic) if using WiFiNINA. To install, check [![arduino-library-badge](https://www.ardu-badge.com/badge/WiFiNINA_Generic.svg?)](https://www.ardu-badge.com/WiFiNINA_Generic).
 17. [`ESP_AT_Lib library v1.4.1+`](https://github.com/khoih-prog/ESP_AT_Lib) if using ESP8288/ESP32-AT shields. To install, check [![arduino-library-badge](https://www.ardu-badge.com/badge/ESP_AT_Lib.svg?)](https://www.ardu-badge.com/ESP_AT_Lib).
-18. [`Modified WiFi101 Library v0.16.1+`](https://github.com/khoih-prog/WiFi101) to use SAMD MKR1000, etc. boards with WiFi101.
+18. [`WiFi101_Generic library v1.0.0+`](https://github.com/khoih-prog/WiFi101_Generic) to use SAMD MKR1000, etc. boards with WiFi101 for sending larger data. To install, check [![arduino-library-badge](https://www.ardu-badge.com/badge/WiFi101_Generic.svg?)](https://www.ardu-badge.com/WiFi101_Generic).
 19. [`WiFiEspAT library v1.4.1+`](https://github.com/jandrassy/WiFiEspAT) if using ESP8288/ESP32-AT shields. [![GitHub release](https://img.shields.io/github/release/jandrassy/WiFiEspAT.svg)](https://github.com/jandrassy/WiFiEspAT/releases/latest)
 20. [`WiFiMulti_Generic library v1.2.2+`](https://github.com/khoih-prog/WiFiMulti_Generic) to use WiFiMulti function. To install, check [![arduino-library-badge](https://www.ardu-badge.com/badge/WiFiMulti_Generic.svg?)](https://www.ardu-badge.com/WiFiMulti_Generic). **New**
 
@@ -414,14 +415,14 @@ Whenever the above-mentioned compiler error issue is fixed with the new Arduino 
  
  ***To be able to compile, run and automatically detect and display BOARD_NAME on Adafruit SAMD (Itsy-Bitsy M4, etc) boards***, you have to copy the whole [Adafruit SAMD Packages_Patches](Packages_Patches/adafruit/hardware/samd/1.7.11) directory into Adafruit samd directory (~/.arduino15/packages/adafruit/hardware/samd/1.7.11). 
 
-Supposing the Adafruit SAMD core version is 1.7.11. This file must be copied into the directory:
+Supposing the Adafruit SAMD core version is 1.7.11. These files must be copied into the directory:
 
 - `~/.arduino15/packages/adafruit/hardware/samd/1.7.11/platform.txt`
 - `~/.arduino15/packages/adafruit/hardware/samd/1.7.11/cores/arduino/Print.h`
 - `~/.arduino15/packages/adafruit/hardware/samd/1.7.11/cores/arduino/Print.cpp`
 
 Whenever a new version is installed, remember to copy this file into the new version directory. For example, new version is x.yy.zz
-This file must be copied into the directory:
+These files must be copied into the directory:
 
 - `~/.arduino15/packages/adafruit/hardware/samd/x.yy.zz/platform.txt`
 - `~/.arduino15/packages/adafruit/hardware/samd/x.yy.zz/cores/arduino/Print.h`
@@ -431,7 +432,7 @@ This file must be copied into the directory:
  
  ***To be able to compile, run and automatically detect and display BOARD_NAME on Seeeduino SAMD (XIAO M0, Wio Terminal, etc) boards***, you have to copy the whole [Seeeduino SAMD Packages_Patches](Packages_Patches/Seeeduino/hardware/samd/1.8.3) directory into Seeeduino samd directory (~/.arduino15/packages/Seeeduino/hardware/samd/1.8.3). 
 
-Supposing the Seeeduino SAMD core version is 1.8.3. This file must be copied into the directory:
+Supposing the Seeeduino SAMD core version is 1.8.3. These files must be copied into the directory:
 
 - `~/.arduino15/packages/Seeeduino/hardware/samd/1.8.3/platform.txt`
 - `~/.arduino15/packages/Seeeduino/hardware/samd/1.8.3/cores/arduino/Arduino.h`
@@ -439,7 +440,7 @@ Supposing the Seeeduino SAMD core version is 1.8.3. This file must be copied int
 - `~/.arduino15/packages/Seeeduino/hardware/samd/1.8.3/cores/arduino/Print.cpp`
 
 Whenever a new version is installed, remember to copy this file into the new version directory. For example, new version is x.yy.zz
-This file must be copied into the directory:
+These files must be copied into the directory:
 
 - `~/.arduino15/packages/Seeeduino/hardware/samd/x.yy.zz/platform.txt`
 - `~/.arduino15/packages/Seeeduino/hardware/samd/x.yy.zz/cores/arduino/Arduino.h`
@@ -450,24 +451,28 @@ This file must be copied into the directory:
 
 #### 7.1 For STM32 boards to use LAN8720
 
+For `Generic STM32F4 series` boards, such as `STM32F407VE`, using `LAN8720`, please use STM32 core `v2.2.0` as breaking core `v2.3.0` creates the compile error.
+
+---
+
 To use LAN8720 on some STM32 boards 
 
 - **Nucleo-144 (F429ZI, NUCLEO_F746NG, NUCLEO_F746ZG, NUCLEO_F756ZG)**
 - **Discovery (DISCO_F746NG)**
 - **STM32F4 boards (BLACK_F407VE, BLACK_F407VG, BLACK_F407ZE, BLACK_F407ZG, BLACK_F407VE_Mini, DIYMORE_F407VGT, FK407M1)**
 
-you have to copy the files [stm32f4xx_hal_conf_default.h](Packages_Patches/STM32/hardware/stm32/2.3.0/system/STM32F4xx) and [stm32f7xx_hal_conf_default.h](Packages_Patches/STM32/hardware/stm32/2.3.0/system/STM32F7xx) into STM32 stm32 directory (~/.arduino15/packages/STM32/hardware/stm32/2.3.0/system) to overwrite the old files.
+you have to copy the files [stm32f4xx_hal_conf_default.h](Packages_Patches/STM32/hardware/stm32/2.2.0/system/STM32F4xx) and [stm32f7xx_hal_conf_default.h](Packages_Patches/STM32/hardware/stm32/2.2.0/system/STM32F7xx) into STM32 stm32 directory (~/.arduino15/packages/STM32/hardware/stm32/2.2.0/system) to overwrite the old files.
 
-Supposing the STM32 stm32 core version is 2.3.0. These files must be copied into the directory:
+Supposing the STM32 stm32 core version is 2.2.0. These files must be copied into the directory:
 
-- `~/.arduino15/packages/STM32/hardware/stm32/2.3.0/system/STM32F4xx/stm32f4xx_hal_conf_default.h` for STM32F4.
-- `~/.arduino15/packages/STM32/hardware/stm32/2.3.0/system/STM32F7xx/stm32f7xx_hal_conf_default.h` for Nucleo-144 STM32F7.
+- `~/.arduino15/packages/STM32/hardware/stm32/2.2.0/system/STM32F4xx/stm32f4xx_hal_conf_default.h` for STM32F4.
+- `~/.arduino15/packages/STM32/hardware/stm32/2.2.0/system/STM32F7xx/stm32f7xx_hal_conf_default.h` for Nucleo-144 STM32F7.
 
 Whenever a new version is installed, remember to copy this file into the new version directory. For example, new version is x.yy.zz,
 these files must be copied into the corresponding directory:
 
 - `~/.arduino15/packages/STM32/hardware/stm32/x.yy.zz/system/STM32F4xx/stm32f4xx_hal_conf_default.h`
-- `~/.arduino15/packages/STM32/hardware/stm32/x.yy.zz/system/STM32F7xx/stm32f7xx_hal_conf_default.h
+- `~/.arduino15/packages/STM32/hardware/stm32/x.yy.zz/system/STM32F7xx/stm32f7xx_hal_conf_default.h`
 
 
 #### 7.2 For STM32 boards to use Serial1
@@ -581,16 +586,38 @@ This file must be copied into the directory:
  
  ***To be able to compile, run and automatically detect and display BOARD_NAME on Seeeduino RP2040 (XIAO RP2040, Wio RP2040 Mini) boards***, you have to copy the whole [Seeeduino RP2040 Packages_Patches](Packages_Patches/Seeeduino/hardware/rp2040/2.7.2) directory into Seeeduino samd directory (~/.arduino15/packages/Seeeduino/hardware/rp2040/2.7.2). 
 
-Supposing the Seeeduino SAMD core version is 2.7.2. This file must be copied into the directory:
+Supposing the Seeeduino RP2040 core version is 2.7.2. These files must be copied into the directory:
 
 - `~/.arduino15/packages/Seeeduino/hardware/rp2040/2.7.2/boards.txt`
 - `~/.arduino15/packages/Seeeduino/hardware/rp2040/2.7.2/variants/Seeed_XIAO_RP2040/pins_arduino.h`
 
 Whenever a new version is installed, remember to copy this file into the new version directory. For example, new version is x.yy.zz
-This file must be copied into the directory:
+These files must be copied into the directory:
 
 - `~/.arduino15/packages/Seeeduino/hardware/samd/x.yy.zz/boards.txt`
 - `~/.arduino15/packages/Seeeduino/hardware/samd/x.yy.zz/variants/Seeed_XIAO_RP2040/pins_arduino.h`
+
+
+---
+
+#### 13. For Seeeduino nRF52840 boards
+
+**To be able to compile and run on Xiao nRF52840 boards**, you have to copy the whole [nRF52 1.0.0](Packages_Patches/Seeeduino/hardware/nrf52/1.0.0) directory into Seeeduino nRF52 directory (~/.arduino15/packages/Seeeduino/hardware/nrf52/1.0.0). 
+
+Supposing the Seeeduino nRF52 version is 1.0.0. These files must be copied into the directory:
+
+- **`~/.arduino15/packages/Seeeduino/hardware/nrf52/1.0.0/platform.txt`**
+- **`~/.arduino15/packages/Seeeduino/hardware/nrf52/1.0.0/cores/nRF5/Print.h`**
+- **`~/.arduino15/packages/Seeeduino/hardware/nrf52/1.0.0/cores/nRF5/Print.cpp`**
+- **`~/.arduino15/packages/Seeeduino/hardware/nrf52/1.0.0/cores/nRF5/Udp.h`**
+
+Whenever a new version is installed, remember to copy these files into the new version directory. For example, new version is x.yy.z
+These files must be copied into the directory:
+
+- **`~/.arduino15/packages/Seeeduino/hardware/nrf52/x.yy.z/platform.txt`**
+- **`~/.arduino15/packages/Seeeduino/hardware/nrf52/x.yy.z/cores/nRF5/Print.h`**
+- **`~/.arduino15/packages/Seeeduino/hardware/nrf52/x.yy.z/cores/nRF5/Print.cpp`**
+- **`~/.arduino15/packages/Seeeduino/hardware/nrf52/x.yy.z/cores/nRF5/Udp.h`**
 
 
 ---
@@ -892,12 +919,12 @@ Example:
 #### 1. File [AdvancedWebServer.ino](examples/AdvancedWebServer/AdvancedWebServer.ino)
 
 
-https://github.com/khoih-prog/WiFiWebServer/blob/0306bd383408c59775f12273958d1c65789bbc6c/examples/AdvancedWebServer/AdvancedWebServer.ino#L40-L297
+https://github.com/khoih-prog/WiFiWebServer/blob/9094e545cd4da8007fd321212a27a36edd2d3da2/examples/AdvancedWebServer/AdvancedWebServer.ino#L40-L327
 
 #### 2. File [defines.h](examples/AdvancedWebServer/defines.h)
 
 
-https://github.com/khoih-prog/WiFiWebServer/blob/0306bd383408c59775f12273958d1c65789bbc6c/examples/AdvancedWebServer/defines.h#L1-L393
+https://github.com/khoih-prog/WiFiWebServer/blob/9094e545cd4da8007fd321212a27a36edd2d3da2/examples/AdvancedWebServer/defines.h#L12-L409
 
 ---
 ---
@@ -912,9 +939,9 @@ The following are debug terminal output and screen shot when running example [**
     <img src="https://github.com/khoih-prog/WiFiWebServer/raw/master/pics/AdvancedWebServer.png">
 </p>
 
-```
+```cpp
 Starting AdvancedServer on SAMD_NANO_33_IOT
-WiFiWebServer v1.10.0
+WiFiWebServer v1.10.1
 [NN] ===============================
 [NN] 
 Used/default SPI pinout: 
@@ -1065,9 +1092,9 @@ Connection: close
 
 The terminal output of **SAMD_NANO_33_IOT with WiFiNINA using WiFiNINA_Generic Library** running [SimpleWebSocket example](examples/HTTPClient/SimpleWebSocket) to demonstrate newly-added WebSocket Client feature.
 
-```
+```cpp
 Starting SimpleWebSocket on SAMD_NANO_33_IOT with WiFiNINA using WiFiNINA_Generic Library
-WiFiWebServer v1.10.0
+WiFiWebServer v1.10.1
 Connecting to SSID: HueNet1
 You're connected to the network, IP = 192.168.2.98
 SSID: HueNet1, Signal strength (RSSI):-24 dBm
@@ -1099,9 +1126,9 @@ Received a message:
 
 The terminal output of **SAMD_NANO_33_IOT with WiFiNINA using WiFiNINA_Generic Library** running [SimpleHTTPExample example](examples/HTTPClient/SimpleHTTPExample) to demonstrate newly-added HTTP Client feature.
 
-```
+```cpp
 Starting SimpleHTTPExample on SAMD_NANO_33_IOT with WiFiNINA using WiFiNINA_Generic Library
-WiFiWebServer v1.10.0
+WiFiWebServer v1.10.1
 Connecting to SSID: HueNet1
 You're connected to the network, IP = 192.168.2.98
 SSID: HueNet1, Signal strength (RSSI):-21 dBm
@@ -1158,9 +1185,9 @@ Body returned follows:
 
 The terminal output of **SAMD_NANO_33_IOT with WiFiNINA using WiFiNINA_Generic Library** running [DweetPost example](examples/HTTPClient/DweetPost) to demonstrate newly-added HTTP Client feature.
 
-```
+```cpp
 Starting DweetPost on SAMD_NANO_33_IOT with WiFiNINA using WiFiNINA_Generic Library
-WiFiWebServer v1.10.0
+WiFiWebServer v1.10.1
 Connecting to SSID: HueNet1
 You're connected to the network, IP = 192.168.2.98
 SSID: HueNet1, Signal strength (RSSI):-22 dBm
@@ -1181,9 +1208,9 @@ Wait ten seconds
 
 The terminal output of **SAMD_NANO_33_IOT with WiFiNINA using WiFiNINA_Generic Library** running [DweetGet example](examples/HTTPClient/DweetGet) to demonstrate newly-added HTTP Client feature.
 
-```
+```cpp
 Starting DweetGet on SAMD_NANO_33_IOT with WiFiNINA using WiFiNINA_Generic Library
-WiFiWebServer v1.10.0
+WiFiWebServer v1.10.1
 Connecting to SSID: HueNet1
 You're connected to the network, IP = 192.168.2.98
 SSID: HueNet1, Signal strength (RSSI):-25 dBm
@@ -1210,9 +1237,9 @@ Wait ten seconds
 The terminal output of **SAMD_NANO_33_IOT with WiFiNINA using WiFiNINA_Generic Library** running [MQTTClient_Auth example](examples/MQTTClient_Auth) to demonstrate newly-added MQTT Client feature.
 
 
-```
+```cpp
 Starting MQTTClient_Auth on SAMD_NANO_33_IOT with WiFiNINA using WiFiNINA_Generic Library
-WiFiWebServer v1.10.0
+WiFiWebServer v1.10.1
 Please upgrade the firmware
 Connecting to WPA SSID: HueNet1
 Connected! IP address: 192.168.2.98
@@ -1230,10 +1257,10 @@ Message arrived [MQTT_Pub] Hello from MQTTClient_Auth on SAMD_NANO_33_IOT with W
 The terminal output of **SAMD_NANO_33_IOT with WiFiNINA using WiFiNINA_Generic Library** running [MQTT_ThingStream example](examples/MQTT_ThingStream) to demonstrate newly-added MQTT Client feature.
 
 
-```
+```cpp
 Start MQTT_ThingStream on SAMD_NANO_33_IOT
 Starting MQTTClient_Auth on SAMD_NANO_33_IOT with WiFiNINA using WiFiNINA_Generic Library
-WiFiWebServer v1.10.0
+WiFiWebServer v1.10.1
 Please upgrade the firmware
 Connecting to WPA SSID: HueNet1
 Connected! IP address: 192.168.2.98
@@ -1259,9 +1286,9 @@ MQTT Message receive [STM32_Pub] Hello from MQTT_ThingStream on SAMD_NANO_33_IOT
 
 The terminal output of **RASPBERRY_PI_PICO with Custom WiFi (ESP8266-AT) using Custom WiFi (WiFiEspAT) Library** running [WebClientRepeating example](examples/WebClientRepeating) to demonstrate new RP2040-based board using [**Earle Philhower's arduino-pico** core](https://github.com/earlephilhower/arduino-pico)
 
-```
+```cpp
 Starting WebClientRepeating on RASPBERRY_PI_PICO with Custom WiFi using Custom WiFi Library
-WiFiWebServer v1.10.0
+WiFiWebServer v1.10.1
 WiFi shield init done
 Connecting to SSID: HueNet1
 You're connected to the network, IP = 192.168.2.76
@@ -1331,9 +1358,9 @@ The following are debug terminal output and screen shot when running example [**
 </p>
 
 
-```
+```cpp
 Starting AdvancedServer on Nano RP2040 Connect with WiFiNINA using WiFiNINA_Generic Library
-WiFiWebServer v1.10.0
+WiFiWebServer v1.10.1
 Connecting to WPA SSID: HueNet1
 HTTP server started @ 192.168.2.130
 H[WIFI] handleClient: New Client
@@ -1457,9 +1484,9 @@ Connection: close
 
 The terminal output of **ESP32_DEV** running [SimpleHTTPExample example](examples/HTTPClient/SimpleHTTPExample) to demonstrate newly-added HTTP Client feature.
 
-```
+```cpp
 Starting SimpleHTTPExample on ESP32_DEV with ESP WiFi using WiFi Library
-WiFiWebServer v1.10.0
+WiFiWebServer v1.10.1
 Connecting to SSID: HueNet1
 You're connected to the network, IP = 192.168.2.80
 SSID: HueNet1, Signal strength (RSSI):-23 dBm
@@ -1523,9 +1550,9 @@ The following are debug terminal output and screen shot when running example [**
 </p>
 
 
-```
+```cpp
 Starting AdvancedServer on PORTENTA_H7_M7 with Portenta_H7 WiFi
-WiFiWebServer v1.10.0
+WiFiWebServer v1.10.1
 Connecting to WPA SSID: HueNet1
 HTTP server started @ 192.168.2.138
 H[WIFI] String Len = 0, extend to 2048
@@ -1539,9 +1566,9 @@ HHHHHHHHH HHHHHHH
 The terminal output of **PORTENTA_H7_M7 with Portenta_H7 WiFi** running [MQTTClient_Auth example](examples/MQTTClient_Auth) to demonstrate MQTT Client feature.
 
 
-```
+```cpp
 Starting MQTTClient_Auth on PORTENTA_H7_M7 with Portenta_H7 WiFi
-WiFiWebServer v1.10.0
+WiFiWebServer v1.10.1
 Connecting to SSID: HueNet1
 Connected! IP address: 192.168.2.130
 Attempting MQTT connection to broker.emqx.io...connected
@@ -1559,9 +1586,9 @@ Message arrived [MQTT_Pub] Hello from MQTTClient_Auth on PORTENTA_H7_M7 with Por
 The terminal output of **PORTENTA_H7_M7 with Portenta_H7 WiFi** running [WebClientRepeating example](examples/WebClientRepeating).
 
 
-```
+```cpp
 Starting WebClientRepeating on PORTENTA_H7_M7 with Portenta_H7 WiFi
-WiFiWebServer v1.10.0
+WiFiWebServer v1.10.1
 Connecting to SSID: HueNet1
 You're connected to the network, IP = 192.168.2.130
 SSID: HueNet1, Signal strength (RSSI):-33 dBm
@@ -1631,9 +1658,9 @@ The following are debug terminal output and screen shot when running example [**
 </p>
 
 
-```
+```cpp
 Starting AdvancedWebServer on ESP32C3_DEV with ESP WiFi using WiFi Library
-WiFiWebServer v1.10.0
+WiFiWebServer v1.10.1
 Connecting to WPA SSID: HueNet1
 HTTP server started @ 192.168.2.86
 HH
@@ -1650,9 +1677,9 @@ The following are debug terminal output and screen shot when running example [**
 </p>
 
 
-```
+```cpp
 Starting AdvancedWebServer on ESP32S3_DEV with ESP WiFi using WiFi Library
-WiFiWebServer v1.10.0
+WiFiWebServer v1.10.1
 Connecting to WPA SSID: HueNet1
 HTTP server started @ 192.168.2.86
 HH
@@ -1669,10 +1696,10 @@ The following are debug terminal output and screen shot when running example [**
 </p>
 
 
-```
+```cpp
 Starting AdvancedWebServer_WiFiMulti on Nano RP2040 Connect with WiFiNINA using WiFiNINA_Generic Library
 WiFiMulti_Generic v1.2.2
-WiFiWebServer v1.10.0
+WiFiWebServer v1.10.1
 Connecting WiFi...
 WiFi connected, IP address: 192.168.2.113
 You're connected to the network, IP = 192.168.2.113
@@ -1687,10 +1714,10 @@ H
 
 The following are debug terminal output and screen shot when running example [**MQTTClient_Auth_WiFiMulti**](examples/WiFiMulti/MQTTClient_Auth_WiFiMulti) on **Nano RP2040 Connect with WiFiNINA using WiFiNINA_Generic Library**
 
-```
+```cpp
 Starting MQTTClient_Auth_WiFiMulti on Nano RP2040 Connect with WiFiNINA using WiFiNINA_Generic Library
 WiFiMulti_Generic v1.2.2
-WiFiWebServer v1.10.0
+WiFiWebServer v1.10.1
 Connecting WiFi...
 WiFi connected, IP address: 192.168.2.113
 You're connected to the network, IP = 192.168.2.113
@@ -1717,10 +1744,10 @@ Message arrived [Nano RP2040 ConnectPub] Hello from MQTTClient_Auth__WiFiMulti o
 
 The following are debug terminal output and screen shot when running example [**WiFiUdpNTPClient_WiFiMulti**](examples/WiFiMulti/WiFiUdpNTPClient_WiFiMulti) on **Nano RP2040 Connect with WiFiNINA using WiFiNINA_Generic Library**
 
-```
+```cpp
 Starting WiFiUdpNTPClient_WiFiMulti on Nano RP2040 Connect with WiFiNINA using WiFiNINA_Generic Library
 WiFiMulti_Generic v1.2.2
-WiFiWebServer v1.10.0
+WiFiWebServer v1.10.1
 Connecting WiFi...
 WiFi connected, IP address: 192.168.2.113
 You're connected to the network, IP = 192.168.2.113
@@ -1751,10 +1778,10 @@ The following are debug terminal output and screen shot when running example [**
 </p>
 
 
-```
+```cpp
 Starting AdvancedWebServer_WiFiMulti on RASPBERRY_PI_PICO_W with RP2040W CYW43439 WiFi
 WiFiMulti_Generic v1.2.2
-WiFiWebServer v1.10.0
+WiFiWebServer v1.10.1
 Connecting WiFi...
 
 WiFi connected, IP address: 192.168.2.180
@@ -1830,7 +1857,7 @@ Submit issues to: [WiFiWebServer issues](https://github.com/khoih-prog/WiFiWebSe
 23. Better workaround for RP2040W `WiFi.status()` bug using `ping()` to local gateway
 24. Add new features, such as `CORS`
 25. Use `allman astyle` and add `utils`
-
+26. Using new [`WiFi101_Generic library`](https://github.com/khoih-prog/WiFi101_Generic) for sending larger data
 
 ---
 ---
@@ -1871,6 +1898,6 @@ If you want to contribute to this project:
 
 ## Copyright
 
-Copyright 2020- Khoi Hoang
+Copyright (c) 2020- Khoi Hoang
 
 
